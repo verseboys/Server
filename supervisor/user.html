@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-用户管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js"></script>
+    <script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdn.bootcss.com/xlsx/0.14.2/xlsx.full.min.js"></script>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <div class="publish_btn">用户列表</div>
+
+            <div>
+                开始日期<input type="text" id="startDatepicker">-结束日期<input type="text" id="endDatepicker">
+                <button onclick="exportData()">导出</button>
+            </div>
+            <div class="search_box right"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+
+        <div id="panel_header" style="margin-top: 30px">
+            <div class="message_header inline"></div>
+            <div class="panel_header panel_header2">
+                <div class="header_id">ID</div>
+                <div class="header_user">用户名</div>
+                <div class="header_time">注册时间</div>
+                <div class="header_info">详细信息</div>
+                <div class="header_control right">操作</div>
+            </div>
+        </div>
+        <div id="panel_body">
+            <ul id="panel_message">
+
+            </ul>
+            <div id="compents_paginator">
+                <ul class="compents_paginator paginator">
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="shadow_area" class="hide">
+    <div id="shadow_box">
+        <div id="box_header"></div><div id="box_body"></div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js"></script>
+<!--<script type="text/javascript" src="public/js/main.js"></script>-->
+<script>
+
+    $( "#startDatepicker" ).datepicker();
+    $( "#endDatepicker" ).datepicker();
+
+    function handleData (users) {
+        /* create a new blank workbook */
+        let wb = XLSX.utils.book_new()
+        let ws_name = '用户列表信息'
+        /* make worksheet */
+        let ws_data = [
+            ['用户id', '用户名','邮箱','注册时间'],
+        ]
+        for (let user of users) {
+            let user_item = [
+                user.id,
+                user.username,
+                user.email,
+                user.create_time
+            ];
+            ws_data.push(user_item);
+        }
+        let ws = XLSX.utils.aoa_to_sheet(ws_data)
+        /* Add the worksheet to the workbook */
+
+        XLSX.utils.book_append_sheet(wb, ws, ws_name)
+        return wb
+    };
+
+    function writeExcel (wb, fileName) {
+        /* output format determined by filename */
+        XLSX.writeFile(wb, fileName)
+    };
+
+    function exportData() {
+        
+        let start_date = $('#startDatepicker').val();
+        let end_date = $('#endDatepicker').val();
+        if (!start_date || !end_date) {
+            return;
+        }
+        start_date = moment(start_date).format('YYYY-MM-DD');
+        end_date = moment(end_date).format('YYYY-MM-DD');
+
+        AJAX({
+            url:'/supervisor/filter_user_date/',
+            type:'get',
+            data:{
+                start_date,
+                end_date,
+            },
+            fn: function (data) {
+                if (data.code === 200) {
+                    let users = data.data.users;
+                    let wb = handleData(users);
+                    let dateStr = moment(Date.now()).format('YYYY年MM月DD日 HH-mm-ss');
+                    writeExcel(wb, `医咖会后台用户列表${dateStr}.xlsx`);
+                    htmlUsers(users);
+                    $('#compents_paginator').hide()
+                }
+            }
+        })
+    };
+
+     function htmlUsers(user) {
+        var str = '';
+        for (var i = 0; i < user.length; i++) {
+            str += '<li class="message_item">';
+            if(user[i].avatar===null){
+                str += '<div class="message_header" style="background-image:url(public/img/static.png)"></div>';
+            }else {
+                str += '<div class="message_header" style="background-image:url(/images/avatar/'+ user[i].avatar+')"></div>';
+            }
+            str += '<div class="message_right">';
+            str += '<div class="message_id">'+user[i].id +'</div>';
+            str += '<div class="message_user">'+user[i].username+'</div>';
+            str += '<div class="message_time">'+ new Date(user[i].create_time).format('yyyy年MM月dd日 hh:mm')+'</div>';
+            str += '<div class="message_info" user_id="'+user[i].id+'">详情</div>';
+            str += '<div class="message_control right">';
+            if(user[i].is_active===1) {
+                str += '<div class="control_lock unlocked" lock_id="' + user[i].id + '">锁定</div>';
+            }else if(user[i].is_active===0){
+                str+='<div class="control_lock locked" lock_id="' + user[i].id + '">已锁定</div>'
+            }
+            str += '</div>';
+            str += '</div>';
+            str += '</li>';
+        }
+        $('#panel_message').html(str);
+    }
+
+    var page = 1, page_num = 0, del_id;
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            get_methods()
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            get_methods()
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            get_methods()
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            get_methods()
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            get_methods()
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup','input',function (e) {
+        if(e.keyCode===13){
+            page=$(this).val();
+            get_methods();
+            $(this).val('').blur();
+        } else {
+            if($(this).val()>page_num){
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g,''))
+        }
+    })
+    var url = '/supervisor/user_management/', type = 'post', val = '';
+    get_methods()
+    function get_methods() {
+        AJAX({
+            type: type,
+            url: url + page + '/',
+            data: val,
+            fn: function (data) {
+                if (data.code!==200) {
+                    alert(data.message)
+                    return
+                }
+                var user=data.data.users
+                
+                htmlUsers(user);
+
+                var str_li = '';
+                if (page !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                var pagecount=data.data.pageCount,start,last;
+                if (data.data.pageCount > 1) {
+                    if(pagecount- Number(page) >2 && Number(page) >2){
+                        start=Number(page)-3;
+                        last=Number(page)+2
+                    }
+                    else if(pagecount-Number(page)<=2){
+                        start=pagecount-6;
+                        last=pagecount;
+                    }
+                    else if(Number(page)<=2 && pagecount>=5){
+                        start=0;
+                        last=5
+                    }
+                    else if(pagecount<=5){
+                        start=0;
+                        last=page;
+                    }
+                    for (var p = start; p < last; p++) {
+                        if (Number(page) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.pageCount !== 1 && page !== data.data.pageCount) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+                $('#compents_paginator .paginator').html(str_li);
+                $('#page_number').html(data.data.pageCount);
+                page_num = data.data.pageCount;
+                if (data.data.pageCount === 1) {
+                    $('#compents_paginator .paginator_controller').hide()
+                } else {
+                    $('#compents_paginator .paginator_controller').show()
+                }
+                $('#content')[0].scrollTop = 0
+            }
+        })
+    }
+
+    $('#shadow_box').css({'width':'434px','height':'291px'})
+    $('#shadow_box').click(function () {
+        return false
+    });
+    $('#shadow_area').click(function () {
+        $('#shadow_area').addClass('hide')
+    })
+    $('#panel_message ').on('click','.message_info',function (e) {
+        var user_id=$(this).attr('user_id');
+        AJAX({
+            url:'/supervisor/user_detail/'+user_id+'/',
+            type:'get',
+            data:'',
+            fn:function (data) {
+                if(data.code===200){
+                    $('#box_header').html(function () {
+                        var str=''
+                        str+='<div class="box_header_left">';
+                        if(data.data.avatar===null) {
+                            str +='<div class="box_image" style="background-image:url(public/img/static.png);box-shadow: none"></div>';
+                        }else{
+                            str +='<div class="box_image"  style="background-image:url(public/img/'+ data.data.avatar+');box-shadow: none"></div>';
+                        }
+
+                        str+='<div class="box_name">用户：'+data.data.username+'</div>';
+                        str+='</div>';
+                        str+='<div class="box_header_right">';
+                        str+='<div class="box_id">ID:'+data.data.id+'</div>';
+                        str+='</div>';
+                        return str;
+                    });
+                    $('#box_body').html(function () {
+                        var str='';
+                        str+='             <div class="box_body_left">\n' +
+                            '                <div class="email">email：'+ (data.data.email===null?" ":data.data.email)+'</div>\n' +
+                            '                <div class="real_name">真实姓名：</div>\n' +
+                            '                <div class="major">专业科室：'+(data.data.profession===null?" ":data.data.profession)+'</div>\n' +
+                            '                <div class="company">单位：'+(data.data.corporation===null?" ":data.data.corporation)+'</div>\n' +
+                            '            </div><div class="box_body_right">\n' +
+                            '                <div class="phone">电话：'+(data.data.mobile===null?" ":data.data.mobile)+'</div>\n' +
+                            '                <div class="gender">性别：'+(data.data.gender===null?" ":data.data.gender)+'</div>\n' +
+                            '                <div class="title">职称：'+(data.data.jobtitle===null?" ":data.data.jobtitle)+'</div>\n' +
+                            '            </div>'
+                        return str
+                    });
+                    $('#shadow_area').removeClass('hide')
+                }else {
+                    alert(data.message)
+                }
+            }
+        })
+    })
+    //锁定
+    $('#panel_message ').on('click','.control_lock',function (e) {
+        var user_id = $(this).attr('lock_id');
+        var _self=$(this);
+        if(_self.attr('type')==='false'){
+            return
+        }
+        AJAX({
+            type:'post',
+            url:"/supervisor/lock_user/",
+            data:{user_id:user_id},
+            fn:function (data) {
+                if(data.code==200){
+                    _self.removeClass('unlocked').addClass('locked').html('已锁定');
+                    _self.attr('type','false')
+                }else {
+                    alert(data.message)
+                }
+            }
+        })
+    })
+
+    $(document).on('click', '.publish_btn', function () {
+        url = '/supervisor/user_management/', type = 'post', val = '';
+        page = 1
+        get_methods()
+    })
+    function search_list() {
+        url = '/supervisor/search_user/';
+        type = 'post', val = {'search_key_words': $('#container .search_box input').val()}
+        page = 1;
+        get_methods()
+    }
+    $('#container .search_box .search_img').click(search_list)
+    $('#container .search_box input').keyup(function (e) {
+        if (e.keyCode === 13) {
+            search_list()
+        }
+    })
+</script>
+</body>
+</html>

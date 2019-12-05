@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>研究方法专题管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/special.css">
+
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+</head>
+<body>
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <a href="method_special_article.html?t=publish" style="text-decoration: none"><div class="publish_btn" style="width: 146px">添加专题</div></a>
+
+            <div class="search_box" style="float: right;"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+        <div class="panel_body" style=" padding-top:0;margin-top: 28px;">
+            <div class="tag-cla" style="background-color: #d8d8d8;margin-top: 0;">
+                <div class="tag-cla-1">专题名称</div>
+                <div class="tag-cla-2">展示顺序</div>
+                <div class="tag-cla-3">包含文章数</div>
+                <div class="tag-cla-4">状态</div>
+                <div class="tag-cla-5">发布时间</div>
+                <div class="tag-cla-6">操作</div>
+            </div>
+            <div id="panel_content">
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    $(document).ready(function () {
+        var page=1,ttty='get',ddddt='',url='/supervisor/method_article_topic_list/',page_num;
+        get_data()
+
+        $(document).on('click', '#compents_paginator .paginator li', function (e) {
+            if ($(this).hasClass('page')) {
+                page = Number($(this).attr('jp-data'));
+
+            }
+            if ($(this).hasClass('prev')) {
+                page= parseFloat(page);
+                page--
+
+            }
+            if ($(this).hasClass('next')) {
+                page= parseFloat(page);
+                page++;
+            }
+            if ($(this).hasClass('first')) {
+                page = 1;
+
+            }
+            if ($(this).hasClass('last')) {
+                page = page_num;
+
+            }
+            get_data()
+        })
+        $(document).on('keyup', '#compents_paginator input', function (e) {
+            if (e.keyCode === 13) {
+                page = $(this).val();
+                get_data();
+                $(this).val('').blur();
+            } else {
+                if ($(this).val() > page_num) {
+                    $(this).val(page_num);
+                }
+                $(this).val($(this).val().replace(/[^0-9]/g, ''))
+            }
+        })
+        $(document).on('click','.del',function () {
+            var p=$(this).attr('pid');
+            $.ajax({
+                url:u+'/supervisor/delete_method_article_topic/',
+                type:'post',
+                data:{'topic_id':p},
+                success:function (data) {
+                    if(data.code===200){
+                        get_data()
+                    }else {
+                        alert(data.message)
+                    }
+                }
+            })
+        })
+        function get_data() {
+            $.ajax({
+                url:u+url+page+'/',
+                type:ttty,
+                data:ddddt,
+                success:function (data) {
+                    var str = '<div class="tag-cla" style="background-color: #d8d8d8;margin-top: 0;">\n' +
+                        '                <div class="tag-cla-1">专题名称</div>\n' +
+                        '                <div class="tag-cla-2">展示顺序</div>\n' +
+                        '                <div class="tag-cla-3">包含文章数</div>\n' +
+                        '                <div class="tag-cla-4">状态</div>\n' +
+                        '                <div class="tag-cla-5">发布时间</div>\n' +
+                        '                <div class="tag-cla-6">操作</div>\n' +
+                        '            </div>\n' +
+                        '            <div id="panel_content">';
+                    if (data.code !== 200) {
+                        $('.panel_body').html(str+='<div class="tag-class-box" style="text-align: center; line-height: 100px;">暂无文章</div></div>')
+
+                        return
+                    }
+                    var list = data.data.topic_list;
+                    if (list.length) {
+
+                        for(var i=0;i<list.length;i++){
+
+                            str+=' <div class="tag-cla">\n' +
+                                '                    <div class="tag-cla-1">'+list[i].title+'</div>\n' +
+                                '                    <div class="tag-cla-2">'+list[i].arrange+'</div>\n' +
+                                '                    <div class="tag-cla-3">'+list[i].topic_count+'</div>\n' +
+                                '                    <div class="tag-cla-4">'+list[i].status+'</div>\n' +
+                                '                    <div class="tag-cla-5">'+list[i].create_time.replace('T'," ")+'</div>\n' +
+                                '                    <div class="tag-cla-6"><a href="method_special_article.html?t=edit&p='+list[i].id+'"><span class="edit">编辑</span></a><span class="gang"> / </span><span class="del" pid="'+list[i].id+'">删除</span></div>\n' +
+                                '                </div>'
+                        }
+                        var str_li = '';
+                        var ppp=parseFloat(page);
+                        if (ppp !== 1) {
+                            str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                            str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                        }
+                        var pagecount = data.data.page_count, start, last;
+                        if (data.data.page_count > 1) {
+                            if (pagecount - Number(ppp) > 2 && Number(ppp) > 2 && pagecount > 5) {
+                                start = Number(ppp) - 3;
+                                last = Number(ppp) + 2
+                            }
+                            else if (pagecount - Number(ppp) <= 2 && pagecount > 5) {
+                                start = pagecount - 6;
+                                last = pagecount;
+                            }
+                            else if (Number(ppp) <= 2 && pagecount > 5) {
+                                start = 0;
+                                last = 5
+                            }
+                            else if (pagecount <= 5) {
+                                start = 0;
+                                last = pagecount;
+                            }
+                            for (var p = start; p < last; p++) {
+                                if (Number(ppp) === (p + 1)) {
+                                    str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                                } else {
+                                    str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                                }
+                            }
+                        }
+                        if (data.data.page_count !== 1 && ppp !== data.data.page_count) {
+                            str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                            str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                        }
+
+                        page_num = data.data.page_count;
+                        if (data.data.page_count != 1) {
+                            str+='<div id="compents_paginator" style="padding-right: 22px">\n' +
+                                '                <ul class="compents_paginator paginator">\n' +str_li+
+                                '                </ul>\n' +
+                                '                <ul class="compents_paginator paginator_controller">\n' +
+                                '                    <li class="page_number">\n' +
+                                '                        <div id="page_number">'+data.data.page_count+'</div>\n' +
+                                '                    </li>\n' +
+                                '                    <li class="page_saver"><input id="page_saver"></li>\n' +
+                                '                    <li class="page_ender">页</li>\n' +
+                                '                </ul>\n' +
+                                '            </div>'
+
+                        }
+
+                        $('#content')[0].scrollTop = 0
+
+                    }else {
+                        str+='<div></div>'
+                        if(page>1){
+                            page--;
+                            get_data()
+                            return
+                        }
+                    }
+                    str+='</div>'
+//            $('#panel_content').html(str)
+                    $('.panel_body').html(str)
+                }
+            })
+        }
+        function search_data() {
+            if($('.search_box input').val()) {
+                page=1;
+                url='/supervisor/search_topic_related_method_article/'
+                ttty='post';
+                ddddt={search_key_words: $('.search_box input').val()};
+                page='1';
+                get_data();
+            }
+        }
+        $(document).on('click','.search_box .search_img',function () {
+            search_data()
+        })
+        $(document).on('keyup', '.search_box input',function (e) {
+            if (e.keyCode === 13) {
+                search_data()
+            }
+        })
+
+    })
+</script>
+</body>
+</html>

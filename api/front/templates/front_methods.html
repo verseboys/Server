@@ -1,0 +1,978 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+{% endblock headblock %}
+
+{% block head-nav %}
+    <div class="head-methods">
+        <div class="header-methods-bot">
+            <ul>
+                {% if category_list %}
+                    {% for c in category_list %}
+                        <li class="item-part">
+                            {# TODO:此处原后端设计不充分数据库中并没有新旧状态字段 先暂时靠 c.category 过滤 #}
+                            <a href="javascript:;" class="head-methods-title"><img src="{% static 'images/arrow_down.svg' %}">{{ c.category }}{% if c.category == '科研进阶' %}<span class="c_new">New</span>{% endif %}</a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+                <!-- <li class="item-part">
+                    {% comment %}<span class="c_hot">Hot</span>{% endcomment %}
+                    <a href="{% url 'front_method_topic' page=1 %}" class="head-methods-title">专题合集</a>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+    <div class="head-methods-list">
+        <div class="header-methods-list-bot">
+           {% if category_list %}
+               {% for c in category_list %}
+                   {% if c.relevance_category %}
+                       <div class="methods-list-item item-part-{{ forloop.counter0 }}">
+                           <div class="list-item list-item-1">
+                               {% for r in c.relevance_category %}
+                                   {% if r.column == 1 %}
+                                       <div><a href="javascript:;" class="he-moth-ti">{{ r.relevance_category }}</a></div>
+                                       <ul>
+                                           {% if r.article_list %}
+                                               {% for article in r.article_list %}
+                                                   <li>{% if article.type == 1 %}
+                                                   <a href="{% url 'front_method_article_detail' article_id=article.article_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                       {% if article.rank == 1 %}
+                                                           <span class="c_new">New</span>
+                                                       {% elif article.rank == 2 %}
+                                                           <span class="c_sim">简</span>
+                                                       {% elif article.rank == 3 %}
+                                                           <span class="c_detail">详</span>
+                                                       {% endif %}
+                                                   </a>
+                                                   {% else %}
+                                                       <a href="{% url 'video_detail' video_id=article.video_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                       </a>
+                                                   {% endif %}</li>
+                                               {% endfor %}
+                                           {% endif %}
+                                       </ul>
+                                   {% endif %}
+                               {% endfor %}
+                           </div>
+                           <div class="list-item list-item-2">
+                               {% for r in c.relevance_category %}
+                                   {% if r.column == 2 %}
+                                       <div><a href="javascript:;" class="he-moth-ti">{{ r.relevance_category }}</a></div>
+                                       <ul>
+                                           {% if r.article_list %}
+                                               {% for article in r.article_list %}
+                                                   <li>{% if article.type == 1 %}
+                                                       <a href="{% url 'front_method_article_detail' article_id=article.article_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                           {% if article.rank == 1 %}
+                                                               <span class="c_new">New</span>
+                                                           {% elif article.rank == 2 %}
+                                                               <span class="c_sim">简</span>
+                                                           {% elif article.rank == 3 %}
+                                                               <span class="c_detail">详</span>
+                                                           {% endif %}
+                                                       </a>
+                                                   {% else %}
+                                                       <a href="{% url 'video_detail' video_id=article.video_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                       </a>
+                                                   {% endif %}</li>
+                                               {% endfor %}
+
+                                           {% endif %}
+                                       </ul>
+                                   {% endif %}
+                               {% endfor %}
+                           </div>
+                           <div class="list-item list-item-3">
+                               {% for r in c.relevance_category %}
+                                   {% if r.column == 3 %}
+                                       <div><a href="javascript:;" class="he-moth-ti">{{ r.relevance_category }}</a></div>
+                                       <ul>
+                                           {% if r.article_list %}
+                                               {% for article in r.article_list %}
+                                                   <li>{% if article.type == 1 %}
+                                                       <a href="{% url 'front_method_article_detail' article_id=article.article_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                           {% if article.rank == 1 %}
+                                                               <span class="c_new">New</span>
+                                                           {% elif article.rank == 2 %}
+                                                               <span class="c_sim">简</span>
+                                                           {% elif article.rank == 3 %}
+                                                               <span class="c_detail">详</span>
+                                                           {% endif %}
+                                                       </a>
+                                                   {% else %}
+                                                       <a href="{% url 'video_detail' video_id=article.video_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                       </a>
+                                                   {% endif %}</li>
+                                               {% endfor %}
+                                           {% endif %}
+                                       </ul>
+                                   {% endif %}
+                               {% endfor %}
+                           </div>
+                           <div class="list-item list-item-4">
+                               {% for r in c.relevance_category %}
+                                   {% if r.column == 4 %}
+                                       <div><a href="javascript:;" class="he-moth-ti">{{ r.relevance_category }}</a></div>
+                                       <ul>
+                                           {% if r.article_list %}
+                                               {% for article in r.article_list %}
+                                                   <li>{% if article.type == 1 %}
+                                                       <a href="{% url 'front_method_article_detail' article_id=article.article_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                           {% if article.rank == 1 %}
+                                                               <span class="c_new">New</span>
+                                                           {% elif article.rank == 2 %}
+                                                               <span class="c_sim">简</span>
+                                                           {% elif article.rank == 3 %}
+                                                               <span class="c_detail">详</span>
+                                                           {% endif %}
+                                                       </a>
+                                                   {% else %}
+                                                       <a href="{% url 'video_detail' video_id=article.video_id %}" target="_blank"><span>{{ article.title }}</span>
+                                                       </a>
+                                                   {% endif %}</li>
+                                               {% endfor %}
+                                           {% endif %}
+                                       </ul>
+                                   {% endif %}
+                               {% endfor %}
+                           </div>
+                       </div>
+                   {% endif %}
+               {% endfor %}
+           {% endif %}
+        </div>
+    </div>
+{% endblock head-nav %}
+
+{% block bodyblock %}
+    <div id="container" style="margin-top: 130px;">
+        <div style="">
+            <div class="methods-content-head" style="margin: 0 auto 13px;    padding-top: 0px;">
+                <div class="relative" style="height: 287px; box-shadow: 0 2px 6px 0 rgba(0,0,0,.2); ">
+                    <div class="RoundRobin_img">
+                        <ul style="position:relative;background:#f2f2f4" class="carousel-inner">
+                            {% for b in banner %}
+                                <li
+                                    class="carousel-item home-page-carousel-item {% if not forloop.first %}hide"{% else %}"{% endif %}>
+                                    <a href="{% if b.link %}
+                                        {{ b.link }}" target="_blank" style="cursor:pointer ">
+                                    {% else %}javascript:;">
+                                    {% endif %}
+                                    <img src="/images/banner/{{ b.name }}"></a></li>
+                            {% endfor %}
+                        </ul>
+                        {% if is_banner_more_than_one %}
+                            <div class="RoundRobin_left carousel-prev-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1513930360285" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" p-id="1874" width="30" height="46">
+                                    <path d="M299.262661 1003.737678 760.056481 535.741746C767.804573 528.336338 772.318027 517.183617 772.318027 505.317118 772.318027 493.539843 767.804573 482.297898 760.056481 474.981714L300.616696 8.591773C286.474548-4.880715 265.787896-2.204063 254.429043 14.569635 243.07019 31.343329 245.326916 55.879316 259.469064 69.351804L687.013792 505.406341 258.039804 942.977646C243.897656 956.450135 241.640931 980.986124 252.999783 997.759818 259.544288 1007.306549 269.022536 1012.302968 278.651232 1012.302968 285.872755 1012.302968 293.169501 1009.447872 299.262661 1003.737678Z" p-id="1875" style="fill: #fff;"/>
+                                </svg>
+                            </div>
+                            <div class="RoundRobin_right carousel-next-btn" >
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1513930360285" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" p-id="1874" width="30" height="46">
+                                    <path d="M299.262661 1003.737678 760.056481 535.741746C767.804573 528.336338 772.318027 517.183617 772.318027 505.317118 772.318027 493.539843 767.804573 482.297898 760.056481 474.981714L300.616696 8.591773C286.474548-4.880715 265.787896-2.204063 254.429043 14.569635 243.07019 31.343329 245.326916 55.879316 259.469064 69.351804L687.013792 505.406341 258.039804 942.977646C243.897656 956.450135 241.640931 980.986124 252.999783 997.759818 259.544288 1007.306549 269.022536 1012.302968 278.651232 1012.302968 285.872755 1012.302968 293.169501 1009.447872 299.262661 1003.737678Z" p-id="1875" style="fill: #fff;"/>
+                                </svg>
+                            </div>
+                            <ul id="step_container">
+                            {% for b in banner %}
+                                <li class="step_btn {% if forloop.first %}step_btn_active{% endif %}" data-step="{{ forloop.counter0 }}"></li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="container_body" class="flex_content">
+            <div class="methods-content-box">
+                <div class="methods-index-title text-cen" style="">
+                    <span class="small_kin_b"></span><span class="litter_kin_b"></span><span class="lager_kin_b"></span>&nbsp;&nbsp;近 / 期 / 更 / 新&nbsp;&nbsp;<span class="lager_kin_b"></span><span class="litter_kin_b"></span><span class="small_kin_b"></span></div>
+                <ul class="methods-more-list methods-others-list">
+                    {% if articles %}
+                        {% for article in articles %}
+                            <li><a href="{% if article.type == 'methodmodel' and article.category_id == 13%}{% url 'front_method_topic_article_detail' article_id=article.id %}{% elif article.type == 'methodmodel' and article.category_id != 13 %}{% url 'front_method_article_detail' article_id=article.id %}{% else %}{% url 'video_detail' video_id=article.id %}{% endif %}" target="_blank"><div class="flex_list">
+                                    <div class="methods_list_box_index_left">
+                                        <div></div>
+                                        <img src="/images/article_images/{{ article.thumbnail }}" alt={{ article.category }}>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <h4 class="methods-more-list-head"><span class="title">
+                                            {% if article.category_id != 13 %}
+                                                【{{ article.category }}】{{ article.title }}
+                                            {% else %}{{ article.title }}{% endif %}</span></h4>
+                                        <div class="methods-more-list-content">
+                                            <span>{{ article.summary|safe}}</span>
+                                        </div>
+                                        <div class="methods_list_box_index_time">
+                                            <span class="right">发表于{{ article.create_time }}</span>
+                                        </div>
+                                    </div>
+                                </div></a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+
+                {% comment %}只有1页的时候不需要显示翻页,因此需要判断page大于1{% endcomment %}
+                {% if pages and pages|length > 1%}
+                    <div class="text-cen">
+                        <ul class="pagination—list">
+                            {% if page_count < 5 %}
+                                {% for page in pages %}
+                                    {% if page == current_page %}
+                                        <li class="active">{% else %}
+                                        <li>
+                                    {% endif %}
+                                        <a href="{% url 'front_method_articles'  category_id=0  page=page %}">{{ page }}</a></li>
+                                {% endfor %}
+                            {% else %}
+                                {% if current_page > 1 %}
+                                    <li class="prev"><a rel="prev" href="{% url 'front_method_articles'  category_id=0  page=current_page|add:-1 %}">上一页</a></li>
+                                {% endif %}
+
+                                {% if current_page > 4 %}
+                                    <li><a href="{% url 'front_method_articles'  category_id=0  page=1 %}">1</a></li>
+                                    <li class="disabled"><span>…</span></li>
+                                {% endif %}
+
+                                {% for page in pages %}
+                                    {% if page == current_page %}
+                                        <li class="active">{% else %}
+                                        <li>
+                                    {% endif %}
+                                        <a href="{% url 'front_method_articles'  category_id=0  page=page %}">{{ page }}</a></li>
+                                {% endfor %}
+
+                                {% if page_count > 6 and current_page|add:2 < page_count %}
+                                    <li class="disabled"><span>…</span></li>
+                                {% endif %}
+                                {% if current_page > 0 and current_page < page_count %}
+                                    <li class="next"><a rel="next" href="{% url 'front_method_articles' category_id=0 page=current_page|add:1 %}">下一页</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="secial">
+                <div class="secial-box">
+                    <div class="secial-box-tit">
+                        <span>专题推荐</span>
+                        <span class="RoundRobin_left"><svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1513930360285" class="icon"  viewBox="0 0 1024 1024" version="1.1" p-id="1874" width="17" height="13"
+                                                            style="margin-right: -2px"><path d="M299.262661 1003.737678 760.056481 535.741746C767.804573 528.336338 772.318027 517.183617 772.318027 505.317118 772.318027 493.539843 767.804573 482.297898 760.056481 474.981714L300.616696 8.591773C286.474548-4.880715 265.787896-2.204063 254.429043 14.569635 243.07019 31.343329 245.326916 55.879316 259.469064 69.351804L687.013792 505.406341 258.039804 942.977646C243.897656 956.450135 241.640931 980.986124 252.999783 997.759818 259.544288 1007.306549 269.022536 1012.302968 278.651232 1012.302968 285.872755 1012.302968 293.169501 1009.447872 299.262661 1003.737678Z" p-id="1875" style="fill: #fff;"/></svg></span><span class="RoundRobin_right"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1513930360285" class="icon"  viewBox="0 0 1024 1024" version="1.1" p-id="1874" width="30" height="13" style="margin-right: -2px;"><path d="M299.262661 1003.737678 760.056481 535.741746C767.804573 528.336338 772.318027 517.183617 772.318027 505.317118 772.318027 493.539843 767.804573 482.297898 760.056481 474.981714L300.616696 8.591773C286.474548-4.880715 265.787896-2.204063 254.429043 14.569635 243.07019 31.343329 245.326916 55.879316 259.469064 69.351804L687.013792 505.406341 258.039804 942.977646C243.897656 956.450135 241.640931 980.986124 252.999783 997.759818 259.544288 1007.306549 269.022536 1012.302968 278.651232 1012.302968 285.872755 1012.302968 293.169501 1009.447872 299.262661 1003.737678Z" p-id="1875" style="fill: #fff;"/>
+                        </svg></span>
+                    </div>
+                    <div class="secial-box-con">
+                        <ul>
+                            {% if topic_list %}
+                                {% for t in topic_list %}
+                                    <li>
+                                        <a href="{% url 'front_method_topic_detail' topic_id=t.id page=1 %}">
+                                            <img src="/images/topic/{{ t.thumbnail }}" alt="{{ t.title }}">
+                                            <div>
+                                                <h5>{{ t.title }}</h5>
+                                                <p>{{ t.summary }}</p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="qr-code">
+                    <img src="{% static 'images/erweima1.png' %}" alt="医咖会"><img src="{% static 'images/erweima2.png' %}" alt="扫码关注医咖会">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex-box hide">
+        <div class="flex-close_btn"></div>
+        <div class="flex-content">
+            <div class="methods-ask-question">
+                <div class="ask-title">描述问题</div>
+                <div class="ask-text">
+                    <div id="box_content" style="padding: 0">
+                        <div id="common_content">
+                            <textarea id="ask_methods" name="editor"></textarea>
+                            <input id="yika_img_methods" type="file" style="display:none;" accept="image/*"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                <div>
+                    <ul class="model_tag_list model_tag_list_1">
+                        <li pid="1">研究设计</li>
+                        <li pid="2" class="checked">统计方法</li>
+                        <li pid="3">样本量计算</li>
+                        <li pid="4">Meta分析</li>
+                        <li pid="5">统计图表</li>
+                        <li pid="6">其他</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        siccess: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+        //轮播
+        $(document).ready(function () {
+            var img_length = 0,img_length_all = $(".carousel-inner").find("img").length
+            var a_list = $('.RoundRobin_img li a');
+            a_list.each(function (i) {
+                var url = $(this).find('img').attr('src');
+                var img = new Image();
+                img.onload = function () {
+                    img_length++
+                    if (img_length === img_length_all) {
+                        banner_move()
+                    }
+                    img.onload = null;
+                }
+                img.src = url;
+                $(this).html(img)
+            })
+            function banner_move() {
+                var step = 0, max_step, move_type = true, click_type = true;
+                var renCas = function () {
+                    var t = $(".carousel-inner"),i = t.find(".carousel-item")
+                    max_step = i.length-1;
+                    if (max_step > 1) {
+                        eventBind();
+                        loop()
+                    }
+                }
+                var step_target = function(step){
+                    return $(".carousel-inner").find("li:eq("+step+")")
+                }
+                var active_step_btn = function(){
+                    $(".step_btn").animate({ height: "8px",marginTop:"8px",background:"rgba(255, 255, 255, 0.7)"}, 100 ).removeClass("step_btn_active")
+                    $(".step_btn:eq("+step+")").animate({ height: "16px",marginTop:"0px",background:"rgba(255, 255, 255, 1)"}, 250 ).addClass("step_btn_active")
+                }
+                var run = function (is_add) {
+                    if(step<0){
+                        step_target(0).fadeOut("fast")
+                        step_target(max_step).fadeIn(function(){
+                            click_type = true;
+                        })
+                        step = max_step
+                    }else if(step>max_step){
+                        step_target(max_step).fadeOut("fast")
+                        step_target(0).fadeIn(function(){
+                            click_type = true;
+                        })
+                        step = 0
+                    }else{
+                        if(is_add===true){
+                            step_target(step-1).fadeOut("fast")
+                            step_target(step).fadeIn(function(){
+                                click_type = true;
+                            })
+                        }else if(is_add===false){
+                            step_target(step+1).fadeOut("fast")
+                            step_target(step).fadeIn(function(){
+                                click_type = true;
+                            })
+                        }
+                    }
+                    active_step_btn()
+                }
+                var loop = function () {
+                    var self = $('.RoundRobin_img');
+                    self.timer = setInterval(function () {
+                        if (move_type) {
+                            step++
+                            run(true)
+                        }
+                    }, 5000)
+                }
+                var eventBind = function () {
+                    var i = $('.RoundRobin_img'), n = i.find(".carousel-prev-btn"), e = i.find(".carousel-next-btn"), a = (i.find(".carousel-item").length);
+                    e.on("click", function () {
+                        if (click_type) {
+                            click_type = false;
+                            step++
+                            run(true)
+                        }
+                    }), n.on("click", function () {
+                        if (click_type) {
+                            click_type = false;
+                            step--
+                            run(false)
+                        }
+                    }), i.hover(function () {
+                        move_type = false
+                    }, function () {
+                        move_type = true
+                    })
+                    $(".step_btn").click(function(){
+                        let data = $(this).data()
+                        if(data.step === step){
+                            return
+                        }
+                        step_target(step).hide()
+                        step = data.step
+                        active_step_btn()
+                        step_target(step).fadeIn()
+                    })
+                }
+                renCas();
+            }
+
+            special_move()
+            function special_move() {
+                var step = 1, max_step, move_type = true, click_type = true;
+                var renCas = function () {
+                    var t = $(".secial-box-con ul"), i = t.find("li"), n = i.length, e = i.eq(n - 1).clone(), s = i.eq(0).clone();
+                    max_step = n;
+                    if (n > 1) {
+                        t.width((n + 2) + '00%').prepend(e).append(s).css("left", '-100%');
+                        eventBind();
+                   loop()
+                    }
+                }
+                var run = function () {
+                    var n = $(".secial-box-con ul")
+                    n.animate({left: -step + '00%'}, function () {
+                        if (step < 1) {
+                            n.css('left', -max_step + '00%');
+                            step = max_step
+                        }
+                        if (step > max_step) {
+                            n.css('left', '-100%')
+                            step = 1
+                        }
+                        click_type = true
+                    })
+                }
+                var loop = function () {
+                    var self = $('.RoundRobin_img');
+                    self.timer = setInterval(function () {
+                        if (move_type) {
+                            step++
+                            run()
+                        }
+                    }, 3000)
+                }
+                var eventBind = function () {
+                    var i = $('.secial-box-tit'), n = i.find(".RoundRobin_left"), e = i.find(".RoundRobin_right"),
+                            a = (i.find(".carousel-item").length);
+                    e.on("click", function () {
+                        if (click_type) {
+                            click_type = false;
+                            step++
+                            run()
+                        }
+                    }), n.on("click", function () {
+                        if (click_type) {
+                            click_type = false;
+                            step--
+                            run()
+                        }
+                    }), i.hover(function () {
+                        move_type = false
+                    }, function () {
+                        move_type = true
+                    })
+                }
+                renCas();
+            }
+
+        })
+
+        var m_x = 0, m_y = 0, mouse_select_text, check_methods_tag, check_methods_tag_2, methods_ask_type = false;
+        window.escapeHtml = function (n) {
+            var t;
+            return t = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+                "/": "&#x2F;"
+            },
+                    String(n).replace(/[&<>"'\/]/g, function (n) {
+                        return t[n]
+                    })
+        }
+        window.methods_link = function () {
+            return $("body").append('<div id="shadow_box"><div class="tips_box tps_link"><div class="content_area content_link"><div class="link_name"><input placeholder="请输入内容..."/></div><div class="link_address"><input placeholder="请输入链接..."/></div></div><div class="box_btn_area"><div class="box_btn_multi_left cancel">取消</div><div class="box_btn_multi_right submit submit2">添加</div></div></div></div>'), $(document).on("click", ".submit2", function () {
+                var t;
+                return t = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/), t.test($(".link_address input").val()) ? (CKEDITOR.instances.ask_methods.insertHtml("<a href='" + $(".link_address input").val() + "'>" + escapeHtml($(".link_name input").val()) + "</a>"), $("#shadow_box").remove()) : ($(".wrong_image,.wrong_link").remove(), $(".content_link").append('<div class="wrong_image"></div><div class="wrong_link">超链接格式错误</div>'), $(".tps_link").css("min-height", "13.36rem"))
+            }), $(document).on("click", ".cancel", function () {
+                return $("#shadow_box").remove(), $(document).off("click", ".cancel")
+            })
+        }
+        $(document).ready(function () {
+            var max_height = window.innerHeight;
+            var z = 3, ele, inde;
+            if ($('#header-pc2').css('top') === '0px') {
+                $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+            } else {
+                $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+            }
+            var SCROLL_TOP_SIZE = $('.head-nav').height() + 'px';
+            $(window).on('scroll', function (e) {
+                if (nav_type !== true) {
+                    if (window.scrollY > SCROLL_OLD_SIZE && window.scrollY > 0) {
+                        $('#header-pc2').css('top', '-' + SCROLL_TOP_SIZE)
+                        $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+                        $('.masg .masg_list').css('display', 'none')
+                    } else if ((window.scrollY < SCROLL_OLD_SIZE) || window.scrollY <= 0) {
+                        $('#header-pc2').css('top', '0px');
+                        $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+                    }
+                    if (window.scrollY >= 170) {
+                        var t = 42 + window.scrollY - 170;
+                        $('.methods-content-tag').css('top', t + 'px')
+                        $('.methods-question').css('top', t + 'px')
+                        $('.move-to-top').removeClass('hide')
+                        $('.move-to-top').css('top', window.scrollY - $('#container_body')[0].offsetTop + ($(window).height() - 47 - 78) + 'px')
+                    } else {
+                        $('.methods-content-tag').css('top', '42px')
+                        $('.methods-question').css('top', '42px')
+                        $('.move-to-top').addClass('hide')
+                    }
+                }
+                SCROLL_OLD_SIZE = window.scrollY;
+//             fix_foot()
+            })
+            if (window.innerWidth >= 1200) {
+                $('.head-methods-list').css('overflow-x', 'hidden')
+            } else {
+                $('.head-methods-list').css('overflow-x', 'auto')
+            }
+            $(window).resize(function () {
+                max_height = window.innerHeight
+                if ($('#header-pc2').css('top') === '0px') {
+                    $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+                } else {
+                    $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+                }
+                if (window.innerWidth >= 1200) {
+                    $('.head-methods-list').css('overflow-x', 'hidden')
+                } else {
+                    $('.head-methods-list').css('overflow-x', 'auto')
+                }
+            })
+            var win_off_top = $('#container_body')[0].offsetTop
+            $('.methods-content-tag li').each(function (i, t) {
+                var p = $(this).attr('scroll_id');
+                $(this).addClass('scroll_id_' + p)
+                var el = $('.methods-content-body  .scroll_id_' + p)
+                var off_t = el[0].offsetTop
+                $(window).on('scroll', function () {
+                    var h = $(document).scrollTop();
+                    if (!methods_ask_type) {
+                        if (max_height > (win_off_top + 45) * 2) {
+                            var to = max_height / 2 - win_off_top
+                            if (h >= off_t - to && off_t - to <= (h + 20)) {
+                                $('.methods-content-tag .scroll_id_' + p).addClass('checked').siblings().removeClass('checked')
+                            }
+                        } else {
+                            if (h >= off_t - 45 && off_t - 45 <= (h + 20)) {
+                                $('.methods-content-tag .scroll_id_' + p).addClass('checked').siblings().removeClass('checked')
+                            }
+                        }
+                    }
+
+                })
+                $(this).click(function () {
+
+                    if (methods_ask_type) {
+                        methods_ask_type = false;
+                        $('.methods-content-body-text').removeClass('hide');
+                        $('.methods-content-body-question').addClass('hide');
+                        $('.methods-question').removeClass('methods-question-checked')
+                        $(document).scrollTop(off_t + win_off_top - 170)
+                        check_methods_tag = null
+                    } else {
+//                    $(document).scrollTop(off_t+win_off_top-170)
+                        $("html,body").animate({
+                            scrollTop: off_t + win_off_top - 170
+                        }, 300)
+                    }
+                })
+                $(document).on('click', '.methods-question', function () {
+                    methods_ask_type = true;
+                    check_methods_tag = null
+                    $(document).scrollTop(0)
+                    $(this).addClass('methods-question-checked')
+                    $('.methods-content-body-text').addClass('hide');
+                    $('.methods-content-body-question').removeClass('hide');
+                    $('.methods-content-tag .scroll_id_1').removeClass('checked').siblings().removeClass('checked')
+                })
+            })
+            let userOS = new UAParser().getOS()
+            //移动端hover必然触发click 记录首次hover状态
+            let isFirstEnter = true
+            //记录上次点击的导航条元素
+            let lastClickedItem = null
+            $(".header-methods-bot .item-part").click(function(){
+                let target = $(this)
+                if(isFirstEnter&&lastClickedItem!==null){
+                    lastClickedItem = target
+                    return
+                }
+                if(["Android","iOS","Symbian","Windows Phone","Windows Mobile"].indexOf(userOS.name)!==-1){
+                    if(target.is(lastClickedItem)&&lastClickedItem!==null){
+                        if(target.find("a").hasClass("checked")){
+                            target.trigger("mouseleave")
+                        }else{
+                            target.trigger("mouseenter")
+                        }
+                    }else{
+                        target.trigger("mouseenter")
+                    }
+                    lastClickedItem = target
+                }
+            }).on('touchstart',function(){
+                isFirstEnter = !$(this).is(lastClickedItem)
+            })
+            $(document).on('mouseenter', '.header-methods-bot .item-part', function () {
+                $(this).find('a').addClass('checked').parent().siblings('.item-part').find('a').removeClass('checked')
+                ele = $(this);
+                inde = $(this).index()
+                var cla = '.item-part-' + inde
+                if (!$('.header-methods-list-bot').find(cla)[0]) {
+                    $('.header-methods-list-bot').find('.item-part-0').addClass('hide').siblings('.methods-list-item ').addClass('hide')
+                    $('.header-methods-list-bot').find('.item-part-0').removeClass('no_hide').siblings('.methods-list-item ').removeClass('no_hide')
+                    $('.head-methods-list').height(0);
+                    $('.header-methods-list-bot').removeClass('height_none')
+                    $('.header-methods-list-bot').removeClass('no_hide')
+                    nav_type = false;
+                    return
+                }
+                nav_type = true;
+                $('.header-methods-list-bot').find(cla).removeClass('hide').siblings('.methods-list-item ').addClass('hide')
+                var h = $('.header-methods-list-bot').find(cla).height()
+                $('.header-methods-list-bot').find(cla).css('z-index', '3').siblings('.methods-list-item ')
+
+                if ($('#header-pc2').css('top') === '0px') {
+                    if (h + 70 >= window.innerHeight - $('#header-pc2').height()) {
+                        $('.head-methods-list').css('overflow-y', 'auto')
+                    } else {
+                        $('.head-methods-list').css('overflow-y', 'hidden')
+                    }
+                } else {
+                    if (h + 70 >= window.innerHeight - $('.head-methods').height()) {
+                        $('.head-methods-list').css('overflow-y', 'auto')
+                    } else {
+                        $('.head-methods-list').css('overflow-y', 'hidden')
+                    }
+                }
+                if (h + 70 > 400) {
+                    $('.line-to-bott').css('transition', 'height ' + (h + 70) / 400 * .5 + 's ease')
+                } else {
+                    $('.line-to-bott').css('transition', 'height .5s ease')
+                }
+
+                $('.head-methods-list').height(h + 70);
+
+                if (h + 70 > max_height) {
+                    $(document.body).css('overflow', 'hidden')
+                } else {
+                    $(document.body).css('overflow', 'auto')
+                }
+                if (!$('.header-methods-list-bot').hasClass('height_none')) {
+                    $('.header-methods-list-bot').addClass('height_none')
+                    $('.header-methods-list-bot').addClass('no_hide')
+                }
+                return false
+            })
+            $(document).on('mouseleave', '.header-methods-bot .item-part', function (e) {
+                var self = this;
+                nav_type = false;
+                var nav_tim = window.setTimeout(function () {
+                    var cla = '.item-part-' + inde
+                    if (nav_type === false) {
+                        $('.header-methods-bot .item-part').each(function () {
+                            $(self).find('a').removeClass('checked');
+                            $('.header-methods-list-bot').find(cla).addClass('hide').siblings('.methods-list-item').addClass('hide')
+
+                            $('.head-methods-list').height(0)
+                            $('.header-methods-list-bot').removeClass('height_none')
+                            $('.header-methods-list-bot').removeClass('no_hide')
+                            $(document.body).css('overflow', 'auto')
+                            nav_type = false;
+
+                        })
+                    } else {
+
+                    }
+                    window.clearTimeout(nav_tim)
+                }, 10)
+            })
+            $(document).on('mouseenter', '.head-methods-list', function (e) {
+                nav_type = true;
+                var cla = '.item-part-' + inde
+                $('.header-methods-list-bot').find(cla).removeClass('hide').siblings('.methods-list-item').addClass('hide')
+                $('.header-methods-bot .item-part').eq(inde).find('a').addClass('checked')
+
+                $('.header-methods-list-bot').addClass('height_none')
+                $('.header-methods-list-bot').addClass('no_hide')
+
+
+            })
+            $(document).on('mouseleave', '.head-methods-list', function (e) {
+                var self = this;
+                $('.header-methods-bot .item-part').each(function () {
+                    $(this).find('a').removeClass('checked')
+                })
+                $('.header-methods-list-bot').find(cla).addClass('hide').siblings('.methods-list-item').addClass('hide')
+                var cla = '.item-part-' + inde
+                $('.header-methods-list-bot').removeClass('height_none')
+                $('.header-methods-list-bot').removeClass('no_hide')
+                $(self).height(0)
+                $(document.body).css('overflow', 'auto')
+                nav_type = false;
+
+            })
+        })
+        $(document).ready(function () {
+            check_methods_tag = $('.methods-ask-question .model_tag_list li').find('.checked').attr('pid')
+            CKEDITOR.replace("ask_methods", {customConfig: "../ckeditor.ask_methods.js"}, CKEDITOR.on("instanceCreated", function (n) {
+                return n.editor.on("change", function (n) {
+                    var con = CKEDITOR.instances.ask_methods.getData().replace('&quot;' + mouse_select_text + '&quot;&nbsp;&nbsp;&nbsp;', '')
+
+                    con.toString().length > 0 && check_methods_tag !== null ? $('.methods-ask-question .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                    // return (CKEDITOR.instances.ask_area_2.getData().length > 0 && post_tag !== null) ?
+                    //     $('#model_ask_ques .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('#model_ask_ques .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                })
+            }))
+
+            var funcGetSelectText = function () {
+                var txt = '';
+                if (document.selection) {
+                    txt = document.selection.createRange();//ie
+                } else {
+                    txt = document.getSelection();
+                }
+                return txt.toString();
+                return txt;
+            }
+            c_click({
+                el: $('#container_body .methods-content-checked-box'),
+                down: function (e) {
+                },
+                move: function (e) {
+                    $(".fix-to-question").remove()
+                },
+                up: function (e) {
+                    mouse_select_text = funcGetSelectText();
+                    if (m_x == 0 && m_y == 0 && $(".fix-to-question")[0]) {
+                        $(".fix-to-question").remove();
+                        mouse_select_text = null
+                        m_x = 0;
+                        m_y = 0
+                    } else {
+                        mouse_select_text = funcGetSelectText();
+
+                        if (mouse_select_text) {
+                            m_x = 0;
+                            m_y = 0
+                            var x = e.pageX - 44
+                            var y = e.pageY + 30
+                            $(document.body).append('<div class="fix-to-question" style="left:' + x + 'px;top:' + y + 'px;">去提问</div>')
+                        }
+                    }
+                }
+            })
+            c_click({
+                el: $(document.body),
+                down: function (e) {
+                },
+                move: function (e) {
+                },
+                up: function (e) {
+                    if ($(e.target).hasClass('fix-to-question')) {
+                        return
+                    }
+//                if(m_x==0&&m_y==0 && $(".fix-to-question")[0]){
+//                    $(".fix-to-question").remove()
+//                    mouse_select_text=null;
+//                    m_x=0;
+//                    m_y=0
+//                }else{
+//
+//                }
+                }
+            })
+            function c_click(option) {
+                var d_x, d_y;
+                var el = option.el;
+
+                function down(e) {
+                    d_x = e.clientX;
+                    d_y = e.clientY;
+                    option.down(e)
+                    el.on('mousemove', move)
+                    el.on('mouseup', up)
+                }
+
+                function move(e) {
+                    option.move(e)
+                }
+
+                function up(e) {
+                    m_x = e.clientX - d_x;
+                    m_y = e.clientY - d_y;
+                    option.up(e)
+                    el.off('mousemove', move)
+                    el.off('mouseup', up)
+                }
+
+                el.on('mousedown', down)
+            }
+
+            $(document).on('click', ".fix-to-question", function () {
+                CKEDITOR.instances.ask_methods.setData('"' + mouse_select_text + '"&nbsp;&nbsp;&nbsp;')
+                $('.flex-box').removeClass('hide')
+                $(".fix-to-question").remove()
+            })
+            $(document).on('click', '.flex-close_btn', function () {
+                $('.flex-box').addClass('hide');
+                CKEDITOR.instances.ask_methods.setData('')
+            })
+            $(document).on('click', '.move-to-top', function () {
+                $("html,body").animate({
+                    scrollTop: 0
+                }, 300)
+            })
+            $(document).on('click', '.methods-ask-question-tag .tag', function () {
+                $(this).addClass('checked').siblings().removeClass('checked')
+                var attr = $(this).attr('type');
+                $('.methods-ask-question-con div[type="' + attr + '"]').removeClass('hide').siblings().addClass('hide')
+            })
+
+        })
+
+
+        function back_top_to(tar, rate) {
+            var scrollTop = $(document).scrollTop()
+            var top = function () {
+                scrollTop = scrollTop + (tar - scrollTop) / (rate || 2);
+                if (scrollTop == tar) {
+                    $(document).scrollTop(tar);
+                    return;
+                }
+                $(document).scrollTop(scrollTop);
+                window.requestAnimationFrame(top);
+            };
+            window.requestAnimationFrame(top)
+        }
+    </script>
+{% endblock bodyblock %}
+
+
+

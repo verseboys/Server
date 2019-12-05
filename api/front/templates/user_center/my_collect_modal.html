@@ -1,0 +1,176 @@
+<!-- 添加到收藏夹 -->
+<div id="collectDictModalMain" v-clock class="collect-dict-modal" v-show="isShowModal">
+  <div class="close_btn" @click="closeCollectDictModal"></div>
+
+  <div class="collect-dict-modal-main" v-if="optType==='manage'">
+    <div class="pc2_collect pc2_watch_collect">
+      <div class="font-18 line-height25 pad-bot20 color-liter-grey f-200">收藏夹</div>
+      <div class="">
+        <ul class="collect_list" v-if="collectDictDatas.length>0">
+          <li v-for="(item,index) in collectDictDatas" :key="item.id">
+            <span class="collect_text" v-html="item.collect_category"></span>
+            <span class="right collect_del" @click="showCollectDictModal('delete',item,index)">删除</span>
+            <span class="right collect_change" @click="showCollectDictModal('edit',item,index)">编辑</span>
+          </li>
+        </ul>
+        <ul class="collect_list" v-if="collectDictDatas.length===0">
+          <li>
+            <span class="collect_text">暂未创建收藏夹!</span>
+          </li>
+        </ul>
+        <div class="push-coll mar-top10 line-height36 color-link font-18 text-left">
+          <span class="pointer" @click.stop="showCollectDictModal('create')">+创建收藏夹</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="collect-dict-modal-main" v-if="optType==='delete'">
+    <div class="pc2_colect_del">
+      <p>删除收藏夹，其包含的问题都将被删除，确定执行此操作吗？</p>
+      <div class="text-cen">
+        <div class="btn-collect-close inline align-cen" @click="cancel()">取消</div>
+        <div class="mar-left20 btn-collect inline align-cen" @click="deleteCollectDict()">提交</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="collect-dict-modal-main" v-if="optType==='create'||optType==='edit'">
+    <div class="pc2_collect">
+      <div class="text-cen font-24 line-height36 pad-top28 pad-bot30" v-if="optType=='create'">创建收藏夹</div>
+      <div class="text-cen font-24 line-height36 pad-top28 pad-bot30" v-if="optType=='edit'">编辑收藏夹</div>
+      <div class="mar-top20">
+        <input type="text" placeholder="名称" v-model="collectDictItem.collect_category" @focus="collectDictItem.errorTip=''">
+        <div class="error" v-text='collectDictItem.errorTip'></div>
+      </div>
+      <div class="mar-bot40 mar-top20">
+        <textarea name="" id=" " placeholder="收藏描述（可选）" v-model="collectDictItem.summary"></textarea>
+      </div>
+      <div class="text-cen">
+        <div class="btn-collect-close inline align-cen" @click="cancel">返回</div>
+        <div class="mar-left20 btn-collect inline align-cen" v-if="optType=='create'"  @click="createCollectDict">创建</div>
+        <div class="mar-left20 btn-collect inline align-cen" v-if="optType=='edit'"  @click="editCollectDict">保存</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="application/javascript">
+var manageCollectDictVM =new Vue({
+  el: '#collectDictModalMain',
+  data: {
+    isShowModal:false,
+    optType:'',// manage delete edit create
+    collectDictDatas:[],
+    curItem:'',
+    curIndex:'',
+    collectDictItem:{
+      collect_category:'',
+      summary:'',
+      errorTip:''
+    }
+  },
+  methods: {
+    closeCollectDictModal:function(){
+      var vm = this;
+      vm.isShowModal = !vm.isShowModal;
+      myCollectVM.switchCollectTypes(0);
+      myCollectVM.getCollectTypeData();
+    },
+    getCollectDictData:function(callback){
+      var vm = this;
+      $.ajax({
+        url: '/user_collect_category_list/',
+        type: 'get',
+        success: function (res) {
+          if (res.code === 200) {
+            vm.collectDictDatas = res.data.user_collect_category_list || [];
+          } else {
+            vm.collectDictDatas = res.data.user_collect_category_list || [];
+          }
+          (callback && typeof(callback)==="function") && callback(optType);
+          vm.optType = 'manage';
+        }
+      })
+    },
+    showCollectDictModal:function(optType,item,index){
+      var vm = this;
+      vm.curIndex = index || '';
+      vm.curItem = item  || '';
+      vm.isShowModal = true;
+
+      vm.collectDictItem.collect_category='';
+      vm.collectDictItem.summary='';
+      vm.collectDictItem.errorTip='';
+
+      if(optType==='manage') {
+        vm.getCollectDictData();
+      }else if(optType==='edit'){
+        vm.collectDictItem.collect_category=vm.curItem.collect_category;
+        vm.optType = optType;
+      }else{
+        vm.optType = optType;
+      }
+    },
+    cancel:function(){
+      this.showCollectDictModal('manage')
+    },
+    deleteCollectDict:function(){
+      var vm = this;
+      $.ajax({
+        url: '/delete_collect_category/' + vm.curItem.id + '/',
+        type: 'get',
+        success: function (res) {
+          if(res.code===200){
+            vm.collectDictDatas.splice(vm.curIndex,1)
+            vm.optType = 'manage';
+            // vm.getCollectDictData();
+          }
+        }
+      })
+    },
+    editCollectDict:function(){
+      var vm = this;
+      var dataObj ={
+        collect_category: vm.collectDictItem.collect_category,
+        summary: vm.collectDictItem.summary,
+      }
+      $.ajax({
+        url: '/alter_collect_category/'+vm.curItem.id+'/',
+        type: 'post',
+        data: dataObj,
+        success: function (res) {
+          if (res.code == 200) {
+            vm.getCollectDictData();
+            // vm.collectDictDatas[vm.curIndex]=vm.curItem;
+            // console.log(vm.collectDictDatas);
+            // vm.optType = 'manage';
+          } else {
+            vm.collectDictItem.errorTip = res.message;
+          }
+        }
+      })
+    },
+    createCollectDict:function(){
+      var vm = this;
+      var dataObj ={
+        collect_category: vm.collectDictItem.collect_category,
+        summary: vm.collectDictItem.summary,
+      }
+      $.ajax({
+        url: '/create_user_collect_category/',
+        type: 'post',
+        data: dataObj,
+        success: function (res) {
+          if (res.code == 200) {
+            vm.getCollectDictData();
+          } else {
+            vm.collectDictItem.errorTip = res.message;
+          }
+        }
+      })
+    }
+  },
+})
+</script>

@@ -1,0 +1,217 @@
+{% extends 'news_header_base.html' %}
+{% load static %}
+
+{% block bodyblock %}
+<div style="background: #fff">
+    <div id="content-body">
+        <div class="body-left">
+            <!--banner-->
+            <div class="banner">
+                <ul style="height: 100%">
+                </ul>
+                <div class="banner-item"></div>
+            </div>
+            <!--tag-list-->
+            <div class="progress-tag">
+                <div class="progress-tag-list">
+                    <a href="{% url 'front_news' page=1 category_id=0  %}"><span {% if category_id == 0 %}class="active"{% endif %}>全部</span></a>
+                    {% for n in news_category_list %}
+                        <a href="{% url 'front_news' page=1 category_id=n.id %}"><span {% if category_id == n.id %}class="active"{% endif %}>{{ n.category }}</span></a>
+                    {% endfor %}
+                </div>
+            </div>
+            <!--article-list-->
+            <div class="progress-article">
+                <ul>
+                    {% for n in news %}
+                        <li>
+                            <a href="{% url 'front_news_detail' news_id=n.id page=1%}" target="_blank">
+                                <div class="progress-article-list">
+                                    {% if n.thumbnail %}
+                                        <div class="progress-article-list-left" style="background-image: url('/images/article_images/{{ n.thumbnail }}')" title="{{ n.category }}"></div>
+                                    {% endif %}
+                                    <div class="progress-article-list-right">
+                                        <h3 class="title-head">{{ n.title }}</h3>
+                                        <div class="content-head">{{ n.summary }}</div>
+                                        <div class="time-head">{{ n.create_time }}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% if pages and pages|length > 1 %}
+                <div class="text-cen">
+                    <ul class="pagination—list">
+                        {% if page_count < 5 %}
+                            {% for page in pages %}
+                                {% if page == current_page %}
+                                    <li class="active">{% else %}
+                                    <li>
+                                {% endif %}
+                            <a href="{% url 'front_news'  category_id=category_id  page=page %}">{{ page }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            {% if current_page > 1 %}
+                                <li class="prev"><a rel="prev" href="{% url 'front_news'  category_id=category_id  page=current_page|add:-1 %}">上一页</a></li>
+                            {% endif %}
+
+                            {% if current_page > 4 %}
+                                <li><a href="{% url 'front_news'  category_id=category_id  page=1 %}">1</a></li>
+                                <li class="disabled"><span>…</span></li>
+                            {% endif %}
+
+                            {% for page in pages %}
+                                {% if page == current_page %}
+                                    <li class="active">{% else %}<li>
+                                {% endif %}
+                            <a href="{% url 'front_news'  category_id=category_id  page=page %}">{{ page }}</a></li>
+                            {% endfor %}
+
+                            {% if page_count > 6 and current_page|add:2 < page_count %}
+                                <li class="disabled"><span>…</span></li>
+                            {% endif %}
+                            {% if current_page > 0 and current_page < page_count %}
+                                <li class="next"><a rel="next" href="{% url 'front_news' category_id=category_id page=current_page|add:1 %}">下一页</a></li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+        <!--右边 热文推荐-->
+        <div class="body-right">
+            <div class="hot-article"><span>热文推荐</span></div>
+            <div class="hot-list">
+                <ul>
+                    {% for h in hold_news %}
+                        {% if h.type == 1 %}
+                            <li>
+                                <a href="{% url 'front_news_detail' news_id=h.id page=1 %}" target="_blank">
+                                    <h4>{{ h.title }}</h4>
+                                    <div>{{ h.create_time }}</div>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="qr-code">
+                <img src="{% static 'images/erweima1.png' %}" alt="医咖会">
+                <img src="{% static 'images/erweima2.png' %}" alt="医咖会">
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="pc-state-box" class="hide">
+    <div class="hide"></div>
+    <div id="neko_shadow_box" v-show="check_type">
+        <div class="close_btn" @click="close()"></div>
+        <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+        <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+        <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+        <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+        <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+            <div id="model_ask_ques">
+                <div class="ask-title">描述问题</div>
+                <div class="ask-text">
+                    <div id="box_content" style="padding: 0">
+                        <div id="common_content">
+                            <textarea id="ask_area" name="editor"></textarea>
+                            <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                <div>
+                    <ul class="model_tag_list"></ul>
+                </div>
+                <div>
+                    <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    var box = new Vue({
+        el: '#pc-state-box',
+        data: {
+            check_type: 0,
+            fix_wat: {
+                show: 'show neko_shadow_box',
+                hide: 'neko_shadow_box hide'
+            },
+            old_check: 0,
+            collect_lists: [],
+            user: {
+                ques_id: '1',
+                ans_id: '2',
+                tar: ''
+            },
+            item: 0,
+            del_item: '',
+            change_collect_val: {}
+        },
+        methods: {
+            close: function () {
+                this.check_type = 0
+            },
+            check_old: function (num) {
+                this.old_check = num;
+                this.check_type = 6
+            },
+            del_collect_list: function (list, num) {
+                this.del_item = list.id
+                this.item = num
+                this.check_type = 22;
+            },
+            cancel_collect_list: function () {
+                this.check_type = 21
+            },
+            push_del_collect: function () {
+                $.ajax({
+                    url: '/delete_collect_category/' + this.del_item + '/',
+                    type: 'get',
+                    success: function (data) {
+
+                        $.ajax({
+                            url: '/user_collect_category_list/',
+                            type: 'get',
+                            success: function (data) {
+                                if (data.code == 200) {
+                                    var list = data.data.user_collect_category_list
+                                    box.collect_lists = list;
+                                }
+                            }
+                        })
+                    }
+                })
+
+                this.check_type = 21;
+            },
+            change_collect_list: function (list, item) {
+                var self = this
+                $.ajax({
+                    url: '/alter_collect_category/' + list.id + '/',
+                    type: 'get',
+                    siccess: function (data) {
+                        self.change_collect_val = data.data;
+                        check_type(23)
+                    }
+                })
+            }
+        },
+        computed: {
+            check_typ: function () {
+                this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+            }
+        }
+    });
+</script>
+{% endblock bodyblock %}

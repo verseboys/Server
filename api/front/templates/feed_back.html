@@ -1,0 +1,122 @@
+{% extends 'header_base.html' %}
+{% load static %}
+
+{% block titleblock %}意见反馈-医咖会{% endblock titleblock %}
+{% block headblock %}
+<link rel="stylesheet" href="{% static 'css/feedback.css' %}">
+{% endblock headblock %}
+
+{% block bodyblock %}
+
+<div class="main_background">
+    <table></table>
+    <div class="page_container"> 
+        <div class="content_container">
+            <div class="content_title">
+                意见反馈
+            </div>
+            <textarea class="feedback_content" cols="30" rows="10" placeholder="　请填写具体内容"></textarea>
+            <div class="picture_container">
+                <div class="add_picture">
+                    <img src="{% static 'images/add_sth.png' %}">
+                    <input type="file" class="user_upload"  accept="image/*">
+                </div>
+                <!-- <div class="user_picture">
+                </div> -->
+            </div>
+            <div class="notice" style="width:106px;text-align:center">
+                点击上传图片
+            </div>
+            <input type="text" class="user_connection" placeholder="　请留下真实的联系方式(邮箱、QQ)方便我们答疑解惑">
+            <div class="button_container">
+                <div class="submit_button">
+                    提交
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    if(!{{ front_user.id|default:0 }}){
+        location.replace('/login/?next=/#1')
+    }
+    //用户图片上传
+    let user_pictures_container=$(".picture_container")
+    let user_upload=$(".user_upload")
+    let user_picture_arr=[]
+    let user_picture_id=null
+    let notice=$(".notice")
+    user_upload.on("change",function(){
+        if(user_picture_arr.length>=1){return}
+        let imgForm=new FormData()
+        let imgFile=$(".user_upload")[0].files[0]
+        imgForm.append("imgFile",imgFile)
+        $(".user_upload").hide()
+        notice.html("上传中...")
+        $.ajax({
+            type:"post",
+            url:"/extends/image_storage/article_images/",
+            data:imgForm,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                if(data.code==200){
+                    //上传成功后调用
+                    let imgUrl = URL.createObjectURL(imgFile)
+                    user_picture_arr.push(imgUrl)
+                    let html = ``
+                    html += `<div class="user_picture"><img style="width:106px;height:97px" src="${user_picture_arr[user_picture_arr.length-1]}"></div> `
+                    $(".add_picture").html(html)
+                    user_picture_id=data.data
+                    notice.html("上传成功")
+                }else{
+                    notice.html("上传失败")
+                }
+            },
+            error:function(){
+                $(".user_upload").show()
+            }
+        })
+    })
+    
+    $(".submit_button").click(function(){
+        console.log(notice.html())
+        if(notice.html()=="上传中..."){
+            alert("请等待图片上传完成再提交")
+        }else if(notice.html().trim() == "点击十字上传图片"){
+            alert("请上传图片")
+        }else{
+            let post_data={
+                content:$(".feedback_content").val(),
+                iphone:$(".user_connection").val()
+            }
+            if(post_data.content.trim()==''){
+                alert("请填写问题描述")
+                return
+            }
+            if(post_data.iphone.trim()==''){
+                alert("请填写联系方式")
+                return
+            }
+            if(user_picture_id!==null){
+                post_data.image=user_picture_id
+            }
+            $.ajax({
+                type:"post",
+                url:"/use_feed_back/",
+                data:post_data,
+                success:function(data){
+                    if(data.code==200){
+                        alert("反馈提交成功，我们的工作人员会尽快与您联系")
+                        location.replace('/')
+                    }else if(data.code==302){
+                        location.replace('/login/?next=/#1')
+                    }else{
+                        return
+                    }
+                }
+            })
+        }
+    })
+</script>
+{% endblock bodyblock %}

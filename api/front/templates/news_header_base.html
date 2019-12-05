@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-n" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titleblock %}医咖会—研究进展{% endblock titleblock %}</title>
+    <link rel="shortcut icon" href="{% static 'images/20171213113454.png' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?t=1561514674">
+    <script type="application/javascript" src="https://lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script src="{% static 'js/news.js' %}"></script>
+    <script type="application/javascript" src="https://lib.baomitu.com/vue/2.1.6/vue.min.js"></script>
+    <script type="application/javascript" src="{% static 'js/javaScripts/main.js' %}?t=1561514674"></script>
+    <link rel="stylesheet" href="/static/css/news.css">
+    <meta name="sogou_site_verification" content="R4wN3QYjpj"/>
+    <meta name="360-site-verification" content="debc8f8830ce25a3fb43938ede64f23d"/>
+    <script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+
+        (function () {
+            var src = (document.location.protocol == "http:") ? "http://js.passport.qihucdn.com/11.0.1.js?9566e77de0b73af83e3bacf54ffc41b6" : "https://jspassport.ssl.qhimg.com/11.0.1.js?9566e77de0b73af83e3bacf54ffc41b6";
+            document.write('<script src="' + src + '" id="sozz"><\/script>');
+        })();
+
+        (function () {
+            var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cspan id='cnzz_stat_icon_1273095657'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1273095657' type='text/javascript'%3E%3C/script%3E"));
+        })();
+
+    </script>
+
+</head>
+<body>
+<div id="header-pc2">
+    <div id="header">
+        <div class="head header-top">
+            <span><a href="/"><img src="{% static 'images/head_2_icon.svg' %}" alt="医咖会—研究进展"></a></span>
+            <span class="concle">
+                {% if front_user %}
+                    <!--登录-->
+                    <span class="login-on ques_bar_meun" style=" background: url('/images/avatar/{{ front_user.avatar }}') no-repeat center; background-size: cover;border-radius: 50%;">
+                        <div class="ques_bar_meun_list" style="top: 49px;">
+                            <a href="/user/?t=user"><img src="{% static 'images/info.svg' %}" alt="">个人中心</a>
+                            <a href="/logout/"><img src="{% static 'images/logout.svg' %}" alt="">退出</a>
+                        </div>
+                    </span>
+                {% else %}
+                    <!--未登录-->
+                    <span class="head-login">登录</span>
+                    <span class="head-register">注册</span>
+                {% endif %}
+
+            </span>
+            {% comment %}<span >
+               <input type="text" placeholder="搜索" class="head_search">
+               <img src="{% static 'images/search_slim.svg' %}" alt="" style="margin-top: 10px;">
+            </span>{% endcomment %}
+            <span class="header-search head_search" style="  margin-left: 18px;">
+                <input type="text" placeholder="搜索..." style=" " class=""><span><img src="{% static 'images/search_slim.svg' %}" alt=""></span>
+            </span>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '.head-login', function () {
+        window.location.href = '/login/?next=' + window.location.pathname+'#1'
+    })
+    $(document).on('click', '.head-register', function () {
+        window.location.href = '/register/'
+    })
+    $(document).on('click', '.ques_bar_meun', function () {
+        $('.ques_bar_meun_list').toggle()
+    })
+    $(document).on('keyup','.head_search input',function (e) {
+        if(e.keyCode===13){
+            window.location.href='/search/?t=2&wd='+$(this).val()
+        }
+    })
+    $(document).on('click','.head_search span',function (e) {
+            window.location.href='/search/?t=2&wd='+$('.head_search input').val()
+    })
+</script>
+{% block bodyblock %}{% endblock bodyblock %}

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>研究方法-标签管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/methods.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章管理</li>
+                <li data-url="custom_menu_tag.html">分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <div class="publish_btn" style="width: 146px">+添加标签</div>
+        </div>
+        <div class="tag-cla">
+            <div class="me-class-left" style="padding-left: 48px;width: 50%">分类名称</div>
+            <div class="me-class-right" style="width: 50%">
+                <div class="me-class-5" style="width: 100%">创建时间</div>
+            </div>
+        </div>
+
+        <div class="panel_body">
+            <div id="panel_content">
+
+            </div>
+            <div id="add-new-list">
+
+            </div>
+            <div id="compents_paginator" style="display: none">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div>
+            <div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+
+    var check_type_num = {}
+    get_list()
+
+    function get_list() {
+        $.ajax({
+            url: u + '/supervisor/method_article_content_sections/',
+            type: 'get',
+            data: '',
+            success: function (data) {
+                if (data.code !== 200) {
+                    alert(data.message);
+                    return
+                }
+                var list = data.data.method_article_content_sections;
+                var str = '';
+                for (var i = 0; i < list.length; i++) {
+                    str+='<div class="tag-class-box">\n' +
+                        '                    <div class="tag-cla par-tag">\n' +
+                        '                        <div class="me-class-left" style="width: 50%">\n' +
+                        '                            <div class="me-class-left-body">\n' +
+                        '                                <span class="meghods-list-type" style="width: 11px;border: none"></span> <input type="text" value="'+list[i].section+'" p_id="'+list[i].id+'">\n' +
+                        '                            </div>\n' +
+                        '                        </div>\n' +
+                        '                        <div class="me-class-right" style="width: 50%;">\n' +
+                        '                            <div class="me-class-5"  style="width: 100%">'+list[i].create_time.substring(0,10)+'</div>\n' +
+                        '                        </div>\n' +
+                        '                    </div>\n' +
+                        '\n' +
+                        '                </div>'
+                }
+                $('#panel_content').html(str);
+            }
+        })
+    }
+
+    $(document).on('click', '.publish_btn', function () {
+        if ($('#add-new-list').find('.new-teg-box').length) {
+            return
+        }
+        $('#add-new-list').append('<div class="tag-class-box new-teg-box">\n' +
+            '                    <div class="tag-cla" style="border-bottom: solid 1px #e1e7ed;background-color: #ddeff9;">\n' +
+            '                        <div class="me-class-left">\n' +
+            '                            <div class="me-class-left-body"><span class="meghods-list-type" style="width: 11px;border: none"></span>\n' +
+            '                                <input type="text"></div>\n' +
+            '                        </div>\n' +
+            '                        <div class="me-class-right">\n' +
+            '                            <div class="me-class-2">&nbsp;</div>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>')
+        $('#add-new-list input').focus()
+    })
+    $(document).on('blur', '#add-new-list input', function () {
+        var val = $(this).val();
+        if (!val) {
+            $('#add-new-list').html('')
+        } else {
+            $.ajax({
+                url: u + '/supervisor/add_method_article_content_section/',
+                type: 'post',
+                data: {section: val},
+                success: function (data) {
+                    if (data.code !== 200) {
+                        alert(data.message)
+                        return
+                    }
+                    $('#add-new-list').html('')
+                    get_list()
+                }
+            })
+        }
+    })
+
+
+
+    var old_title_text = ''
+    $(document).on('focus', '.par-tag input', function () {
+        old_title_text = $(this).val()
+    })
+    $(document).on('blur', '.par-tag input', function () {
+        var p = $(this).attr('p_id');
+        var self = this;
+        if ($(this).val() === old_title_text) {
+            return
+        }
+        $.ajax({
+            url: u + '/supervisor/alter_method_article_content_section/' + p + '/',
+            type: 'post',
+            data: {
+                section: $(this).val()
+            },
+            success: function (data) {
+                if (data.code !== 200) {
+                    alert(data.message);
+                    $(self).val(old_title_text)
+                    old_title_text = ''
+                    return
+                }
+                old_title_text = ''
+                get_list()
+            }
+        })
+    })
+    $(document).on('keyup','.par-tag input',function (e) {
+        if(e.keyCode===13){
+            var p = $(this).attr('p_id');
+            var self = this;
+            if ($(this).val() === old_title_text) {
+                return
+            }
+            $.ajax({
+                url: u + '/supervisor/alter_method_article_content_section/' + p + '/',
+                type: 'post',
+                data: {
+                    section: $(this).val()
+                },
+                success: function (data) {
+                    if (data.code !== 200) {
+                        alert(data.message);
+                        $(self).val(old_title_text)
+                        old_title_text = ''
+                        return
+                    }
+                    old_title_text = ''
+                    get_list()
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,820 @@
+{% extends 'front_methods.html' %}
+{% load static %}
+{% block titleblock %}
+    {{ title }}-医咖会
+{% endblock titleblock %}
+
+{% block head_description %}
+    {% spaceless %}
+        {% if contents %}
+            {% for content in contents %}
+                {{ content.content|safe|striptags }}
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock head_description %}
+{% block headblock %}
+    {{ block.super }}
+    <style>
+        #container .methods-content-head h2 {
+            color: #333;
+            font-size: 28px;
+        }
+        .methods-other-left-content a{
+            color: #4990e2;
+            text-decoration: underline;
+        }
+    </style>
+{% endblock headblock %}
+{% block bodyblock %}
+
+    <div id="container">
+        <div style="background: #fff;">
+            <div class="methods-content-head" style="background: #fff;margin: 0 auto 26px;padding-bottom: 53px;">
+                <div style="display: flex">
+
+                    <div style="flex: 1;">
+                        <h2>{{ title }}</h2>
+                        <div>
+                            {{ category|safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="container_body" oncopy="return false;">
+            <div class="methods-content-box">
+                <div class="inline align-top methods-other-left-top">
+                    <div class="methods-other-left-content">
+                        {% if contents %}
+                            {% for c in contents %}
+                                {{ c.content|safe }}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="bg-write methods-other-left-text">
+                        <div class="methods-content-body-question">
+                            <div class="methods-ask-question-tag"><a  class="tag pointer" type="ask">提问</a><a class="tag checked pointer" type="history">历史提问</a></div>
+                            <div class="methods-ask-question-con">
+                                <!--提问-->
+                                <div type="ask" class="hide">
+                                    <div class="methods-ask-question methods-ask-question-setial">
+                                        <div class="ask-title">描述问题</div>
+                                        <div class="ask-text">
+                                            <div style="padding: 0">
+                                                <div>
+                                                    <textarea id="methods_ask_1" name="editor"></textarea>
+                                                    <input type="file" id="yika_img_methods_1" style="display:none;" accept="image/*"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                                        <div>
+                                            <ul class="model_tag_list model_tag_list_2">
+
+                                            </ul>
+                                        </div>
+                                        <div class="text-rig">
+                                            <div class="model_btn inline mar-top38" style="background-color: #ccc;cursor: no-drop" id="article_ask_btn_sub">提交问题</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--问题-->
+                                <div type="history" style="padding-left: 30px;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="inline align-top mar-left10">
+                    <div class="detial_ask_methods">我要提问</div>
+                    {% if front_user %}
+                        {% if file_name %}
+                            <a data-href="{% url 'front_download_article' article_id=id type_id=1 file_id=0 %}" class="user_download">
+                                <div class="down_load_button_flag" style="width: 260px;height: 54px;background-color: #2b8ad7;text-align: center;line-height: 54px;font-weight: 400;color: #ffffff;margin-bottom: 18px;border-radius: 2px; cursor: pointer;">下载资料</div>
+                            </a>
+                        {% endif %}
+                    {% else %}
+
+                        {% if file_name %}
+                        <div class="login_log" style="width: 260px;height: 54px;background-color: #2b8ad7;text-align: center;line-height: 54px;font-weight: 400;color: #ffffff;margin-bottom: 18px;border-radius: 2px; cursor: pointer;">下载资料</div>
+                        {% endif %}
+
+                    {% endif %}
+                    <div id="container_sidebar">
+
+                        <div id="sidebar_paper_box">
+                            <div class="paper_title">相关阅读</div>
+                            <div class="paper_content">
+
+                            </div>
+                        </div>
+                        <div id="sidebar_qr_code">
+                            <div class="qr_code"></div>
+                            <div class="qr_text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex-box hide">
+        <div class="flex-close_btn"></div>
+        <div class="flex-content">
+            <div class="methods-ask-question">
+                <div class="ask-title">描述问题</div>
+                <div class="ask-text">
+                    <div id="box_content" style="padding: 0">
+                        <div id="common_content">
+                            <textarea id="ask_methods" name="editor"></textarea>
+                            <input id="yika_img_methods" type="file" style="display:none;" accept="image/*"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                <div>
+                    <ul class="model_tag_list model_tag_list_1">
+
+                    </ul>
+                </div>
+                <div>
+                    <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script type="text/javascript" src="{% static 'js/user_download.js' %}"></script>
+    <script>
+        var isQuestionReleasing = false;
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        siccess: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+
+        var m_x = 0, m_y = 0, mouse_select_text, check_methods_tag, check_methods_tag_2=null, methods_ask_type = false;
+        window.escapeHtml = function (n) {
+            var t;
+            return t = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+                "/": "&#x2F;"
+            },
+                    String(n).replace(/[&<>"'\/]/g, function (n) {
+                        return t[n]
+                    })
+        }
+        window.methods_link = function () {
+            return $("body").append('<div id="shadow_box"><div class="tips_box tps_link"><div class="content_area content_link"><div class="link_name"><input placeholder="请输入内容..."/></div><div class="link_address"><input placeholder="请输入链接..."/></div></div><div class="box_btn_area"><div class="box_btn_multi_left cancel">取消</div><div class="box_btn_multi_right submit submit2">添加</div></div></div></div>'), $(document).on("click", ".submit2", function () {
+                var t;
+                return t = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/), t.test($(".link_address input").val()) ? (CKEDITOR.instances.ask_methods.insertHtml("<a href='" + $(".link_address input").val() + "'>" + escapeHtml($(".link_name input").val()) + "</a>"), $("#shadow_box").remove()) : ($(".wrong_image,.wrong_link").remove(), $(".content_link").append('<div class="wrong_image"></div><div class="wrong_link">超链接格式错误</div>'), $(".tps_link").css("min-height", "13.36rem"))
+            }), $(document).on("click", ".cancel", function () {
+                return $("#shadow_box").remove(), $(document).off("click", ".cancel")
+            })
+        }
+        window.methods_link_1 = function () {
+            return $("body").append('<div id="shadow_box"><div class="tips_box tps_link"><div class="content_area content_link"><div class="link_name"><input placeholder="请输入内容..."/></div><div class="link_address"><input placeholder="请输入链接..."/></div></div><div class="box_btn_area"><div class="box_btn_multi_left cancel">取消</div><div class="box_btn_multi_right submit submit3">添加</div></div></div></div>'), $(document).on("click", ".submit3", function () {
+                var t;
+                return t = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/), t.test($(".link_address input").val()) ? (CKEDITOR.instances.methods_ask_1.insertHtml("<a href='" + $(".link_address input").val() + "'>" + escapeHtml($(".link_name input").val()) + "</a>"), $("#shadow_box").remove()) : ($(".wrong_image,.wrong_link").remove(), $(".content_link").append('<div class="wrong_image"></div><div class="wrong_link">超链接格式错误</div>'), $(".tps_link").css("min-height", "13.36rem"))
+            }), $(document).on("click", ".cancel", function () {
+                return $("#shadow_box").remove(), $(document).off("click", ".cancel")
+            })
+        }
+        $(document).ready(function () {
+            var max_height = window.innerHeight;
+            var z = 3, ele, inde, nav_type = false;
+            if ($('#header-pc2').css('top') === '0px') {
+                $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+            } else {
+                $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+            }
+            var SCROLL_OLD_SIZE = window.scrollY;
+            var SCROLL_TOP_SIZE = $('.head-nav').height() + 'px';
+            window.onscroll = function (e) {
+                if (nav_type !== true) {
+                    if (window.scrollY > SCROLL_OLD_SIZE && window.scrollY > 0) {
+                        $('#header-pc2').css('top', '-' + SCROLL_TOP_SIZE)
+                        $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+                    } else if ((window.scrollY < SCROLL_OLD_SIZE) || window.scrollY <= 0) {
+                        $('#header-pc2').css('top', '0px');
+                        $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+                    }
+                    if (window.scrollY >= 170) {
+                        var t = 42 + window.scrollY - 170;
+                        $('.methods-content-tag').css('top', t + 'px')
+                        $('.methods-question').css('top', t + 'px')
+                        $('.move-to-top').removeClass('hide')
+                        $('.move-to-top').css('top', window.scrollY - $('#container_body')[0].offsetTop + ($(window).height() - 47 - 78) + 'px')
+                    } else {
+                        $('.methods-content-tag').css('top', '42px')
+                        $('.methods-question').css('top', '42px')
+                        $('.move-to-top').addClass('hide')
+                    }
+                }
+                SCROLL_OLD_SIZE = window.scrollY;
+//             fix_foot()
+            }
+            if (window.innerWidth >= 1200) {
+                $('.head-methods-list').css('overflow-x', 'hidden')
+            } else {
+                $('.head-methods-list').css('overflow-x', 'auto')
+            }
+            $(window).resize(function () {
+                max_height = window.innerHeight
+                if ($('#header-pc2').css('top') === '0px') {
+                    $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+                } else {
+                    $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+                }
+                if (window.innerWidth >= 1200) {
+                    $('.head-methods-list').css('overflow-x', 'hidden')
+                } else {
+                    $('.head-methods-list').css('overflow-x', 'auto')
+                }
+            })
+            var win_off_top = $('#container_body')[0].offsetTop
+            $('.methods-content-tag li').each(function (i, t) {
+                var p = $(this).attr('scroll_id');
+                $(this).addClass('scroll_id_' + p)
+                var el = $('.methods-content-body  .scroll_id_' + p)
+                var off_t = el[0].offsetTop
+                $(window).on('scroll', function () {
+                    var h = $(document).scrollTop();
+                    if (!methods_ask_type) {
+                        if (max_height > (win_off_top + 45) * 2) {
+                            var to = max_height / 2 - win_off_top
+                            if (h >= off_t - to && off_t - to <= (h + 20)) {
+                                $('.methods-content-tag .scroll_id_' + p).addClass('checked').siblings().removeClass('checked')
+                            }
+                        } else {
+                            if (h >= off_t - 45 && off_t - 45 <= (h + 20)) {
+                                $('.methods-content-tag .scroll_id_' + p).addClass('checked').siblings().removeClass('checked')
+                            }
+                        }
+                    }
+
+                })
+                $(this).click(function () {
+
+                    if (methods_ask_type) {
+                        methods_ask_type = false;
+                        $('.methods-content-body-text').removeClass('hide');
+                        $('.methods-content-body-question').addClass('hide');
+                        $('.methods-question').removeClass('methods-question-checked')
+                        $(document).scrollTop(off_t + win_off_top - 170)
+                        check_methods_tag = null
+                    } else {
+//                    $(document).scrollTop(off_t+win_off_top-170)
+                        $("html,body").animate({
+                            scrollTop: off_t + win_off_top - 170
+                        }, 300)
+                    }
+                })
+                $(document).on('click', '.methods-question', function () {
+                    methods_ask_type = true;
+                    check_methods_tag = null
+                    $(document).scrollTop(0)
+                    $(this).addClass('methods-question-checked')
+                    $('.methods-content-body-text').addClass('hide');
+                    $('.methods-content-body-question').removeClass('hide');
+                    $('.methods-content-tag .scroll_id_1').removeClass('checked').siblings().removeClass('checked')
+                })
+            })
+            $(document).on('mouseenter', '.header-methods-bot .item-part', function () {
+                $(this).find('a').addClass('checked').parent().siblings('.item-part').find('a').removeClass('checked')
+                ele = $(this);
+                inde = $(this).index()
+                var cla = '.item-part-' + inde
+                if (!$('.header-methods-list-bot').find(cla)[0]) {
+                    $('.header-methods-list-bot').find('.item-part-0').addClass('hide').siblings('.methods-list-item ').addClass('hide')
+                    $('.header-methods-list-bot').find('.item-part-0').removeClass('no_hide').siblings('.methods-list-item ').removeClass('no_hide')
+                    $('.head-methods-list').height(0);
+                    $('.header-methods-list-bot').removeClass('height_none')
+                    $('.header-methods-list-bot').removeClass('no_hide')
+                    nav_type = false;
+                    return
+                }
+                nav_type = true;
+                $('.header-methods-list-bot').find(cla).removeClass('hide').siblings('.methods-list-item ').addClass('hide')
+                var h = $('.header-methods-list-bot').find(cla).height()
+                $('.header-methods-list-bot').find(cla).css('z-index', '3').siblings('.methods-list-item ')
+
+                if ($('#header-pc2').css('top') === '0px') {
+                    if (h + 70 >= window.innerHeight - $('#header-pc2').height()) {
+                        $('.head-methods-list').css('overflow-y', 'auto')
+                    } else {
+                        $('.head-methods-list').css('overflow-y', 'hidden')
+                    }
+                } else {
+                    if (h + 70 >= window.innerHeight - $('.head-methods').height()) {
+                        $('.head-methods-list').css('overflow-y', 'auto')
+                    } else {
+                        $('.head-methods-list').css('overflow-y', 'hidden')
+                    }
+                }
+                if (h + 70 > 400) {
+                    $('.line-to-bott').css('transition', 'height ' + (h + 70) / 400 * .5 + 's ease')
+                } else {
+                    $('.line-to-bott').css('transition', 'height .5s ease')
+                }
+
+                $('.head-methods-list').height(h + 70);
+
+                if (h + 70 > max_height) {
+                    $(document.body).css('overflow', 'hidden')
+                } else {
+                    $(document.body).css('overflow', 'auto')
+                }
+                if (!$('.header-methods-list-bot').hasClass('height_none')) {
+                    $('.header-methods-list-bot').addClass('height_none')
+                    $('.header-methods-list-bot').addClass('no_hide')
+                }
+
+                return false
+            })
+            $(document).on('mouseleave', '.header-methods-bot .item-part', function (e) {
+                var self = this;
+                nav_type = false;
+                var nav_tim = window.setTimeout(function () {
+                    var cla = '.item-part-' + inde
+                    if (nav_type === false) {
+                        $('.header-methods-bot .item-part').each(function () {
+                            $(self).find('a').removeClass('checked');
+                            $('.header-methods-list-bot').find(cla).addClass('hide').siblings('.methods-list-item').addClass('hide')
+
+                            $('.head-methods-list').height(0)
+                            $('.header-methods-list-bot').removeClass('height_none')
+                            $('.header-methods-list-bot').removeClass('no_hide')
+                            $(document.body).css('overflow', 'auto')
+                            nav_type = false;
+
+                        })
+                    } else {
+
+                    }
+                    window.clearTimeout(nav_tim)
+                }, 10)
+            })
+            $(document).on('mouseenter', '.head-methods-list', function (e) {
+                nav_type = true;
+                var cla = '.item-part-' + inde
+                $('.header-methods-list-bot').find(cla).removeClass('hide').siblings('.methods-list-item').addClass('hide')
+                $('.header-methods-bot .item-part').eq(inde).find('a').addClass('checked')
+
+                $('.header-methods-list-bot').addClass('height_none')
+                $('.header-methods-list-bot').addClass('no_hide')
+
+
+            })
+            $(document).on('mouseleave', '.head-methods-list', function (e) {
+                var self = this;
+                $('.header-methods-bot .item-part').each(function () {
+                    $(this).find('a').removeClass('checked')
+                })
+                $('.header-methods-list-bot').find(cla).addClass('hide').siblings('.methods-list-item').addClass('hide')
+                var cla = '.item-part-' + inde
+                $('.header-methods-list-bot').removeClass('height_none')
+                $('.header-methods-list-bot').removeClass('no_hide')
+                $(self).height(0)
+                $(document.body).css('overflow', 'auto')
+                nav_type = false;
+
+            })
+        })
+        $(document).ready(function () {
+            check_methods_tag = $('.methods-ask-question .model_tag_list li').find('.checked').attr('pid')
+            CKEDITOR.replace("ask_methods", {customConfig: "../ckeditor.ask_methods.js"}, CKEDITOR.on("instanceCreated", function (n) {
+                return n.editor.on("change", function (n) {
+                    if (n.sender.name === "ask_methods") {
+
+                        var con = CKEDITOR.instances.ask_methods.getData().replace('&quot;' + mouse_select_text + '&quot;&nbsp;&nbsp;&nbsp;', '')
+
+                        con.toString().length > 0 && check_methods_tag !== null ? $('.methods-ask-question .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                    }
+                    // return (CKEDITOR.instances.ask_area_2.getData().length > 0 && post_tag !== null) ?
+                    //     $('#model_ask_ques .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('#model_ask_ques .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                })
+            }))
+            CKEDITOR.replace("methods_ask_1", {customConfig: "../ckeditor.ask_methods_1.js"}, CKEDITOR.on("instanceCreated", function (n) {
+                return n.editor.on("change", function (n) {
+                    if (n.sender.name === "methods_ask_1") {
+                        (CKEDITOR.instances.methods_ask_1.getData().length > 0 && check_methods_tag_2 !== null) ? $('.methods-ask-question-setial .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question-setial .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                    }
+                })
+            }))
+            $(document).on('click', '.methods-ask-question .model_tag_list li', function () {
+                check_methods_tag_2 = $(this).attr('pid');
+                $(this).addClass('checked').siblings().removeClass('checked');
+                (CKEDITOR.instances.methods_ask_1.getData().length > 0 && check_methods_tag_2 !== null) ? $('.methods-ask-question-setial .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question-setial .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+            })
+            var funcGetSelectText = function () {
+                var txt = '';
+                if (document.selection) {
+                    txt = document.selection.createRange();//ie
+                } else {
+                    txt = document.getSelection();
+                }
+                return txt.toString();
+                return txt;
+            }
+            c_click({
+                el: $('#container_body .methods-content-checked-box'),
+                down: function (e) {
+                },
+                move: function (e) {
+                    $(".fix-to-question").remove()
+                },
+                up: function (e) {
+                    mouse_select_text = funcGetSelectText();
+                    if (m_x == 0 && m_y == 0 && $(".fix-to-question")[0]) {
+                        $(".fix-to-question").remove();
+                        mouse_select_text = null
+                        m_x = 0;
+                        m_y = 0
+                    } else {
+                        mouse_select_text = funcGetSelectText();
+
+                        if (mouse_select_text) {
+                            m_x = 0;
+                            m_y = 0
+                            var x = e.pageX - 44
+                            var y = e.pageY + 30
+                            $(document.body).append('<div class="fix-to-question" style="left:' + x + 'px;top:' + y + 'px;">去提问</div>')
+                        }
+                    }
+                }
+            })
+            c_click({
+                el: $(document.body),
+                down: function (e) {
+                },
+                move: function (e) {
+                },
+                up: function (e) {
+                    if ($(e.target).hasClass('fix-to-question')) {
+                        return
+                    }
+//                if(m_x==0&&m_y==0 && $(".fix-to-question")[0]){
+//                    $(".fix-to-question").remove()
+//                    mouse_select_text=null;
+//                    m_x=0;
+//                    m_y=0
+//                }else{
+//
+//                }
+                }
+            })
+            function c_click(option) {
+                var d_x, d_y;
+                var el = option.el;
+
+                function down(e) {
+                    d_x = e.clientX;
+                    d_y = e.clientY;
+                    option.down(e)
+                    el.on('mousemove', move)
+                    el.on('mouseup', up)
+                }
+
+                function move(e) {
+                    option.move(e)
+                }
+
+                function up(e) {
+                    m_x = e.clientX - d_x;
+                    m_y = e.clientY - d_y;
+                    option.up(e)
+                    el.off('mousemove', move)
+                    el.off('mouseup', up)
+                }
+
+                el.on('mousedown', down)
+            }
+
+            $(document).on('click', ".fix-to-question", function () {
+                CKEDITOR.instances.ask_methods.setData('"' + mouse_select_text + '"&nbsp;&nbsp;&nbsp;')
+                $('.flex-box').removeClass('hide')
+                $(".fix-to-question").remove()
+            })
+            $(document).on('click', '.flex-close_btn', function () {
+                $('.flex-box').addClass('hide');
+                CKEDITOR.instances.ask_methods.setData('')
+            })
+            $(document).on('click', '.move-to-top', function () {
+                $("html,body").animate({
+                    scrollTop: 0
+                }, 300)
+            })
+            $(document).on('click', '.methods-ask-question-tag .tag', function () {
+                if ($(this).attr('type') === 'ask') {
+                    if (!$('.login-on')[0]) {
+                        //check_type(1)
+                        window.location.href = '/login/?next=' + window.location.pathname + '#1'
+                        return
+                    }
+                }
+                $(this).addClass('checked').siblings().removeClass('checked')
+                var attr = $(this).attr('type');
+                $('.methods-ask-question-con div[type="' + attr + '"]').removeClass('hide').siblings().addClass('hide');
+                if (attr === 'history') {
+                    get_page_data(1)
+                }
+
+            })
+            get_page_data(1)
+            function get_page_data(p) {
+                $.ajax({
+                    url: '/method_article_detail_ask_list/'+{{ id }}+'/'+p + '/',
+                    type: 'get',
+                    success: function (data) {
+                        if (data.code !== 200) {
+                            str = '<div style="display: flex;justify-content: center;align-items: center; height: 370px;">' +
+                                    '<div>' +
+                                    ' <svg xmlns="http://www.w3.org/2000/svg" width="94" height="96" viewBox="0 0 94 96">' +
+                                    '<path fill="#BCC1CC" fill-rule="evenodd" d="M57.744 71.226h-37.56c-4.51 0-8.202-3.742-8.202-8.316V18.583L.85 5.776 7.482.011l78.42 90.213-6.632 5.765-21.526-24.763zm-2.283-29.458a5.962 5.962 0 0 0 1.924-4.402c0-3.281-2.622-5.94-5.858-5.94a5.788 5.788 0 0 0-3.813 1.43L23.233 4.693h62.566c4.511 0 8.16 3.743 8.16 8.317L94 86.102 55.462 41.768zm18.035 1.538c3.236 0 5.859-2.66 5.859-5.94 0-3.281-2.623-5.94-5.859-5.94-3.235 0-5.858 2.659-5.858 5.94 0 3.28 2.623 5.94 5.858 5.94zm-43.938 0c3.235 0 5.858-2.66 5.858-5.94 0-3.281-2.623-5.94-5.858-5.94-3.236 0-5.859 2.659-5.859 5.94 0 3.28 2.623 5.94 5.859 5.94z"/>' +
+                                    ' </svg>' +
+                                    ' <p style="margin-top: 13px">暂无历史问答哦~</p>' +
+                                    '</div>' +
+                                    ' </div>'
+                            $('.methods-ask-question-con div[type="history"]').html(str)
+                            return
+                        }
+                        var list = data.data.questions_list, str = '';
+                        for (var i = 0; i < list.length; i++) {
+                            str += '<div class="ans-ques-list" id="' + list[i].question_id + '" link="/question_detail/' + list[i].question_id + '/0/1/1/">' +
+                                    '<div class="inline ans-ques-z ' + (list[i].answers_count ? 'bg-link' : 'bg-ori') + '">' +
+                                    '<span class="block line-height20 ">' + list[i].answers_count + '</span>' +
+                                    '<span class="block line-height20">回答</span>' +
+                                    '</div><div class="inline bor-bot1 ans-ques-list-right">' +
+                                    '<p class="ans-ques-list-title"><span>' + (list[i].recently_answer_username ? list[i].recently_answer_username : list[i].username) + '</span>&nbsp;&nbsp;<span>' + (list[i].recently_answer_time ? list[i].recently_answer_time : list[i].create_time) + '</span>' + (list[i].recently_answer_username ? "回复" : "发表") + '了这个问题</p>' +
+                                    '<p class="ans-ques-list-content"><span class="ques-tit-ak">' + list[i].content.replace(/(<[^>]+>)/g, '') + '</span>' +
+                                    '<a href="javascript:;" class="ques_tainal_link">' +
+                                    ' <span class="ans-ques-img-tag"></span><span class="color-link font-14">' + list[i].category + '</span>' +
+                                    ' </a>' +
+                                    '</p>' +
+                                    '</div>' +
+                                    '</div>'
+                        }
+                        var page = data.data.pages
+                        if (page && page.length > 1) {
+                            str += '<ul class= "item_list mar-top23" id="article_ask_list_page">'
+                            if (data.data.current_page > 5) {
+                                str += '<li class= "prev" p_page="' + data.data.current_page - 1 + '"> <a  > & nbsp;</a></li>'
+                            }
+                            for (var j = 0; j < page.length; j++) {
+                                if (page[j] === data.data.current_page) {
+                                    str += '<li class="checked" p_page="' + page[j] + '">'
+                                } else {
+                                    str += '<li p_page="' + page[j] + '">'
+                                }
+                                str += '<a  >' + page[j] + '</a></li>'
+                            }
+                            if (data.data.page_count > 5 && data.data.current_page < data.data.page_count) {
+                                str += '<li class= "next" p_page= "' + data.data.current_page + 1 + '" > <a> & nbsp;</a></li>'
+                            }
+                            str += '</ul>'
+                        }
+                        $('.methods-ask-question-con div[type="history"]').html(str)
+                    }
+                })
+            }
+
+            $(document).on('click', '.ans-ques-list', function () {
+                if ($(this).attr('link')) {
+                    window.open($(this).attr('link'))
+                }
+            })
+            $(document).on('click', '#article_ask_list_page li', function () {
+                get_page_data($(this).attr('p_page'))
+            })
+        })
+        $(document).ready(function () {
+            $(document).on('click', '.detial_ask_methods', function () {
+                $('.methods-content-body-question .methods-ask-question-tag a[type="ask"]').trigger('click')
+                if ($('.login-on')[0]) {
+                    $(document).scrollTop(100000);
+                }
+            })
+
+        })
+
+        function back_top_to(tar, rate) {
+            var scrollTop = $(document).scrollTop()
+            var top = function () {
+                scrollTop = scrollTop + (tar - scrollTop) / (rate || 2);
+                if (scrollTop == tar) {
+                    $(document).scrollTop(tar);
+                    return;
+                }
+                $(document).scrollTop(scrollTop);
+                window.requestAnimationFrame(top);
+            };
+            window.requestAnimationFrame(top)
+        }
+
+        $.ajax({
+            url: '/front_question_category_list/',
+            type: "get",
+            success: function (data) {
+
+                if (data.code !== 200) {
+                    return
+                }
+                var list = data.data.question_category_list;
+                var str = '';
+                for (var i = 0; i < list.length; i++) {
+                    str += '<li pid="' + list[i].id + '">' + list[i].category + '</li>';
+                }
+                $('.model_tag_list_1').html(str);
+                $('.model_tag_list_2').html(str);
+            }
+        })
+        $(document).on('change', '#yika_img_methods_1', function () {
+            var oMyForm;
+            var _self = this;
+            if (!this['value'].match(/.jpg|.gif|.png|.bmp|.JPEG|svg|/i)) {
+                return
+            }
+            var oMyForm = new FormData();
+            oMyForm.append("imgFile", $('#yika_img_methods_1')[0].files[0]);
+            $.ajax({
+                type: 'post',
+                url: '/extends/image_storage/article_images/',
+                data: oMyForm,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (e) {
+                    if (e.code !== 200) {
+                        alert(e.message);
+                        return
+                    }
+                    CKEDITOR.instances.methods_ask_1.insertHtml("<img src='http://www.mediecogroup.com/images/article_images/" + e.data + "'>")
+                }
+
+            })
+        })
+        $(document).on('click', '#article_ask_btn_sub', function () {
+            if(isQuestionReleasing){return}
+            if (CKEDITOR.instances.methods_ask_1.getData().length > 0 && check_methods_tag_2 !== null) {
+                isQuestionReleasing = true;
+                $("#article_ask_btn_sub").css("background", "#E0E4E9").css("color", "#FFFFFF");
+                $.ajax({
+                    url: '/front_release_question/',
+                    type: 'post',
+                    data: {
+                        content: "" + CKEDITOR.instances.methods_ask_1.getData(),
+                        question_category_id: check_methods_tag_2,
+                        relevance_method_article_id:{{ id }}
+                    },
+                    success: function (data) {
+                        isQuestionReleasing = false;
+                        $('#article_ask_btn_sub').css('background-color', '#37aef2').css('cursor', 'pointer');
+                        if (data.code !== 200) {
+                            $().alert_box(data.message)
+                            return
+                        }
+                        $('.methods-ask-question-tag a[type="history"]').trigger('click')
+                        CKEDITOR.instances.methods_ask_1.setData("")
+                        $(".model_tag_list_2").children().removeClass('checked')
+                        check_methods_tag_2 = null
+                    }
+                })
+            }
+            {#                                $().alert_box('请输入评论内容')#}
+
+        })
+        $.ajax({
+            url: '/related_reading_method_article_list/'+{{ id }}+'/',
+            success: function (data) {
+                if (data.code === 200) {
+
+                    var list=data.data,str='',current_url='';
+                   //var n=list.length>=5?5: list.length
+                    for(var i=0;i<list.length;i++){
+                        if(list[i].category_id==13) {
+                            current_url = '/method_topic_article_detail/'
+                        }else{
+                            current_url = '/method_article_detail/'
+                        }
+
+                        if(list[i].parent_category){
+                            title  = "【"+list[i].parent_category+"】"+list[i].title
+                        }else{
+                            title = list[i].title
+                        }
+                        str += '<a href="'+current_url+ list[i].id + '/"><div class="paper_item">' + '<div class= "item_info">' + title +'</div></div></a>'
+                    }
+                    $('#sidebar_paper_box .paper_content').html(str)
+                }
+            }
+        })
+    </script>
+{% endblock bodyblock %}
+

@@ -1,0 +1,167 @@
+{% extends './_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+    <link rel="stylesheet" href="{% static 'css/network.css' %}">
+{% endblock headblock %}
+
+{% block head-nav %}
+    <div class="head-methods-list">
+        <div class="header-methods-list-bot"> </div>
+    </div>
+{% endblock head-nav %}
+
+{% block bodyblock %}
+    <div id="container" class="min_width_container" style="padding-bottom:50px;">
+        <div class="container">
+            <div class="title-top">
+                <!-- 添加字段判断是否审核通过 -->
+                {% if form.status == 0 %}
+                    <div class="status_submitted"></div>
+                    <h3 class="container-form">科研团队成员信息</h3>
+                    <a href="/networks/1/apply?edit=1">
+                        <div class="edit" id="edit">编辑</div>
+                    </a>
+                {% elif form.status == 1 %}            
+                    <div class="status_pass"></div>
+                    <h3 class="container-form">科研团队成员信息</h3>
+                {% endif %}
+            </div>
+            <div class="form-wrap" style="background:#fff;">
+                <div class="form-one">
+                    <h4 class="form-one-h">一、项目名称</h4>
+                    <form action="" id="form1">
+                        <fieldset id="newsletter_topics"  style="border:none">
+                            <div class="form-one-inc" style="border:none">
+                                {% for study in studies %}
+                                    {% if study.study_id in form.edc_study_ids %}
+                                        <p>
+                                            <label >
+                                                {{study.name}}
+                                            </label>
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}   
+                                <p>
+                                    <label for="topic" class="error"></label>
+                                </p>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="form-two">
+                    <h4 class="form-two-h">二、研究组负责人信息</h4>
+                    <form action="" id="form2" class="form-o cmxform">
+                        <fieldset>  
+                            <p>
+                                <span style="float:left;">
+                                    <label for="cname1">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                                    <span style="display:inline-block;">{{form.leader.name}}</span>
+                                </span>
+                                <span style = "float:right">
+                                    <label for="csubject1">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
+                                    <span style="display:inline-block;">{{form.leader.department}}</span>
+                                </span>
+                            </p>                            
+                            <p>
+                                <span style="float:left;">
+                                    <label for="cemail1">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+                                    <span style="display:inline-block;">{{form.leader.email}}</span>
+                                </span>
+                                <span style = "float:right">
+                                    <label for="cjob1">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+                                    <span style="display:inline-block;">{{form.leader.title}}</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span style="float:left;">
+                                    <label for="cphone1">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+                                    <span style="display:inline-block;">{{form.leader.phone}}</span>
+                                </span>
+                                <span style = "float:right">
+                                    <label for="cwork1">工作单位： </label>
+                                    <span style="display:inline-block;">{{form.site}}</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span style = "float:left;width:710px;">
+                                    <label for="cplace1">工作地址： </label>
+                                    <span style="display:inline-block;width:510px;">{{form.address}}</span>
+                                </span>
+                            </p>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="form-three">
+                    <h4 class="form-three-h">三、研究人员的信息</h4>
+                    <form action=""  id="form3" class="form-t cmxform" >
+                        {% for research in form.researchers %}
+                        <fieldset style="border:none">
+                            <p>
+                                <span style = "float:left">
+                                    <label for="cname2">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                                    <span style="display:inline-block;">{{research.name}}</span>
+                                </span>
+                                <span style = "float:right">
+                                    <label for="csubject2">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
+                                    <span style="display:inline-block;">{{research.department}}</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span style = "float:left">
+                                    <label for="cemail2">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+                                    <span style="display:inline-block;">{{research.email}}</span>
+                                </span>
+                                <span style = "float:right">
+                                    <label for="cjob2">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+                                    <span style="display:inline-block;">{{research.title}}</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span style = "float:left">
+                                    <label for="cphone2" for="number">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+                                    <span style="display:inline-block;">{{research.phone}}</span>
+                                    <span style="display:inline-block;"></span>
+                                </span>
+                            </p>
+                        </fieldset>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="form-six">
+                    <h4 class="form-six-h">四、数据管理员信息</h4>    
+                    <form action="" id="form6" class="form-e">
+                        <fieldset style="border:none">
+                            <p>
+                                <span style = "float:left">
+                                    <label for="cname2">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                                    <span style="display:inline-block;">{{form.datamanager.name}}</span>
+                                </span>
+                                <span style = "float:right">
+                                    <label for="csubject2">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
+                                    <span style="display:inline-block;">{{form.datamanager.department}}</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span style = "float:left">
+                                    <label for="cemail2">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+                                    <span style="display:inline-block;">{{form.datamanager.email}}</span>
+                                </span>
+                                <span style = "float:right">
+                                    <label for="cjob2">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+                                    <span style="display:inline-block;">{{form.datamanager.title}}</span>
+                                </span>
+                            </p>
+                            <p>
+                                <span style = "float:left">
+                                    <label for="cphone2" for="number">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+                                    <span style="display:inline-block;">{{form.datamanager.phone}}</span>
+                                </span>
+                            </p>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock bodyblock %}

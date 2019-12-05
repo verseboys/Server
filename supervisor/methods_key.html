@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>研究方法-关键词关联</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/methods.css">
+    <link rel="stylesheet" href="public/css/methods_recommend.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+        .progress-list{
+            display: flex;
+            text-align: center;
+            padding: 0 22px 0 22px;
+            line-height: 40px;
+            border-bottom: solid 1px #d8d8d8;
+        }
+        .progress-title{
+            flex: 2;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding-right: 20px;
+        }
+        .progress-tag{
+            flex: 1;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .progress-class{
+            flex: 2;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding-right: 20px;
+        }
+        .edit{
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.9px;
+            color: #4588f1;
+        }
+        .del{
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.9px;
+            color: #e57163;
+        }
+        .gang{
+            display: inline-block;
+            opacity: 0.59;
+            font-family: PingFangSC;
+            font-size: 14px;
+            letter-spacing: 0.9px;
+            letter-spacing: 0.9px;
+            color: #000000;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav"></div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <a href="methods_key_article.html?type=add" style="text-decoration: none"><div class="publish_btn" style="width: 146px">新建关键词</div></a>
+            <div class="search_box" style="float: right;"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+        <div class="panel_body" style=" padding-top:0;margin-top: 28px;">
+            <div class="progress-list" style="background:#d8d8d8;line-height: 33px;margin-top: 27px">
+                <div class="progress-title">规则名</div><div class="progress-class">关键词</div><div class="progress-tag">操作</div>
+            </div>
+            <div id="panel_content">
+                <div class="progrss_recommen_list">
+                    <div class="progress-list" style="line-height: 40px;">
+                        <div class="progress-title">标题</div><div class="progress-class">分类</div><div class="progress-tag"><a href="methods_key_article.html?type=edit&g=1"><div class="edit" >编辑</div></a><div class="gang">/</div><div class="del" p_id="'+list[i].id+'">删除</div></div>
+                    </div>
+                </div>
+            </div>
+            <div id="compents_paginator" style="display: none">
+                <ul class="compents_paginator paginator"></ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div>
+            <div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var page='1/', item='',url="/supervisor/key_word_groups/",ttp="RECOM",page_num,ttty='get',ddddt='';
+    got_list()
+    function got_list() {
+        $.ajax({
+            url:u+url+page+item,
+            type:ttty,
+            data:ddddt,
+            success:function (data) {
+                var str = '<div class="progress-list" style="background:#d8d8d8;line-height: 33px;margin-top: 27px">\n' +
+                    '                <div class="progress-title">规则名</div><div class="progress-class">关键词</div><div class="progress-tag">操作</div>\n' +
+                    '            </div>\n' +
+                    '            <div id="panel_content"><div class="progrss_recommen_list">'
+                if (data.code !== 200) {
+                    $('.panel_body').html(str+='<div class="tag-class-box" style="text-align: center; line-height: 100px;">暂无文章</div></div></div>')
+
+                    return
+                }
+                var list = data.data.key_word_groups;
+
+                if (list.length) {
+
+                    for(var i=0;i<list.length;i++){
+                        var key='';
+                        var q=list[i].key_word_list
+                        for(var j=0;j<q.length;j++){
+                            if(j===q.length-1){
+                                key+=q[j]
+                            }else{
+                                key+=q[j]+'、'
+                            }
+                        }
+                        str+='<div class="progress-list" style="line-height: 40px;">\n' +
+                            '                        <div class="progress-title" title="'+list[i].group_name+'">'+list[i].group_name+'</div><div class="progress-class" title="'+key+'">'+key+'</div><div class="progress-tag"><a href="methods_key_article.html?type=edit&g='+list[i].group_id+'"><div class="edit" >编辑</div></a><div class="gang">/</div><div class="del" p_id="'+list[i].group_id+'">删除</div></div>\n' +
+                            '                    </div>'
+                    }
+
+                    var str_li = '';
+                    var ppp=parseFloat(page);
+                    if (ppp !== 1) {
+                        str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                        str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                    }
+                    var pagecount = data.data.page_count, start, last;
+                    if (data.data.page_count > 1) {
+                        if (pagecount - Number(ppp) > 2 && Number(ppp) > 2 && pagecount > 5) {
+                            start = Number(ppp) - 3;
+                            last = Number(ppp) + 2
+                        }
+                        else if (pagecount - Number(ppp) <= 2 && pagecount > 5) {
+                            start = pagecount - 6;
+                            last = pagecount;
+                        }
+                        else if (Number(ppp) <= 2 && pagecount > 5) {
+                            start = 0;
+                            last = 5
+                        }
+                        else if (pagecount <= 5) {
+                            start = 0;
+                            last = pagecount;
+                        }
+                        for (var p = start; p < last; p++) {
+                            if (Number(ppp) === (p + 1)) {
+                                str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                            } else {
+                                str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                            }
+                        }
+                    }
+                    if (data.data.page_count !== 1 && ppp !== data.data.page_count) {
+                        str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                        str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                    }
+
+                    page_num = data.data.page_count;
+                    if (data.data.page_count != 1) {
+                        str+='<div id="compents_paginator" style="padding-right: 22px">\n' +
+                            '                <ul class="compents_paginator paginator">\n' +str_li+
+                            '                </ul>\n' +
+                            '                <ul class="compents_paginator paginator_controller">\n' +
+                            '                    <li class="page_number">\n' +
+                            '                        <div id="page_number">'+data.data.page_count+'</div>\n' +
+                            '                    </li>\n' +
+                            '                    <li class="page_saver"><input id="page_saver"></li>\n' +
+                            '                    <li class="page_ender">页</li>\n' +
+                            '                </ul>\n' +
+                            '            </div>'
+
+                    }
+
+                    $('#content')[0].scrollTop = 0
+
+                }else {
+                    str+='<div></div>'
+                }
+                str+='</div>'
+//            $('#panel_content').html(str)
+                $('.panel_body').html(str)
+            }
+        })
+    }
+    $(document).on('click', '#compents_paginator .paginator li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'))+'/';
+
+        }
+        if ($(this).hasClass('prev')) {
+            page= parseFloat(page);
+            page--
+            page+='/'
+
+        }
+        if ($(this).hasClass('next')) {
+            page= parseFloat(page);
+            page++;
+            page+='/'
+        }
+        if ($(this).hasClass('first')) {
+            page = 1+'/';
+
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num+'/';
+
+        }
+        got_list()
+    })
+    $(document).on('keyup', '#compents_paginator input', function (e) {
+        if (e.keyCode === 13) {
+            page = $(this).val()+'/';
+            got_list();
+            $(this).val('').blur();
+        } else {
+            if ($(this).val() > page_num) {
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g, ''))
+        }
+    })
+    function search_data() {
+        if($('.search_box input').val()) {
+            page=1;
+            url='/supervisor/search_key_word/'
+            ttty='post';
+            ddddt={search_key_word: $('.search_box input').val()};
+            page='1/';
+            got_list();
+        }
+    }
+    $(document).on('click','.search_box .search_img',function () {
+        search_data()
+    })
+    $(document).on('keyup', '.search_box input',function (e) {
+        if (e.keyCode === 13) {
+            search_data()
+        }
+    })
+    $(document).on('click','.del',function () {
+        var p=$(this).attr('p_id')
+        $.ajax({
+            url:u+'/supervisor/delete_key_word_group/'+p+'/',
+            type:'post',
+            success:function () {
+                got_list()
+            }
+        })
+
+    })
+    function bond_select(num) {
+        num ? num : 1
+        var str = '';
+        for (var i = 1; i <= 4; i++) {
+            if (i === Number(num)) {
+                str += ' <option value="' + i + '" selected>' + i + '</option>'
+            } else {
+                str += ' <option value="' + i + '">' + i + '</option>'
+            }
+        }
+        return str
+    }
+</script>
+</body>
+</html>

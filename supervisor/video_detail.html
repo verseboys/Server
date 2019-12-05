@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-用户管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/research_detail.css">
+    <link rel="stylesheet" href="public/css/methods_artical.css">
+    <link rel="stylesheet" href="public/css/video_detail.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="public/js/common.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/adapters/jquery.js"></script>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav">
+    <ul>
+        <li>
+            <span>课程信息</span>
+            <div class="basic_message hover_block">
+                　　　　基本信息
+            </div>
+        </li>
+        <li>
+            <span>章节内容</span>
+            <div class="content hover_block">
+                　　　　课程章节内容
+            </div>
+        </li>
+        <li>
+            <span>评论</span>
+            <div class="comment hover_block">
+                　　　　评论管理
+            </div>
+        </li>
+        <li>
+                <span>交易管理</span>
+                <div class="price hover_block">
+                   　　　　订单查询
+                </div>
+        </li>
+        <li>
+            <span>反馈管理</span>
+            <div class="feedback hover_block">
+               　　　　查看反馈
+            </div>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <!-- 基本信息页面 -->
+    <div class="public_container basic_message_container">
+        <div class="study_name_container">
+            课程名称：
+            <input type="text" id="studyName" >
+        </div>
+        <div class="study_introduce_container"> 
+            课程简介：
+           <div id="study_introduce">
+            
+           </div>
+        </div>
+        <div class="teacher_introduce_container"> 
+            讲者简介：
+            <div id="teacher_introduce">
+
+            </div>
+        </div>
+        <div class="study_price_container">
+            课程价格：
+            <div>
+                <div class="study_price_radio_container">
+                    <input type="radio" name="price" value="0" class="study_price_radio"><span>免费</span>
+                </div>
+                <div class="study_price_radio_container">
+                    <input type="radio" name="price" value="1" class="study_price_radio"><span>收费</span>
+                    <input type="number" class="price_input"><span>&nbsp元</span>
+                </div>
+            </div>
+        </div>
+        <div class="study_img_container">
+                缩略图：   <input name="study_image" type="file" style="display:inline-block"  accept="image/png,image/gif,image/jpeg" id="study_image">
+                <div style="height:10px"></div>
+            预览：<div class="study_img" >
+                    <img src=""  style="object-fit:contain;width:208px;height:127px" >
+                 </div>
+                   
+        </div>
+        <div class="confirm_container">
+            <div class="cancel"  id="basic_cancel">
+                取消
+            </div>
+            <div class="save" id="basic_save">
+                保存
+            </div>
+        </div>
+        <div></div>
+    </div>
+
+    <!--  课程章节内容页面 -->
+    <div class="public_container content_container hide">
+        <div >
+            <span class="content_title">章节</span><span class="content_circle_middle">1</span>
+            <select name="" id="chapter_selector">
+                <option value="">选择新章节</option>
+            </select>
+        </div>
+        <div class="chapter_container">
+            <!-- 课时容器 -->
+            <div class="study_container" style="display:none">
+                <div class="study_title">
+                    <span class="study_number">课时1</span>
+                    <span class="content_circle_small"></span>
+                    <input type="text" class="chapter_input" ><span class="chapter_edit ">编辑</span><span class="chapter_delete">删除</span>
+                </div>
+            </div>
+            <!-- 添加课时 -->
+            <div class="add_study_container" >
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 订单管理页面 -->
+    <div class="public_container price_container hide">
+        <div class="orders_title">
+            <div class="orders_all orders_active">全部订单</div>
+            <div class="orders_search">订单查询</div>
+        </div>
+        <!-- 全部订单 -->
+        <div class="orders_all_container">
+            <div class="orders_flash_container">
+                <div class="orders_flash_button">
+                    更新
+                </div>
+            </div>
+            <div class="orders_detail_container">
+                <div class="orders_detail_head">
+                    <span style="width:141px">
+                        订单号
+                    </span>
+                    <span>
+                        课程名称
+                    </span>
+                    <span>
+                        用户名称
+                    </span>
+                    <span>
+                        交易金额
+                    </span>
+                    <span>
+                        支付方式
+                    </span>
+                    <span style="width:141px">
+                        第三方支付订单号
+                    </span>
+                    <span>
+                        订单状态
+                    </span>
+                    <span>
+                        订单操作
+                    </span>
+                </div>
+                <div class="orders_detail_body">
+                    <!--  动态生成部分  -->
+                </div>
+                <div class="orders_detail_foot">
+                    <!--<div class="price_sum">
+                            本页订单金额总计：0 元
+                    </div>-->
+                    <div class="price_sum_all">
+                            订单金额总计：0元
+                    </div>
+                </div>
+            </div>
+            <!-- 全部订单分页 -->
+            <div class="paging_container" style="width:100%;margin-left:1px">
+                <div id="panel_body" class="panel_body1">
+                    <div id="compents_paginator" class="compents_paginator1">
+                        <ul class="compents_paginator paginator">
+                        </ul>
+                        <ul class="compents_paginator paginator_controller">
+                            <li class="page_number">
+                                <div id="page_number" class="page_number1"></div>
+                            </li>
+                            <li class="page_saver"><input id="page_saver" class="page_saver1"></li>
+                            <li class="page_ender">页</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 订单查询 -->
+        <div class="orders_search_container  hide">
+            <div class="orders_search_condition">
+                <div class="time_condition">订单时间　<input type="text" class="public_time_input flatpickr-input time_start">　——　<input type="text" class="public_time_input flatpickr-input time_end"></div>
+                <div class="state_condition">订单状态　
+                    <select class="orders_state">
+                        <option value="null">全部</option>
+                        <option value="2">已支付</option>
+                        <option value="1">未支付</option>
+                        <option value="0">已失效</option>
+                    </select>
+                </div>
+                <div class="search_action">
+                    <div class="orders_search_button">
+                        查询
+                    </div>
+                    <div class="search_flash_button">
+                        更新
+                    </div>
+                </div>
+            </div>
+            <div class="name_condition_container">
+                课程名称　<select class="name_search_condition">
+                    <option >课程加载中</option>
+                </select>
+            </div>
+            <div class="orders_detail_container">
+                    <div class="orders_detail_head">
+                        <span style="width:141px">
+                            订单号
+                        </span>
+                        <span>
+                            课程名称
+                        </span>
+                        <span>
+                            用户名称
+                        </span>
+                        <span>
+                            交易金额
+                        </span>
+                        <span>
+                            支付方式
+                        </span>
+                        <span style="width:141px">
+                            第三方支付订单号
+                        </span>
+                        <span>
+                            订单状态
+                        </span>
+                        <span>
+                            订单操作
+                        </span>
+                    </div>
+                    <div class="orders_detail_body">
+                    <!-- 动态生成部分 -->
+                    </div>
+                    <div class="orders_detail_foot">
+                        <!--<div class="price_sum">
+                            本页订单金额总计：0 元
+                        </div>-->
+                        <div class="price_sum_all">
+                            订单金额总计：0元
+                        </div>
+                    </div>
+            </div>
+            <!-- 订单查询分页 -->
+            <div class="paging_container" style="width:100%;margin-left:1px">
+                <div id="panel_body" class="panel_body1">
+                    <div id="compents_paginator" class="compents_paginator1">
+                        <ul class="compents_paginator paginator">
+                        </ul>
+                        <ul class="compents_paginator paginator_controller">
+                            <li class="page_number">
+                                <div id="page_number" class="page_number1"></div>
+                            </li>
+                            <li class="page_saver"><input id="page_saver" class="page_saver1"></li>
+                            <li class="page_ender">页</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--评论管理页面-->
+    <div class="public_container comment_container hide">
+        <div>
+            <span class="title_detail">详细内容</span> 
+            <span class="title_search">
+                <input type="text" placeholder="　点击搜索关键词...">
+                <span class="search_button">
+                    <img src="public/img/search.png" width="23" height="21" class="search_trigger">
+                </span>
+            </span>
+            <span class="title_uname">用户名</span>
+            <span class="title_comment_time">评论时间</span>
+            <span class="title_action">操作</span>
+        </div>
+        <div class="real_comment_container">
+            <!-- 动态生成部分 -->
+            <!-- <div class="one_real_comment">
+                <textarea cols="30" rows="10" class="comment_message" disabled>
+
+                </textarea> 
+                <div class="one_real_uname"></div>
+                <div class="one_real_comment_time">
+                    <span>2016-1-12</span>
+                    <span style="margin-left:30px">19:12</span>
+                </div>
+                <div class="one_real_action">
+                    <span class="delete_comment">删除</span>
+                </div>
+            </div>
+            <div class="divide_comment"></div> -->
+            <!-- 动态生成结束 -->
+        </div>
+        <div class="paging_container">
+            <div id="panel_body" class="panel_body1">
+                <div id="compents_paginator" class="compents_paginator1">
+                    <ul class="compents_paginator paginator">
+                    </ul>
+                    <ul class="compents_paginator paginator_controller">
+                        <li class="page_number">
+                            <div id="page_number" class="page_number1"></div>
+                        </li>
+                        <li class="page_saver"><input id="page_saver" class="page_saver1"></li>
+                        <li class="page_ender">页</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 反馈管理页面 -->
+    <div class="public_container feedback_container hide">
+        <div>
+            <span class="title_detail">详细内容</span> 
+            <span class="title_search">
+                <input type="text" placeholder="　点击搜索关键词...">
+                <span class="search_button">
+                    <img src="public/img/search.png" width="23" height="21" class="feedback_search_trigger">
+                </span>
+            </span>
+            <span class="title_uname">用户名</span>
+            <span class="title_connection">联系方式</span>
+            <span class="title_comment_time">反馈时间</span>
+            <span class="title_action">操作</span>
+        </div>
+        <div class="real_feedback_container">
+            <!-- 动态生成部分 -->
+            <!-- <div class="one_real_comment">
+                <textarea cols="30" rows="10" class="comment_message" disabled>
+                </textarea> 
+                <div class="one_real_uname">
+                </div>
+                <div class="one_real_connection">
+                </div>
+                <div class="one_real_comment_time">
+                    <span>2016-1-12</span>
+                    <span style="margin-left:30px">19:12</span>
+                </div>
+                <div class="one_real_action">
+                    <span class="check_feedback">删除</span>
+                </div>
+            </div>
+            <div class="divide_comment"></div> -->
+            <!-- 动态生成结束 -->
+        </div>
+        <div class="paging_container" style="width:1341px">
+            <div id="panel_body" class="panel_body1">
+                <div id="compents_paginator" class="compents_paginator1">
+                    <ul class="compents_paginator paginator">
+                    </ul>
+                    <ul class="compents_paginator paginator_controller">
+                        <li class="page_number">
+                            <div id="page_number" class="page_number1"></div>
+                        </li>
+                        <li class="page_saver"><input id="page_saver" class="page_saver1"></li>
+                        <li class="page_ender">页</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="feedback_background hide">
+            <div class="feedback_detail_container">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--导航开关-->
+<div class="nav_cursor">
+    <img src="/supervisor/public/img/nav_cursor.png">
+</div>
+<!-- 公共富文本编辑器 -->
+<div class="public_editor" style="display:none">
+        <div class="more-text public_editor_container">
+            <textarea id="ask_area" name="editor"></textarea>
+            <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+            <div  class="save_button" id="public_editor_save" style="width:150px">保存并退出</div>
+            <div  class="cancel_button"  id="public_editor_cancel">取消</div>
+        </div> 
+</div>
+
+
+<script type="text/javascript" src="public/js/main.js"></script>
+<script type="text/javascript" src="public/js/publish.js"></script>
+<script type="text/javascript" src="public/js/video_detail.js"></script>
+
+</body>
+</html>

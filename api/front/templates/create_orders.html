@@ -1,0 +1,296 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block titleblock %}提交订单-医咖会{% endblock titleblock %}
+{% block headblock %}
+<link rel="stylesheet" href="{% static 'css/purchase_course.css' %}">
+{% endblock headblock %}
+
+{% block bodyblock %}
+
+<div class="main_background">
+    <table></table>
+    <div class="page_container"> 
+        <div class="purchase_title">
+            <span class="purchase_title_inner">确认订单并支付</span>
+            <span class="bill_number">订单号：</span>
+        </div> 
+        <div class="step_container">  
+        </div> 
+        <div class="bill_countdown">
+            你的订单已提交，请在<span style="color:#d84a33">&nbsp;24&nbsp;</span>小时内完成支付！支付剩余时间：<span class="time_left"></span>
+        </div>
+        <div class="choose_payment_method">
+            请选择支付方式
+        </div>
+        <div class="payment_method">
+            <div class="ali_container">
+                <div class="fake_radio">
+                    <img src="{% static 'images/radio_active.svg'%}">
+                </div>
+                <div class="ali_logo">
+                    <div class="ali_logo_inner">
+                            <img src="{% static 'images/ali_logo.png'%}">
+                    </div>
+                </div>
+            </div>
+            <div class="price_container">
+            </div>
+        </div>
+        <div class="pay_now">
+            <div class="pay_button">
+                立即支付
+            </div>
+        </div>
+        <div class="other_detail">
+                <div class="question_container">
+                    我有疑问，需要反馈？
+                </div>
+                <div class="readme_container">
+                    <div class="checkbox_container">
+                        <img class="checkbox_cancel hide" src="https://cdn.zeplin.io/59a37c1e1d67d1f72d98c3f3/assets/3E993461-BD2C-4C7B-B6D9-34EC6782E8E4.png">
+                        <img class="checkbox_confirm " src="{% static 'images/checkbox_active.png' %}">
+                    </div>  
+                    <span>我已经阅读并同意 <span class="readme_show">《医咖会服务协议》</span></span>                 
+                </div>
+        </div>
+        <div class="bill_background hide">
+        <div class="readme">
+                <div>
+                    <div class="readme_cancel">
+                            <img src="{% static 'images/cancel.png' %}" >
+                    </div>
+                </div>
+                <h3 class="readme_title">
+                        医咖会服务协议
+                </h3>
+                <pre class="readme_comtent">    欢迎使用医咖会服务，为保障用户权益，请用户在付费之前，详细阅读此服务协议（以下简称“本协议”）所有内容，特别是加粗部分。当用户点选“【我已经阅读并同意《医咖会服务协议》】”时，即表示用户同意并承诺遵守本协议。
+    本协议内容包括协议正文、医咖会已经发布的或将来可能发布的各类规则。所有规则为本协议不可分割的组成部分，与协议正文具有同等法律效力。
+    如果您未满18周岁，请在法定监护人的陪同下阅读本协议，并在法定监护人的指导下使用本服务。
+ 
+【第一条 定义】
+1. 医咖会：医咖会品牌和商标为北京医助科技有限公司所有，www.mediecogroup.com为医咖会的经营平台。医咖会声明其所展示并销售的课程（含视频、图片及文章等）的著作权均属于医咖会或供图作者所有，受中华人民共和国知识产权法以及其他法律规定的保护。
+2. 协议范围：本协议是您（以下也称“用户”）、医咖会或供图作者等之间关于您使用本服务所涉相关事项的法律协议。
+3. 收费课程是指医咖会有偿提供给用户的视频、资料、图片等内容。
+ 
+【第二条 本协议的修订】
+医咖会有权对本协议进行调整或补充，并在医咖会平台公告。若用户继续使用医咖会服务，则视为接受该等调整或补充，亦或用户有权终止使用该服务。
+ 
+【第三条 医咖会服务规范】
+1. 医咖会作为课程提供方，为用户提供观看课程平台服务。医咖会平台可以为用户提供有偿服务或内容（包括但不限于收费课程等所有收费类型的服务和内容，下同），医咖会为有偿服务或内容的提供方或售卖方。
+2. 除非另有证明，医咖会储存在其服务器上的数据是用户使用医咖会服务的唯一有效证据。
+
+【第四条 用户规则】
+1. 用户可在医咖会平台上浏览医咖会提供的内容，如用户希望有偿获得该部分内容或服务，则用户需先登录或注册医咖会帐号。
+2. 您确认：您是具备完全民事权利能力和完全民事行为能力的自然人、法人或其他组织，有能力对您使用医咖会服务的一切行为独立承担责任。若您不具备前述主体资格，医咖会在依据法律规定或本协议约定要求您承担责任时，有权向您的监护人追偿。
+3. 用户理解并同意，医咖会平台提供有偿内容或服务实行先付款后使用的方式，用户及时、足额、合法的支付所需的款项是您使用该等有偿内容或服务的前提。
+4. 用户理解并同意，录播视频课程通过医咖会平台发布的收费课程将采用整体购买的方式，即用户只需购买一次，就可以学习该课程所有已发布或即将发布的课时。已购买的收费录播视频课程，用户可以自己重复学习，无需再次付费，暂无观看时间限制（后续如有变化另行通知）。
+5. 用户理解并同意，用户无权对已购买的课程进行出售、转让、许可或其他方式使除用户自己以外的第三方（包括但不限于自然人、法人或其他组织）使用其已购买的课程。若用户违反本条规定，则医咖会有权视情况采取如下措施：
+1) 取消用户继续使用该课程的权利；
+2) 限制/冻结用户的帐号；
+3) 要求用户退还其通过出售、转让、许可等其他方式取得的收益；
+4) 其他医咖会可以采取的救济措施（包括但不限于向您或第三方追究侵权责任）；
+6. 用户了解并同意，医咖会可能会基于自身原因（包括但不限于：更新课程内容、改进课程安排）不定期的对收费课程进行更新而无需经过您的事先同意。
+7. 用户应保管好自己的帐号和密码，如因用户未保管好自己的帐号和密码而对自己、医咖会或第三方造成损害的，用户将负全部责任。另外，用户应对用户帐号中的所有活动和事件负全责。用户可随时改变帐号绑定信息和密码。用户同意若发现有非法使用用户的帐号或出现安全漏洞的情况，立即通告医咖会，将会尽力予以妥善解决。
+ 
+【第五条 退款规则】
+A. 用户购买课程之日起7天内，因医咖会平台技术原因可申请退款。技术原因是指：由医咖会平台技术故障引发的连续超过24小时课程无法正常观看、视频无法正常播放、PPT/PDF课程无法观看。非医咖会平台技术原因不予退款，如用户个人网络原因、观看设备故障、用户账号丢失等类原因不属于平台技术故障。
+B. 用户购买超过7天后一律不予退款。
+ 
+【第六条 其他规则】
+1. 不可抗力：医咖会对不可抗力导致的损失不承担责任。本服务条款所指不可抗力包括：天灾、法律法规或政府指令的变更，因网络服务特性而特有的原因，例如境内外基础电信运营商的故障、计算机或互联网相关技术缺陷、互联网覆盖范围限制、计算机病毒、黑客攻击等因素，及其他合法范围内的不能预见、不能避免并不能克服的客观情况。
+2. 服务中止、中断及终止：医咖会根据自身商业决策等原因可能会选择中止、中断及中止平台服务。如有此等情形发生，医咖会会采取公告的形式通知您。经国家行政或司法机关的生效法律文书确认您存在违法或侵权行为，或者医咖会根据自身的判断，认为您的行为涉嫌违反本协议内容或医咖会不时公布的使用规则等内容，或涉嫌违反法律法规的规定的，则医咖会有权中止、中断或终止向您提供服务，且无须为此向您或任何第三方承担责任。
+3. 所有权及知识产权：医咖会平台上所有内容，包括但不限于课程、文字、声音、图片、软件、图表、网站架构、网站画面的安排、网页设计、以及有偿内容或服务均由医咖会、供图作者或其他权利人依法拥有其知识产权，包括但不限于著作权、商标权、专利权等。非经医咖会书面同意用户不得擅自使用、修改、复制、传播、改变、散布、发行或发表上述内容。如有违反，用户同意承担由此给医咖会、供图作者或其他权利人造成的一切损失，同时保留追究用户侵权责任的权利。
+4. 所有发给用户的通知都可通过电子邮件、常规的信件或在网站显著位置公告的方式进行传送。
+5. 本协议适用中华人民共和国的法律。当本协议的任何内容与中华人民共和国法律相抵触时，应当以法律规定为准，同时相关内容将按法律规定进行修改或重新解释，而本协议其他部分的法律效力不变。
+6. 本协议自发布之日起实施，并构成用户和医咖会之间的共识。
+7. 医咖会不行使、未能及时行使或者未充分行使本协议或者按照法律规定所享有的权利，不应被视为放弃该权利，也不影响医咖会在将来行使该权利。
+8. 如果用户对本协议内容有任何疑问，请发送邮件至我们的客服邮箱：http://yikahui@mediecogroup.com
+9. 本协议于2018年5月20日生效。
+                </pre>
+            </div>
+        </div>
+    <div class="ali_alert_background hide">
+        <div class="ali_alert_container">
+             <div class="alert_title">
+                请在新打开的页面完成支付
+             </div>
+             <p>
+                 支付前完成请不要关闭窗口
+             </p>
+             <p>
+                 支付完成后，将返回你购买的课程页面
+             </p>
+             <p>
+                 如果支付失败，可在个人中心-我的课程
+             </p>
+             <p>
+                 中查看是否成功
+             </p>
+             <div class="pay_result_container">
+                <div class="choose_pay_way">
+                    重新选择支付方式
+                </div>
+                <div class="pay_succeed">
+                    支付完成
+                </div>
+             </div>
+        </div>
+    </div>
+    </div>
+</div>
+<script>
+let time_now=null
+let ali_alert_container=$(".ali_alert_container")
+let time_left = function(time_end,time_start,minutes_all){
+    let time_left = $(".time_left")
+    minutes_gone = new Date(time_end).getTime()-new Date(time_start).getTime()
+    let seconds = null
+    let minutes = null
+    if (minutes_all-minutes_gone<0){
+        seconds=0
+        minutes=0
+    }else{
+        minutes = new Date(minutes_all-minutes_gone+40*60*60*1000).getMinutes()
+        seconds = new Date(minutes_all - minutes_gone+40 * 60 * 60 * 1000).getSeconds()
+        hours = new Date(minutes_all - minutes_gone+ 40 * 60 * 60 * 1000).getHours()
+    }
+    minutes=minutes>=10?minutes:("0"+minutes)
+    seconds=seconds>=10?seconds:("0"+seconds)
+    hours= hours>=10?hours:("0"+hours)
+    time_left.text(hours+" : "+minutes+" : "+seconds)
+}
+    //医咖会协议
+    let readme=$(".bill_background")
+    let readme_cancel=$(".readme_cancel")
+    $(".readme_show").click(function(){
+        readme.removeClass("hide")
+    })
+    readme_cancel.click(function(){
+        readme.addClass("hide")
+    })
+    let readmeButton=$(".checkbox_container")
+    readmeButton.click(function(){
+        readmeButton.find('img').toggleClass('hide')
+    })
+    //创建订单
+    if({{ front_user.id|default:0 }}){
+        let course_id = sessionStorage.getItem("course_id")
+        let type = sessionStorage.getItem("type")
+        let order_id=(type=="get")?sessionStorage.getItem("order_id"):null
+        let order_id_used= sessionStorage.getItem("order_id_used")
+        if((order_id_used!="")&&(order_id_used!=undefined)){
+            type="get"
+            order_id=order_id_used
+        }
+        if(type!='get'&&type!='post'){
+            location.replace("/")
+        }else{
+            let xhr = null;
+            let url = null
+            if(type=='post'){
+                url="/create_orders/0/"
+            }else{
+                url="/create_orders/"+order_id+"/"
+            }
+            if(window.XMLHttpRequest){
+                xhr = new XMLHttpRequest();
+            } else {
+                xhr = new ActiveXObject('Microsoft.XMLHTTP')
+            }
+            xhr.open(type, url, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            if(type=="post"){
+                xhr.send("goods_id="+course_id);
+            }else{
+                xhr.send(null)
+            }
+
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 3){
+                    time_now = new Date(xhr.getResponseHeader('Date'))
+                }
+
+
+                if(xhr.readyState == 4){
+                    if(xhr.status == 200){
+                        let data= JSON.parse(xhr.responseText)
+                        sessionStorage.setItem("order_id_used",data.data.order_id)
+                        //请求成功倒计时开始
+                        let time_all= 24*60 * 60 * 1000
+                        setInterval(function () {
+                            time_left(time_now,data.data.create_time,time_all)
+                            time_all-=1000
+                        },1000)
+                        let order_id=data.data.order_id
+                        $(".price_container").html(sessionStorage.getItem("course_price"))
+                        $(".bill_number").html("订单号："+order_id)
+                        $(".pay_button").unbind("click").click(function(){
+                            if($(".checkbox_container").find(".checkbox_confirm:visible").length==1){
+                        //TODO:添加微信支付后修改
+                                $.ajax({
+                                    type:"post",
+                                    url:"/pay_orders/",
+                                    data:{
+                                        order_id,
+                                        type:1  
+                                    },
+                                    async:false,
+                                    success:function(data){
+                                        let ali_alert= $(".ali_alert_background")
+                                        ali_alert.removeClass("hide")
+                                        window.open(data.data)
+                                         $(".pay_succeed").unbind("click").click(function(){
+                                                $.ajax({
+                                                    type:"get",
+                                                    url:'/alipay_order_status/'+order_id,
+                                                    success:function (data) {
+                                                        if(data.code==200){
+                                                            sessionStorage.setItem("order_id_used","")
+                                                            ali_alert_container.html(`
+                                                              <div style="font_size:20px;text-align:center;margin-top:100px;margin-bottom:100px;">
+                                                                购买成功
+                                                              </div>
+                                                              <div class="pay_result" style="width:121px;height:35px;margin:0 auto;background:#eaeaf0;text-align:center;line-height:35px;cursor:pointer">确认</div>
+                                                             `)
+                                                        }else{
+                                                            ali_alert_container.html(`
+                                                              <div style="font_size:20px;text-align:center;margin-top:100px;margin-bottom:100px;">
+                                                                订单失效或未付款
+                                                              </div>
+                                                              <div class="pay_result" style="width:121px;height:35px;margin:0 auto;background:#eaeaf0;text-align:center;line-height:35px;cursor:pointer">确认</div>
+                                                             `)
+                                                        }
+                                                        $(".pay_result").click(function () {
+                                                            //跳转课程页面
+                                                            location.href = sessionStorage.getItem('page_from')
+                                                        })
+                                                    }
+                                                })
+                                         })
+                                         $(".choose_pay_way").click(function () {
+                                             ali_alert.addClass("hide")
+                                         })
+                                    }
+                                })
+
+                            }else{
+                                return
+                            }
+                        })
+                        
+                    } else if(xhr.status == 302){
+                        location.replace('/login/?next=/#1')
+                    }else{  
+                        return
+                    }
+                }
+            }
+        }
+    }else{
+        location.replace('/login/?next=/#1')
+    }
+    $(".question_container").click(function(){
+        location.href="/feed_back"
+    })
+</script>
+{% endblock bodyblock %}

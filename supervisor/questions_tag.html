@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-问题标签管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="public/js/vue.js"></script>
+    <style>
+        .box_content{
+            display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container" class="">
+
+        <div class="panel_right ">
+            <div class="tag_item" v-for="(lis ,item) in child_list"  v-bind:class="[parcheck_id=== lis.id? 'tag_item checked' : '', 'tag_item']"  >
+                <div class="tag_del_btn"></div>
+                <div class="tag_text" @click="check_parID(lis,item)">{{lis.category}}</div>
+                <input class="tag_edit_input" v-bind:type_id="lis.id" v-model="add_change" @blur="change_tag($event,lis,item)">
+                <div class="tag_toolbox">
+                    <div class="edit" @click="modif_tag($event,lis)"></div>
+                    <div class="del" v-bind:type_id="lis.id" @click="del_tag(lis,1,item)"></div>
+                </div>
+            </div>
+
+            <div class="tag_item tag_add_btn page_2_add_btn"><input style="display: none;" v-model="add_child_val.val" @blur="add_child($event)" @keyDown.enter="add_child($event)">
+                <div class="tag_text" style="display: inline-block;" @click="add_show_child($event)"></div>
+            </div>
+        </div>
+        <div v-if="child_list.length">
+            <textarea v-model="text" class="tag_textarea" id="textarea_tag" @keyup="text_up($event)" @blur="text_blur()"></textarea>
+        </div>
+        <pc-show-box v-bind:box="box_id" v-bind:tag_val="change"></pc-show-box>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var id=140
+    Vue.component('pc-show-box', {
+        template: '<div id="alert_area" v-show="box">\n' +
+        '            <div id="alert_box">' +
+        '<div v-if="box===1">\n' +
+        '            <div class="box_header">删除标签</div>\n' +
+        '            <div class="box_content">' +
+        '<p>确认删除“{{tag_val.tag}}”这个标签？</p>' +
+        '<div class="tips_box">{{add.msg}}</div>\n'+
+        '</div>\n' +
+        '            <div class="box_item">\n' +
+        '                <div class="item_left"  @click="close(0)">取消</div>\n' +
+        '                <div class="item_right" @click="del_val(tag_val)">确认</div>\n' +
+        '            </div>\n' +
+        '        </div>\n' +
+        '        <div v-if="box===2">\n' +
+        '            <div class="box_header">添加标签</div>\n' +
+        '            <div class="box_content">\n' +
+        '                <div class="add_tag_input"><input v-model="add_val"></div>\n' +
+        '<div class="tips_box">{{add.msg}}</div>\n'+
+        '            </div>\n' +
+        '            <div class="box_item">\n' +
+        '                <div class="item_left" @click="close(0)">取消</div>\n' +
+        '                <div class="item_right" @click="add_tag()">添加</div>\n' +
+        '            </div>\n' +
+        '        </div>\n'+
+        '<div v-if="box===3">\n' +
+        '            <div class="box_header">提示</div>\n' +
+        '            <div class="box_content" style="display: block;">\n' +
+        '               确认修改？ \n' +
+        '             <div class="tips_box">{{add.msg}}</div>\n'+
+        '            </div>\n' +
+        '            <div class="box_item">\n' +
+        '                <div class="item_left" @click="close_ques(0,tag_val)">取消</div>\n' +
+        '                <div class="item_right" @click="add_tag_ques(tag_val)">确认</div>\n' +
+        '            </div>\n' +
+        '        </div>' +
+        '</div>' +
+        '</div>',
+        props:['box','tag_val'],
+        data:function () {
+            return {
+                add:{
+                    msg:''
+                },
+                add_val:''
+
+            }
+        },
+        methods:{
+            close:function (num) {
+                check_type(num);
+                if(num===0){
+                    this.add_val='';
+                }
+            },
+            close_ques:function(num,val){
+                tag.parcheck_id = val.next.id;
+                tag.text=tag.child_list[val.item].summary;
+                tag.foc_type=false,
+
+                    check_type(num);
+                },
+            add_tag:function () {
+                var _self=this;
+                AJAX({
+                    url:'1',
+                    type:'get',
+                    data:{'add_tag': _self.add_val},
+                    fn:function (data) {
+                        if(data.code===200) {
+                            tag.par_lists.push(data.data)
+                            check_type(0);
+                        }else{
+                            _self.add.msg='提示: '+data.message;
+                        }
+                    }
+                    ,error:function () {
+                        var data={
+                            "message": "成功添加一级标签!",
+                            "code": 200,
+                            "data": {
+                                "tag": _self.add_val,
+                                "id": id++
+                            }
+                        };
+                        if(data.code===200) {
+                            tag.par_lists.push(data.data)
+                            check_type(0)
+                        }else{
+                            _self.add.msg='提示: '+data.message;
+                        }
+                        _self.add_val=''
+                    }
+                })
+            },
+            del_val:function (list) {
+                var _self=this;
+                AJAX({
+                    url:'/supervisor/delete_question_category/'+ list.id+'/',
+                    type:'get',
+                    data:'',
+                    fn:function (data) {
+                        if(data.code===200){
+                            check_type(0);
+                            _self.add.msg='';
+                            del_list_val(list.type,list.item)
+                            if(tag.child_list.length) {
+                                tag.parcheck_id = tag.child_list[0].id;
+                                tag.change.item = 0;
+                                tag.text = tag.child_list[0].summary
+                                tag.change.id= tag.child_list[0].id
+                            }
+                        }else{
+                            _self.add.msg=data.message;
+                        }
+                    }
+                    /*
+                    ,error:function () {
+                        var data={
+                            "message": "成功删除标签!",
+                            "code": 200,
+                            "data": {}
+                        }
+                        if(data.code===200){
+                            check_type(0);
+                            _self.add.msg='';
+                            del_list_val(list.type,list.item)
+                            if(tag.child_list.length) {
+                                tag.parcheck_id = tag.child_list[0].id;
+                                tag.change.item = 0;
+                                tag.text = tag.child_list[0].summary
+                            }
+                        }else{
+                            _self.add.msg=data.message;
+                        }
+                    }
+                    */
+                })
+            },
+            add_tag_ques:function (val) {
+
+                AJAX({
+                    url:'/supervisor/alter_question_and_answer_category/'+val.id+'/',
+                    type:'post',
+                    data:{"summary":val.text},
+                    fn:function (data) {
+                        if(data.code===200){
+                            tag.parcheck_id = val.next.id;
+//                            tag.text=val.next.summary;
+                            tag.child_list[val.item].summary=val.text;
+                            tag.foc_type=false
+//                            get_child_tag(val.next)
+                            check_type(0)
+                        }else {
+                            alert(data.message)
+                        }
+                    }
+                })
+            }
+        }
+    })
+    var tag = new Vue({
+        el: "#container",
+        data: {
+            box_id:0,
+            parcheck_id: '',
+            par_lists: '',
+            child_list: [],
+            change:{
+                type:'',
+                id:'',
+                tag:'',
+                item:0,
+                text:'',
+                next:''
+            },
+            add_child_val:{
+                type:true,
+                val:''
+            },
+            add_change:'',
+            text:'',
+            foc_type:false,
+            well:0,
+            text_type:false
+        },
+        methods: {
+            check_parID: function (num,item) {
+                if(this.foc_type){
+
+                    this.change.id=this.parcheck_id;
+                    this.change.text=this.text;
+                    this.change.next=num;
+                    this.change.next.item=item;
+                    check_type(3)
+                }else{
+
+                    this.parcheck_id = num.id;
+                    this.text=num.summary;
+                    this.change.item=item
+
+                }
+            },
+            show_add_box:function (num) {
+                check_type(num)
+            },
+            modif_tag:function (e,list) {//修改标签
+                var _self=this
+                $(e.target).parent().prev('.tag_edit_input').css('display','inline-block').focus();
+                $(e.target).parent().prev().prev('.tag_text').css('display','none');
+
+
+            },
+            change_tag:function (e,list,item) {//提交修改
+                var _self=this
+                $(e.target).css('display','none');
+                $(e.target).prev('.tag_text').css('display','inline-block');
+                $.ajax({
+                    url:'/supervisor/alter_question_and_answer_category/'+list.id,
+                    type:'post',
+                    data:{category:_self.add_change},
+                    success: function (data) {
+                        if(data.code===200){
+                            _self.child_list[item].tag=_self.add_change;
+                            _self.add_change=''
+                        }else {
+                            alert(data.message)
+                        }
+
+                    }
+                })
+
+            },
+            del_tag:function (list,num,item) {//删除标签
+
+                this.change.id=list.id;
+                this.change.tag=list.category;
+                this.change.type=num;
+                this.change.item=item;
+                this.box_id = 1;
+
+            },
+            add_child:function (e) {
+                var _self=this;
+                if(_self.add_child_val.type) {
+                    _self.add_child_val.type=false;
+                    if(_self.add_child_val.val){
+                        AJAX({
+                            url: '/supervisor/add_question_category/',
+                            type: 'post',
+                            data: {category:_self.add_child_val.val},
+                            fn: function (data) {
+                                if(data.code===200){
+                                    got_list(function (da) {
+                                        var d=null;
+                                        for(var i=0;i<da.length;i++){
+                                            if(da[i].id===data.data.category_id){
+                                                d=da[i].id;
+                                                tag.change.item=i;
+                                            }
+                                        }
+                                        tag.parcheck_id = d;
+                                        tag.text='';
+
+                                        e.target.style.display = 'none';
+                                        $(e.target).next().css('display', 'inline-block');
+                                        _self.add_child_val.val='';
+                                    })
+                                }else {
+                                    alert(data.message)
+                                }
+                            }
+                        })
+                    }else{
+                        e.target.style.display = 'none';
+                        $(e.target).next().css('display', 'inline-block');
+                        _self.add_child_val.val='';
+                    }
+                }
+            },
+            add_show_child:function (e) {
+                var _self=this;
+                _self.add_child_val.type=true;
+                e.target.style.display='none';
+                $(e.target).prev().css('display','inline-block').focus()
+            },
+            text_up:function (e) {
+              if(!/[^16|17|18|20|27|91|37|38|39|40|112|113|114|115|116|117|118|119|120|121|122|123]/.test(e.keyCode)){
+                  this.foc_type=true;
+              }
+            },
+            text_blur:function () {
+                if(this.foc_type){
+                    this.change.id=this.parcheck_id;
+                    this.change.text=this.text;
+                    this.change.next={id:this.parcheck_id,text:this.text};
+
+                    check_type(3)
+                }
+            }
+        }
+    })
+    got_list(function (da) {
+        tag.parcheck_id = da[0].id;
+        tag.text=da[0].summary;
+    })
+    function got_list(fn) {
+        AJAX({
+            url: "/supervisor/question_category_list/",
+            type: 'get',
+            data: '',
+            fn: function (data) {
+                if (data.code!==200) {
+                    alert(data.message);
+                    $('#container .panel_right').removeClass('hide');
+                    return
+                }
+                var da = data.data.question_category_list
+                fn(da);
+                tag.child_list =  da;
+                $('#container .panel_right').removeClass('hide');
+            }
+        })
+
+    }
+
+    function get_child_tag(num) {
+        AJAX({
+            url: "/elevance_tag/"+num+'/',
+            type: 'get',
+            data: '',
+            fn: function (data) {
+
+            }
+            , error: function () {
+                var data= child_lis
+                if(data.code!==200){
+                    return
+                }
+                tag.child_list = child_lis.data.question_category_list;
+                $('#container .panel_right').removeClass('hide');
+            }
+        })
+    }
+    function del_list_val(num,item) {
+        if(num===0){
+            tag. par_lists.splice(item,1);
+            tag.parcheck_id=tag. par_lists[0].id;
+            child_lis.data.tags.pop();
+            get_child_tag(tag.parcheck_id)
+        }else if(num==1){
+            tag. child_list.splice(item,1)
+        }
+    }
+    $('#textarea_tag').css('width', (window_width - 224 - 25 - 256 - 22) + 'px')
+    $(window).resize(function () {
+        $('#textarea_tag').css('width', (window_width - 224 - 25 - 256 - 22) + 'px')
+    })
+
+    function check_type(item) {
+        tag.box_id = item;
+        switch (item) {
+            case 0:
+
+                break
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+
+                break;
+            case 6:
+
+                break;
+            case 7:
+
+                break;
+            case 8:
+
+                break
+        }
+    }
+    function change_child_input(e) {
+        $(e.target).next().css('display','inline-block')
+    }
+</script>
+</body>
+</html>

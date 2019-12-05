@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="13px" viewBox="0 0 13 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>单选</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="视频模块" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="13、确认订单并支付-copy" transform="translate(-257.000000, -356.000000)" fill-rule="nonzero" fill="#45A0EA">
+            <g id="单选" transform="translate(257.000000, 356.000000)">
+                <path d="M6.5,13 C2.91014913,13 4.39629938e-16,10.0898509 0,6.5 C-4.39629938e-16,2.91014913 2.91014913,6.59444907e-16 6.5,0 C10.0898509,2.19814969e-16 13,2.91014913 13,6.5 C13,10.0898509 10.0898509,13 6.5,13 Z M6.5,9.28571428 C8.03850751,9.28571428 9.28571428,8.03850751 9.28571428,6.5 C9.28571428,4.96149249 8.03850751,3.71428572 6.5,3.71428572 C4.96149249,3.71428572 3.71428572,4.96149249 3.71428572,6.5 C3.71428572,8.03850751 4.96149249,9.28571428 6.5,9.28571428 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

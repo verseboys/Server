@@ -1,0 +1,1082 @@
+.nav{
+    position: fixed;
+    left: 0px;
+    width: 224px;
+    /* height: 762px; */
+    background-image: linear-gradient(to top, rgb(49, 60, 99), rgb(36, 40, 62));
+    height: 100%;
+    padding-top: 57px;
+    padding-bottom: 15px;
+    z-index: 2;
+    transition: all 0.4s ease;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+.nav ul{
+    margin-top: 50px;
+}
+.nav li{
+    height: 70px;
+}
+.nav ul li span {
+    display: inline-block;
+    margin-left: 40px;
+    margin-bottom: 5px;
+    position: relative;
+    line-height: 16px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    text-align: left;
+    color: rgb(137, 146, 202);
+}
+.hover_block{
+    width: 224px;
+    opacity: 0.54;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 2.71;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+    cursor: pointer;
+}
+.hover_block:hover{
+    background-image: linear-gradient(to right, #f9f9f9, rgba(255, 255, 255, 0));
+}
+.public_container{
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 #d8d8d8;
+    padding-left:28px;
+    padding-top:54px;
+}
+.basic_message_container{
+    width: 803px;
+    height: 1100px;
+}
+.study_name_container{
+    height: 32px;
+    line-height: 32;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #403f40;
+}
+select{
+    width: 642px;
+    height: 32px;
+    background-color: #eaeaf1;
+    border:0;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4a4a4a;
+    padding-left:15px; 
+}
+#shadow_box{
+    position: relative;
+    top: 100px;
+    left:100px;
+    z-index: 100000;
+}
+.study_introduce_container{
+    margin-top:20px;
+    margin-right:20px;
+}
+.teacher_introduce_container{
+    margin-top:20px;
+    margin-right:20px;
+}
+.study_price_radio{
+    width: 20px;
+    height: 20px;
+    background-color: #e4e4e4;
+    position: relative;
+    top:4px;
+}    
+.study_price_container{
+    margin-top:20px;
+}
+.study_price_radio_container{
+   margin-top:10px; 
+   height: 40px;
+}
+.study_price_radio_container.active{
+   border: 0;
+}
+.active{
+    color: #4588f1;
+}
+.price_input{
+    width: 215px;
+    height: 38px;
+    background-color: #eaeaf0;
+    border: solid 1px #d8d8d8;
+    margin-left:10px;
+}
+input:focus{
+    box-sizing: border-box;
+}
+input.chapter_input:focus{
+    box-sizing: border-box;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+-webkit-appearance: none !important;
+    margin: 0; 
+}
+.study_img_container{
+    margin-top:20px; 
+}
+.study_img{
+    width: 208px;
+    height: 127px;
+    background-color: #eaeaf0;
+    display: inline-block;
+    vertical-align: top;
+}
+.confirm_container{
+    width: 803px;
+    height: 68px;
+    margin-left:-28px;
+    margin-top:21px;
+    background-color: #f2f3f4;
+}
+.save{
+    width: 104px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #45a0ea;
+    line-height: 35px;
+    float: right;
+    text-align: center;
+    margin-top:18px;
+    cursor: pointer;
+    color:#fff;
+}
+.cancel{
+    width: 61px;
+    height: 35px;
+    border-radius: 2px;
+    line-height: 35px;
+    float: right;
+    text-align: center;
+    margin-top:18px;
+}
+.cancel:hover{
+    background-color: red;
+}
+.hide{
+    display: none;
+}
+.content_container{
+    width:850px;
+}
+.content_title{
+    font-family: PingFangSC;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #403f40;
+}
+.content_circle_middle{
+    width: 28px;
+    height: 28px;
+    background-color: #ffffff;  
+    border: solid 3px #d8d8d8;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: center;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 25px;
+    letter-spacing: 1.5px;
+    text-align: center;
+    color: #403f40;
+    margin-left:5px;
+}
+.content_circle_small{
+    margin-left:10px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    border: solid 1px #d8d8d8;
+    position: relative;
+    top:3px;
+}
+.study_container{
+    margin-top:20px;
+}
+.add_study_container{
+    margin-top:20px;
+}
+.chapter_input{
+    width: 642px;
+    height: 32px;
+    background-color: #eaeaf1;
+}
+.chapter_edit{
+    display: inline-block;
+    width:50px;
+    text-align: center;
+    cursor: pointer;
+    height: 32px;
+    line-height: 32px;
+}
+.chapter_delete{
+    display: inline-block;
+    width:50px;
+    text-align: center;
+    cursor: pointer;
+    height: 32px;
+    line-height: 32px;
+}
+.study_number{
+    display: inline-block;
+    width: 41px;
+}
+.study_content{
+    background-color: #eaeaf1;
+    margin-top:20px; 
+    padding-left:24px; 
+    margin-right:30px;
+}
+.study_content input[type=text],input[type=number]{
+    width: 489px;
+    height: 29px;
+    background-color: #ffffff;
+    border: solid 1px #d8d8d8;
+}
+.study_content input[type=text],input[type=number]:focus{
+    box-sizing: border-box;
+}
+.study_name{
+    margin-top:20px; 
+}
+.point_html_container{
+    width: 489px;
+    height: 226px;
+    background-color: #ffffff;
+    border: solid 1px #d8d8d8;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+    margin-left:6px;
+    overflow-y: scroll;
+}
+.study_point{
+    margin-top: 30px;
+}
+.study_summary{
+    margin-top:34px;
+}
+.teacher_introduction_container{
+    margin-top:34px;
+}
+.summary_html_container{
+    width: 489px;
+    height: 127px;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: solid 1px #d8d8d8;
+    margin-left:8px;
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: scroll;
+}
+.teacher_introduction_html_container{
+    width: 489px;
+    height: 127px;
+    background-color: #ffffff;
+    cursor: pointer;
+    border: solid 1px #d8d8d8;
+    margin-left:8px;
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: scroll;
+}
+.video_id{
+    margin-top: 53px;
+}
+.study_content input[name='video_id']{
+    margin-left:14px;
+}
+.video_time{
+    margin-top:28px;
+}
+.study_content input[name='video_time']{
+    margin-left:-2px;
+}
+.tag_state{
+    margin-top:30px;
+}
+.release_state{
+    margin-top:30px;
+}
+.release_date{
+    margin-top:30px;
+}
+.download_file{
+    margin-top:42px;
+}
+.img_min{
+    margin-top:42px;
+}
+.save_cancel_container{
+    margin-top:38px;
+    margin-left:-24px;
+    height: 54px;
+    background-color: #f2f3f4;
+}
+.file_container{
+    display: inline-block;
+    width: 80%;
+    margin-left:5px;
+    vertical-align: top;
+}
+.one_file{
+    display: block;
+    margin-bottom:15px;
+    position: relative;
+    min-height: 10px;
+}
+.delete_button{
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.add_button{
+    width: 78px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #45a0ea;
+    text-align: center;
+    line-height: 35px;
+    margin-left:80px;
+    color: #fff;
+    cursor: pointer;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+}
+.add_button:active{
+    border: 1px solid black;
+}
+.img_min_container{
+    width: 208px;
+    height: 127px;
+    object-fit: contain;
+    background: #fff;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+.save_button{
+    width: 78px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #45a0ea;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 35px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    margin-top:10px; 
+    margin-left:600px;
+    border:1px solid #f2f3f4;
+}
+.save_button:active{
+    border: 1px solid black;
+    position: relative;
+    top:1px;
+}
+.cancel_button{
+    width: 78px;
+    height: 35px;
+    border-radius: 2px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 35px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    margin-top:10px; 
+    margin-left:10px; 
+    border:1px solid #f2f3f4;
+    color:#403f40;
+}
+.cancel_button:hover{
+    background: red;
+}
+.cancel_button:active{
+    border:1px solid black;
+    position: relative;
+    top:1px;
+}
+.price_container{
+   width:1100px;
+   padding-top:30px;
+   padding-right: 30px; 
+   padding-bottom: 30px;
+}
+.save_price{
+    margin-left:-28px;
+    height: 54px;
+    background-color: #f2f3f4;
+}
+.study_price_radio_container .study_price_input{
+    width: 215px;
+    height: 38px;
+    background-color: #eaeaf0;
+    border: solid 1px #d8d8d8;
+}
+.public_container.comment_container{
+    padding-top: 0;
+    width: 1141px;
+    height: 60px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.feedback_container{
+    padding-top: 0;
+    width: 1341px;
+    height: 60px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.title_detail{
+    opacity: 0.5;
+    display: inline-block;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    color: #000000;
+    font-family: PingFangSC;
+    font-size: 14px;
+    margin-left: 30px;
+}
+.title_search{
+    display: inline-block;
+    height: 60px;
+    line-height: 60px;
+    margin-left: 50px;
+    position: relative;
+}
+.title_search input{
+    width: 353.1px;
+    height: 42.4px;
+    border-radius: 2px;
+    background-color: #f6f6f6;
+    font-family: PingFangSC;
+    font-size: 13px;
+    color: #000000;
+}
+.search_button{
+    display: inline-block;
+    height: 40px;
+    position: absolute;
+    top:8px;
+    right: 9px;
+}
+.search_trigger{
+    cursor: pointer;
+}
+.feedback_search_trigger{
+    cursor: pointer;
+}
+.title_level{
+    display: inline-block;
+    opacity: 0.5;
+    height: 60px;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 60px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000000;
+    width:120px;
+}
+.title_uname{
+    display: inline-block;
+    opacity: 0.5;
+    height: 60px;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 60px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000000;
+    width:120px;
+}
+.title_comment_time{
+    display: inline-block;
+    opacity: 0.5;
+    height: 60px;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 60px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000000;
+    width:220px;
+}
+.title_action{
+    display: inline-block;
+    opacity: 0.5;
+    height: 60px;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 60px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000000;
+    width:120px;
+}
+.title_connection{
+    display: inline-block;
+    opacity: 0.5;
+    height: 60px;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 60px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #000000;
+    width:200px;
+}
+.real_comment_container{
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 #d8d8d8;
+    width: 1141px;
+    margin-top:20px;
+    margin-left:-28px;
+}
+.real_feedback_container{
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 #d8d8d8;
+    width: 1341px;
+    margin-top:20px;
+    margin-left:-28px;
+}
+.one_real_comment{
+    height:65px;
+}
+.comment_message{
+    display: inline-block;
+    margin-left:58px; 
+    width: 465px;
+    height: 65px;
+}
+.one_real_level{
+    display: inline-block;
+    height: 65px;
+    width: 120px;
+    color: #000000;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+    line-height:65px;
+}
+.one_real_uname{
+    display: inline-block;
+    height: 65px;
+    width: 120px;
+    color: #000000;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+    line-height:65px;
+}
+.one_real_connection{
+    display: inline-block;
+    height: 65px;
+    width: 200px;
+    color: #000000;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+    line-height:65px;
+}
+.one_real_comment_time{
+    width: 220px;
+    display: inline-block;
+    height: 65px;
+    color: #000000;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+    line-height:65px;
+}
+.one_real_action{
+    width: 120px;
+    display: inline-block;
+    height: 65px;
+    color: #000000;
+    text-align: center;
+    font-size: 14px;
+    vertical-align: top;
+    line-height:65px;
+}
+.delete_comment{
+    cursor: pointer;
+}
+.check_feedback{
+    cursor: pointer;
+
+}
+.divide_comment{
+    height: 1.1px;
+    opacity: 0.05;
+    background-color: #000000;
+}
+.paging_container{
+    height: 80px;
+    background-color: #ffffff;
+    width: 1141px;
+    margin-left:-28px;
+}
+.public_editor{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.5);
+}
+.public_editor_container{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-left:-356px;
+    margin-top:-166px;
+}
+.close_public_editor{
+    position: absolute;
+    top:70%;
+    left:80%;
+}
+#public_editor_cancel:hover{
+    background: rgba(0, 0, 0, 0.05);
+}
+#studyName{
+    width: 642px;
+    height: 32px;
+    background-color: rgb(234, 234, 241);
+}
+#studyName:focus{
+    box-sizing: border-box;
+}
+.file {
+    position: relative;
+    display: inline-block;
+    background: #D0EEFF;
+    border: 1px solid #99D3F5;
+    border-radius: 4px;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+.real_img_min_container{
+    position: relative;
+    top:0;
+    left: 0;
+}
+#study_introduce{
+    width:750px;
+    height:288px;
+    overflow-y: scroll;
+    cursor: pointer;
+    background-color: #eaeaf1;
+}
+#teacher_introduce{
+    width:750px;
+    height:288px;
+    overflow-y: scroll;
+    cursor: pointer;
+    background-color: #eaeaf1;
+}
+.orders_title{
+    height: 37px;
+    border-bottom: solid 1px #d8d8d8;
+    margin-bottom:30px;
+}
+.orders_all{
+    float: left;
+    width: 90px;
+    height: 37px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 36px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #403f40;
+    cursor: pointer;
+    border-top:solid 3px #fff;
+}
+.orders_search{
+    cursor: pointer;
+    float: left;
+    width: 90px;
+    height: 37px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 36px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #403f40;
+    border-top:solid 3px #fff;
+}
+.orders_active{
+    border-top:3px solid  #45a0ea;
+    border-left:1px solid #d8d8d8;
+    border-right:  1px solid #d8d8d8;
+    border-bottom: 2px solid #fff;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.orders_flash_container{
+    height: 36px;
+    margin-bottom: 30px;
+}
+.orders_flash_button{
+    width: 69px;
+    height: 34px;
+    border-radius: 6px;
+    background-color: #03a675;
+    border: solid 1px #d8d8d8;
+    float: right;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 34px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+}
+.orders_detail_head{
+    height: 47px;
+    background-color: #45a0ea;
+    border: solid 1px #d8d8d8;
+}
+.orders_detail_head span{
+    display: inline-block;
+    height: 45px;
+    width: 120px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 45px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}
+.one_bill{
+    height: 112px;
+    padding-top:45px;
+}
+.one_bill span{
+    display: inline-block;
+    width: 120px;
+    text-align: center;
+    white-space:pre-wrap;
+    word-wrap : break-word ;
+    height: 60px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #000000;
+}
+.one_bill span.bill_number{
+    vertical-align: top;
+    width:141px;
+}
+.one_bill span.bill_action{
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #45a0ea;
+}
+.one_bill span.bill_action a{
+    cursor: pointer;
+}
+.bill_diff_bg{
+    background-color: #eaeaf0;
+}
+.orders_detail_foot{
+    height: 45px;
+    background-color: #d8d8d8;
+    border: solid 1px #d8d8d8;  
+}
+
+
+.price_sum {
+    min-height: 45px;
+    line-height: 45px;
+    padding-left: 24px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #403f40;
+}
+
+.price_sum_all {
+    min-height: 45px;
+    line-height: 45px;
+    padding-left: 24px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    color: #403f40;
+    /*border-top:1px solid #eaeaf0;*/
+}
+.orders_detail_container{
+    box-shadow: 0 1px 2px 0 #d1d1d1;
+}
+.time_start{
+    height: 27px;
+    background-color: #eaeaf1;
+    border: solid 1px #d8d8d8;
+    width: 150px;
+}
+.time_end{
+    height: 27px;
+    background-color: #eaeaf1;
+    border: solid 1px #d8d8d8;
+    width: 150px;
+}
+.orders_search_condition{
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #403f40;
+    position: relative;
+    margin-bottom: 20px;
+}
+.time_condition{
+    display: inline-block;
+    margin-right:100px;
+}
+.state_condition{
+    display: inline-block;
+}
+.orders_state{
+    width: 90px;
+}
+.search_action{
+    display: inline-block;
+    position: absolute;
+    right: 0px;
+}
+.orders_search_button{
+    display: inline-block;
+    width: 69px;
+    height: 34px;
+    border-radius: 6px;
+    background-color: #45a0ea;
+    border: solid 1px #d8d8d8;
+    margin-right:32px; 
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 31px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+}
+.search_flash_button{
+    display: inline-block;
+    width: 69px;
+    height: 34px;
+    border-radius: 6px;
+    background-color: #03a675;
+    border: solid 1px #d8d8d8;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 31px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+}
+.name_condition_container{
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #403f40;
+    margin-bottom: 30px;
+}
+.name_search_condition{
+    width:150px;
+    text-align: center;
+}
+.feedback_detail_container{
+    width: 1109px;
+    height: 650px;
+    position: fixed;
+    z-index: 100000;
+    top: 120px;
+    left: 275px;
+    background-color: #ffffff;
+    padding-left:40px;
+}
+.feedback_background{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgb(0, 0, 0,0.2);
+    z-index: 99999;
+    top: 0;
+    left: 0;
+}
+.feedback_content{
+    text-align: left;
+    color: #45a0ea;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+}
+.feed_back_img{
+    width:383px;
+    min-height:10px; 
+}
+.feedback_cancel{
+    margin-top:10px;
+    height: 20px;
+    text-align: right;
+    margin-right: 20px;
+}
+.feedback_cancel_button{
+    cursor: pointer;
+}
+#move_nav{
+    display: none;!important;
+    /*position: fixed;*/
+    /*left: 243px!important;*/
+}
+.nav_cursor{
+    position: fixed;
+    left:224px;
+    top:50%;
+    margin-top:-25px;
+    z-index:9;
+    width:20px;
+    height:50px;
+    transition: all 0.4s ease;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+.close_nav{
+    left:-224px;
+}
+.close_nav_button{
+    left:0px;
+}

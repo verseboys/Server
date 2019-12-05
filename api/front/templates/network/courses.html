@@ -1,0 +1,79 @@
+{% extends './_base.html' %}
+{% load static %}
+
+{% block bodyblock %}
+<div id="container">
+    <div class="tab_content">
+      {% if courses is None %}
+        <!--没有课程-->
+        <div class="tab_introduct" id="training">
+            <div class="train">
+                <p>
+                    <img src="{% static 'images/train.svg' %}" alt="">
+                </p>
+                <p>培训视频预计于3月~4月上线，敬请期待！</p>
+            </div> 
+        </div>
+      {% else %}
+          <div class="tab_introduct project_courses" id="training" >
+              <div class="basic_courses">
+                  <p><img src="{% static 'images/xmpx.svg' %}" alt=""></p>
+                  {% for course in courses %}
+                  <div class="project_develop">
+                      <a href="{% url 'network_course' network_id=network.id course_id=course.id %}">
+                          <img src="{{course.pic_url}}" style="width: 100%;height: 100%;">
+                      </a>
+                      <div class="project">
+                          <h4>{{course.name}}</h4>
+                          <p style="word-break:break-all;">{{course.description}}</p>
+                      </div>
+                  </div>
+                  {% endfor %}
+                  <div class="project_develop live">
+                      <a href="/copdlive/">
+                          <img src="{% static 'images/copdlive.jpg' %}?1563696704421" alt="" style="width: 100%;height: 100%;">
+                      </a>
+                      <div class="project">
+                          <h4>慢阻肺规范化防诊治体系与能力建设培训项目</h4>
+                          <p style="word-break:break-all;">“慢阻肺专项研究”项目开展，以促进各研究单位经验分享，解决项目进展中的突出问题，加强各研究单位交流合作为核心。</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="expect">
+                  <div class="expect_online">
+                      <p><img src="{% static 'images/jqqd.svg' %}" alt=""></p>
+                      <div class="expect_course">
+                          <div class="expect_course_project">
+                              <p>
+                                  <img src="{% static 'images/ztkc.png' %}" alt="">
+                                  <b>课程筹备中</b>
+                              </p>
+                              <div class="projects">
+                                  <h4>临床研究方法学专题教程</h4>
+                                  <p>文献检索，常用研究设计类型，常用统计分析，论文撰写及发表，图表制作规范...</p>
+                              </div>
+                          </div>
+                          <div class="expect_course_research">
+                              <p>
+                                  <img src="{% static 'images/zljt.png' %}" alt="">
+                                  <b>课程筹备中</b>
+                              </p>
+                              <div class="projects">
+                                  <h4>慢阻肺临床诊疗讲堂</h4>
+                                  <p>邀请临床专家解读：慢阻肺指南，临床诊疗理念，最新研究进展。</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      {% endif %}
+    </div>
+</div>
+<script>
+    console.log(document.referrer)
+    if (document.referrer.indexOf('courses')>0){  // TODO:  networks ->course 不知道是否会影响邮箱
+        window.location.hash='#training'
+    }
+</script>
+{% endblock bodyblock %}

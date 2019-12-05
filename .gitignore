@@ -1,0 +1,8 @@
+*.sw[op]
+*.py[cd]
+.idea/
+media/
+yizhuenv/
+api/front/anniversary/node_modules/*
+supervisor/new_manager/node_modules/*
+images/*/

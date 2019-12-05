@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="17px" viewBox="0 0 19 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43 (38999) - http://www.bohemiancoding.com/sketch -->
+    <title>email</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-63.6%" y="-50.0%" width="227.3%" height="240.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <polygon id="path-2" points="10.9479552 3.12121805 10.9479552 0.0543101504 1.64179105e-05 0.0543101504 1.64179105e-05 3.12121805 10.9479552 3.12121805"></polygon>
+        <polygon id="path-4" points="10.9479333 6.31578947 0 6.31578947 0 0.0125413534 10.9479333 0.0125413534"></polygon>
+    </defs>
+    <g id="7.-注册" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="UX：click-注册点击状态" transform="translate(-663.000000, -347.000000)">
+            <g id="email" filter="url(#filter-1)" transform="translate(667.000000, 349.000000)">
+                <g id="Page-1">
+                    <g id="Group-3" transform="translate(0.000000, 0.002086)">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <g id="Clip-2"></g>
+                        <path d="M6.60461343,2.84927256 L10.9479716,0.639535714 L10.9479716,0.639535714 C10.9479716,0.316302632 10.6936582,0.0543101504 10.3800214,0.0543101504 L0.56791194,0.0543101504 C0.254275124,0.0543101504 1.64179105e-05,0.316302632 1.64179105e-05,0.639535714 L1.64179105e-05,0.639535714 L4.3433199,2.84927256 C5.05602139,3.21186654 5.89191194,3.21186654 6.60461343,2.84927256" id="Fill-1" fill="#000000" mask="url(#mask-3)"></path>
+                    </g>
+                    <g id="Group-6" transform="translate(0.000000, 2.201335)">
+                        <mask id="mask-5" fill="white">
+                            <use xlink:href="#path-4"></use>
+                        </mask>
+                        <g id="Clip-5"></g>
+                        <path d="M3.9666,2.03257895 L-2.1890547e-05,0.0195902256 L-2.1890547e-05,5.73058647 C-2.1890547e-05,6.05376316 0.254291542,6.31581203 0.567928358,6.31581203 L10.3800378,6.31581203 C10.6936746,6.31581203 10.9479333,6.05376316 10.9479333,5.73058647 L10.9479333,0.0125413534 L6.9806,2.031 C6.03076915,2.51427068 4.91686866,2.51483459 3.9666,2.03257895" id="Fill-4" fill="#000000" mask="url(#mask-5)"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

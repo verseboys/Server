@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-自定义菜单</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <div class="publish_btn">添加文章链接</div>
+            <div class="search_box"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+        <div class="panel_header custom_menu">
+            <div class="page_list"><span style="width:100px;float: left;margin-right: 20px;text-align: center;">ID</span>文章列表</div>
+            <div class="classification">分类</div>
+            <div class="control">操作</div>
+        </div>
+        <div class="panel_body custom_menu" style="padding-bottom: 76px">
+            <div id="panel_content">
+                <div class="panel_item " pid="' + da.id + '">
+                    <div class="page_list">' + da.title + '</div>
+                    <div class="stat">' + methods_status(da.status) + '</div>
+                    <div class="control">
+                        <div class="del" pid="1">删除</div>
+                    </div>
+                </div>
+            </div>
+            <div id="compents_paginator" style="padding-right: 22px">
+                <ul class="compents_paginator paginator">
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div>
+            <div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<div id="add_alert_box">
+    <div class="add_alert_box">
+        <div class="add_alert_box_head">添加文章</div>
+        <div class="relative">
+            <div class="add_alert_box_tag relative after_img_sico" pid="">选择分类 </div>
+            <div class="add_alert_box_tag_list hide"></div>
+        </div>
+        <div class="error">请选择分类</div>
+        <div><input type="text" placeholder="请输入标题" class="add_alert_box_tag add_alert_box_title"></div>
+        <div class="error">请输入标题</div>
+        <div><input type="text" placeholder="请输入链接" class="add_alert_box_tag add_alert_box_link"></div>
+        <div class="error"></div>
+        <div class="add_alert_box_btn">
+            <div class="add_alert_box_false">取消</div>
+            <div class="add_alert_box_true">确定</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+var alert_box_type=true,page_id;
+    var page = 1, page_num = 0, del_id;
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            get_methods()
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            get_methods()
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            get_methods()
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            get_methods()
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            get_methods()
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup', 'input', function (e) {
+        if (e.keyCode === 13) {
+            page = $(this).val();
+            get_methods();
+            $(this).val('').blur();
+        } else {
+            if ($(this).val() > page_num) {
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g, ''))
+        }
+    })
+    var url = '/article_index_list/', type = 'get', val = '';
+    get_methods()
+    function get_methods() {
+        AJAX({
+            type: type,
+            url: '/supervisor' + url  + page + '/',
+            data: val,
+            fn: function (data) {
+
+                if (data.code !== 200) {
+                    alert(data.message)
+                    return
+                }
+                var str = '';
+                var content = data.data.article_index_list
+                for (var i = 0; i < content.length; i++) {
+                    var da = content[i];
+                    str += '<div class="panel_item" >';
+                    str += '<div class="page_list"><span style="width:100px;display:inline-block;margin-right: 20px;text-align: center;">'+ da.id+'</span><a href="javascript:;" title="' + da.title + '" pid="'+da.id+'">' + da.title + '</a></div>';
+                    str += '<div class="stat">' + da.category__category + '</div>';
+                    str += '<div class="control">';
+                    str += '<div class="del" pid="' + da.id + '">删除</div>';
+                    str += '</div>';
+                    str += '</div>';
+                }
+                $('#panel_content').html(str);
+                var str_li = '';
+                if (page !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                var pagecount = data.data.pageCount, start, last;
+                if (data.data.pageCount > 1) {
+                    if (pagecount - Number(page) > 2 && Number(page) > 2 && pagecount > 5) {
+                        start = Number(page) - 3;
+                        last = Number(page) + 2
+                    }
+                    else if (pagecount - Number(page) <= 2 && pagecount > 5) {
+                        start = pagecount - 6;
+                        last = pagecount;
+                    }
+                    else if (Number(page) <= 2 && pagecount > 5) {
+                        start = 0;
+                        last = 5
+                    }
+                    else if (pagecount <= 5) {
+                        start = 0;
+                        last = pagecount;
+                    }
+                    for (var p = start; p < last; p++) {
+                        if (Number(page) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.pageCount !== 1 && page !== data.data.pageCount) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+                $('#compents_paginator .paginator').html(str_li);
+                $('#page_number').html(data.data.pageCount);
+                page_num = data.data.pageCount;
+                if (data.data.pageCount === 1) {
+                    $('#compents_paginator .paginator_controller').hide()
+                } else {
+                    $('#compents_paginator .paginator_controller').show()
+                }
+                $('#content')[0].scrollTop = 0
+
+                        }
+        })
+    }
+
+    function del_method() {
+    }
+
+    $('#container').on('click', '.del', function () {
+        del_id = Number($(this).attr('pid'))
+        $('#alert_area').removeClass('hide');
+    })
+    $('#alert_box .box_item .item_left').click(function () {
+        $('#alert_area').addClass('hide');
+    })
+    $(document.body).on('click', '#alert_box .box_item .item_right', function () {
+        $.ajax({
+            url: '/supervisor/delete_article_index/'+del_id+'/',
+            type: 'get',
+            data: '',
+            success: function (data) {
+                $('#alert_area').addClass('hide');
+                url = '/article_index_list/';
+                type = 'get';
+                val = '';
+                get_methods()
+            }
+        })
+    })
+
+    //状态管理
+    function methods_status(num) {
+        switch (num) {
+            case 0:
+                return "删除";
+            case 1:
+                return "发布";
+            case 2:
+                return "推荐";
+            case 3:
+                return "草稿";
+            default:
+                return "错误"
+        }
+
+    }
+
+    function search_list() {
+        url = '/search_article_index/';
+        type = 'post', val = {'search_article_index': $('#container .search_box input').val()}
+        page = 1;
+        get_methods()
+
+    }
+
+    $('#container .search_box .search_img').click(search_list)
+    $('#container .search_box input').keyup(function (e) {
+        if (e.keyCode === 13) {
+            search_list()
+        }
+    })
+
+
+
+    $('#add_alert_box .after_img_sico').click(function () {
+        var self=$(this);
+        if($(this).hasClass('after_img_sico_check')){
+            self.removeClass('after_img_sico_check');
+            self.next().addClass('hide');
+        }else {
+                $.ajax({
+                    url: '/supervisor/article_category_list/',
+                    type:'get',
+                    success:function (data) {
+
+                        if(data.code!==200){
+                            alert_box(data.message);
+                            return;
+                        }
+                        var list=data.data.article_category_list;
+                        var str='';
+                        for(var i=0;i<list.length;i++){
+                            str+='<div class="add_alert_box_li" lid="'+list[i].id+'" title="'+list[i].category+'">'+list[i].category+'</div>'
+                        }
+                        $('.add_alert_box_tag_list').html(str);
+                        $('.add_alert_box_tag_list').remove('hide');
+                        self.addClass('after_img_sico_check');
+                        self.next().removeClass('hide')
+
+                    }
+
+                });
+
+
+        }
+    })
+    $('#add_alert_box').on('click','.add_alert_box_tag_list .add_alert_box_li',function () {
+        var str=$(this).attr('title');
+        var p=$(this).attr('lid');
+        $('#add_alert_box .after_img_sico').html(str).attr('pid',p).removeClass('after_img_sico_check').next().addClass('hide');
+
+    })
+    $('.publish_btn').click(function () {
+        alert_box_type=true;
+        $('.add_alert_box_head').html('添加文章链接')
+        $('#add_alert_box').css('display','flex');
+    })
+    $('.add_alert_box_false').click(function () {
+        $('#add_alert_box').hide()
+    })
+    $('.add_alert_box_true').click(function () {
+        var p=$('#add_alert_box .after_img_sico').attr('pid');
+        var title=$('.add_alert_box_title').val();
+        var link=$('.add_alert_box_link').val();
+        if(!p){
+            $('#add_alert_box .after_img_sico').parent().next('.error').show()
+        }else {
+            $('#add_alert_box .after_img_sico').parent().next('.error').hide()
+        }
+        if(!title){
+            $('.add_alert_box_title').parent().next('.error').show()
+        }else {
+            $('.add_alert_box_title').parent().next('.error').hide()
+        }
+        if(!link){
+            $('.add_alert_box_link').parent().next('.error').html('请输入链接').show();
+            return;
+        }else {
+            if(/http(s)?:\/\//.test(link)){
+                $('.add_alert_box_link').parent().next('.error').hide();
+            }else {
+                $('.add_alert_box_link').parent().next('.error').html('请正确输入链接 例：http://www.xxx.com').show();
+                return;
+            }
+        }
+        if(link&&title&&p){
+            if(alert_box_type) {
+                $.ajax({
+                    url: '/supervisor/add_article_index/',
+                    type: 'post',
+                    data: {
+                        title: title,
+                        category_id: p,
+                        index: link
+                    },
+                    success: function (data) {
+                        $('#add_alert_box').hide();
+                        $('.add_alert_box_title').val('');
+                        $('.add_alert_box_link').val('');
+                        $('#add_alert_box .after_img_sico').attr('pid', '').html('选择分类')
+                        $('.add_alert_box_link').parent().next('.error').hide();
+                        $('#add_alert_box .after_img_sico').parent().next('.error').hide();
+                        $('.add_alert_box_title').parent().next('.error').hide()
+                        url = '/article_index_list/';
+                        type = 'get';
+                        val = '';
+                        page = 1;
+                        get_methods()
+                    }
+
+                })
+            }else {
+                $.ajax({
+                    url: '/supervisor/alter_article_index/' + page_id + '/',
+                    type: 'post',
+                    data: {
+                        title: title,
+                        category_id: p,
+                        index: link
+                    },
+                    success: function (data) {
+                        $('#add_alert_box').hide();
+                        $('.add_alert_box_title').val('');
+                        $('.add_alert_box_link').val('');
+                        $('#add_alert_box .after_img_sico').attr('pid', '').html('选择分类')
+                        $('.add_alert_box_link').parent().next('.error').hide();
+                        $('#add_alert_box .after_img_sico').parent().next('.error').hide();
+                        $('.add_alert_box_title').parent().next('.error').hide()
+                        url = '/article_index_list/';
+                        type = 'get';
+                        val = '';
+                        page = 1;
+                        get_methods()
+                    }
+                })
+            }
+        }
+    })
+    $(document).on('click','#panel_content .panel_item a ',function () {
+        page_id=$(this).attr('pid');
+        alert_box_type=false;
+        $.ajax({
+            url:'/supervisor/alter_article_index/'+ page_id+'/',
+            type:'get',
+            success:function (data) {
+                if(data.code!==200){
+                    return;
+                }
+                    var da=data.data;
+                $('#add_alert_box .after_img_sico').attr('pid',da.category_id).html(da.category_name);
+                $('.add_alert_box_title').val(da.title);
+                $('.add_alert_box_link').val(da.index)
+                $('.add_alert_box_head').html('修改文章')
+                $('#add_alert_box').css('display','flex');
+            }
+
+
+        })
+
+    })
+</script>
+</body>
+</html>

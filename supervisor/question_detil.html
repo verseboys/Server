@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-问题详情</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/queston_detil.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js"></script>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container" class="hide">
+        <div class="user_ques_top" style="display: flex;padding-right: 30px">
+            <div class="inline user_quer_left">
+                <span class="user-box"></span>
+            </div>
+            <div class="inline" style="flex: 1;;">
+                <div class="user_top_title"></div>
+                <div class="font-14 line-height30 mar-top20">
+                    <span class="icon-title-tag"></span><span class="reset_chose">重选</span><span
+                        class="ques_user_title"></span><span class="ques_time_title"></span>
+                </div>
+            </div>
+        </div>
+        <!---->
+        <div id="uesr_ques_box">
+            <div class="user_ques_con">
+                <div class="inline user_quer_left"><span class="user-box"></span></div>
+                <div class=" user_quer_right">
+                    <div class="user_top_title line-height30" id="6"></div>
+                    <div class="user_top_content"></div>
+                    <div class="ques_aks_text mar-top15">
+                        <ul class="ques_aks_list">
+                            <li>
+                                <div class="user_top_content">这个是id=3,answers=6的二级评论</div>
+                                <div><textarea></textarea></div>
+                                <div class="font-14 line-height30 mar-top10 color-gre">
+                                    <span class="mar-rig40 user_con_usr">
+                                        <span> 水水水水</span>
+                                    </span>
+                                    <span class="user_con_time">2017-05-23</span>
+                                    <span class="right">
+                                        <span class="ques_user_text" type="1">编辑</span>&nbsp;|&nbsp;<span class="ques_user_del" ans_id="7" ques_id="3" hash_id="6">删除</span>
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="user_top_content">这个是id=3,answers=6的二级评论sss</div>
+                                <div class="font-14 line-height30 mar-top10 color-gre"><span
+                                        class="mar-rig40 user_con_usr"><span> 水水水水</span></span><span
+                                        class="user_con_time">2017-05-23</span><span class="right">
+                                    <span class="ques_user_text">编辑</span>&nbsp;|&nbsp;<span class="ques_user_del"
+                                                                                           ans_id="8" ques_id="3"
+                                                                                           hash_id="6">删除</span></span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="user_top_content"><pre>这个是id=3,answers=6的二级评论swwwwss</pre></div>
+                                <div class="font-14 line-height30 mar-top10 color-gre"><span
+                                        class="mar-rig40 user_con_usr"><span> 水水水水</span></span><span
+                                        class="user_con_time">2017-05-23</span><span class="right"><span
+                                        class="ques_user_text">编辑</span>&nbsp;|&nbsp;<span class="ques_user_del"
+                                                                                           ans_id="9" ques_id="3"
+                                                                                           hash_id="6">删除</span></span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="page_list text-cen">
+                            <ul>
+                                <li class="page checked" p_id="1" ans_id="6">1</li>
+                                <li class="page" p_id="2" ans_id="6">2</li>
+                                <li class="page" p_id="3" ans_id="6">3</li>
+                                <li class="page" p_id="4" ans_id="6">4</li>
+                                <li class="page" p_id="5" ans_id="6">5</li>
+                                <li class="next" p_id="2" ans_id="6">下一页</li>
+                                <li class="last" p_id="16" ans_id="6">尾页</li>
+                            </ul>
+                            <span>共 16 页，跳至</span>&nbsp;<input type="text" page="16" ans_id="6">&nbsp;<span>页</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script src="public/js/question_detil.js"></script>
+<script>
+    //重选便签
+    var chose_tag = {
+        text: '',
+        id: ''
+    }
+    $(document.body).on('click', '.reset_chose', function () {
+        var _self = $(this)
+        TAG_LIST({
+            item: Number(_self.attr('ques_type_id')),
+            id: Number(_self.attr('ques_id')),
+            fn: function (n) {
+
+                alert_box({
+                    title: '重选便签',
+                    content: n,
+                    yes: function () {
+                        if (chose_tag.id === '') {
+                            return
+                        }
+                        AJAX({
+                            url: '/supervisor/alter_question_category/'+ Number(_self.attr('ques_id'))+'/'+ chose_tag.id+'/',
+                            type: 'get',
+                            data: {
+                                //"question_category_id": Number(_self.attr('ques_type_id')),
+                               // "question_id": Number(_self.attr('ques_id'))
+                            },
+                            fn: function (data) {
+                                if(data.code===200){
+                                    $('.user_ques_top .icon-title-tag').html(chose_tag.text);
+                                    _self.attr('ques_type_id', chose_tag.id);
+                                    chose_tag.id = '';
+                                    chose_tag.text = '';
+                                }
+                            }
+                        })
+                    },
+                    no: function () {
+                        chose_tag.id = '';
+                        chose_tag.text = '';
+                    },
+                    fn: function () {
+                        $('.box_content').removeClass('text-cen').addClass('text-left')
+                    }
+                })
+            }
+        })
+    })
+    $(document.body).on('click', '.box_content .icon-title-tag', function (e) {
+        $(this).addClass('checked').siblings().removeClass('checked');
+        chose_tag.id = $(this).attr('p_id');
+        chose_tag.text = $(this).attr('p_text');
+    })
+    //编辑|保存
+    /*
+    $(document.body).on('click','#container .ques_user_text',function (e) {
+        var _self=$(this)
+        if($(this).attr('type')==="1"){
+            $(this).parent().parent().prev().children('textarea').css('display','block').focus();
+            $(this).parent().parent().prev().prev().css('display','none');
+            $(this).attr('type','0');
+            $(this).html('保存');
+        }else{
+            AJAX({
+                url:'/alter_answer/'+_self.attr('ans_id'),
+                type:'post',
+                data:{'comment ':_self.parent().parent().prev().children('textarea').val()},
+                fn:function (data) {
+                    _self.parent().parent().prev().children('textarea').css('display','none');
+                    _self.parent().parent().prev().prev().css('display','block');
+                    _self.attr('type','1');
+                    _self.html('编辑');
+                    _self.parent().parent().prev().prev().html(_self.parent().parent().prev().children('textarea').val())
+                }
+                ,error:function () {
+                    console.log(_self.parent().parent().prev().children('textarea').val())
+                    _self.parent().parent().prev().children('textarea').css('display','none');
+                    _self.parent().parent().prev().prev().css('display','block');
+                    _self.attr('type','1');
+                    _self.html('编辑');
+                    _self.parent().parent().prev().prev().children('pre').html(_self.parent().parent().prev().children('textarea').val())
+                }
+            })
+        }
+    })
+    */
+    //删除
+    $(document.body).on('click', '.ques_user_del', function (e) {
+        var _self = $(this);
+        alert_box({
+            yes: function () {
+                AJAX({
+                    url: '/supervisor/delete_answer/',
+                    type: 'post',
+                    data: {'answer_id':_self.attr('ans_id')},
+                    fn: function (data) {
+                        if(data.code!==200){
+
+                            return
+                        }
+                        window.location.hash = _self.attr('hash_id');
+                        if (_self.parent().parent().parent()[0].tagName.toLowerCase() === 'li') {
+                            hash_change(_self.attr('hash_id'), function () {
+                                var top = $('#content')[0].scrollTop
+                                $('#content')[0].scrollTop = top - 95
+                            })
+                            _self.parent().parent().parent().remove();
+                            detil();
+                        } else {
+                            hash_change(_self.attr('hash_id'), function () {
+                                var top = $('#content')[0].scrollTop
+                                $('#content')[0].scrollTop = top - 95
+                            })
+                            _self.parent().parent().parent().parent().remove();
+                            detil();
+                        }
+                    }
+
+//                        _self.parent().parent().parent().parent().remove();
+//                        console.log(_self.parent().parent().parent().parent())
+
+                })
+            },
+            no: function () {
+
+            }
+        })
+    })
+
+    /*
+    * alert_box
+    *   option
+    *      no:function
+    *      yes:function
+    *      title:text
+    *      content:html
+    *      fn:function
+    * */
+    function alert_box(option) {
+        var tra = document.createDocumentFragment();
+        var div = document.createElement('div');
+        div.id = 'alert_area';
+        var alert_box = document.createElement('div');
+        alert_box.id = 'alert_box';
+        var title = option.title ? option.title : '提示'
+        var box_header = document.createElement('div');
+        box_header.className = 'box_header';
+        box_header.innerHTML = title;
+        var content = option.content ? option.content : '确认删除？'
+        var box_content = document.createElement('div');
+        box_content.className = 'box_content';
+        box_content.innerHTML = content;
+
+        var box_item = document.createElement('div')
+        box_item.className = 'box_item';
+        var left = option.left ? option.left : '取消'
+        var item_left = document.createElement('div');
+        item_left.className = 'item_left';
+        item_left.innerHTML = left;
+        var right = option.right ? option.right : '确认'
+        var item_right = document.createElement('div');
+        item_right.className = 'item_right';
+        item_right.innerHTML = right;
+
+        box_item.appendChild(item_left);
+        box_item.appendChild(item_right);
+        alert_box.appendChild(box_header);
+        alert_box.appendChild(box_content);
+        alert_box.appendChild(box_item);
+        div.appendChild(alert_box)
+        tra.appendChild(div)
+        $(document.body).append(tra);
+        item_left.onclick = function () {
+            option.no ? option.no() : '';
+            $('#alert_area').remove()
+        };
+        item_right.onclick = function () {
+            option.yes ? option.yes() : '';
+            $('#alert_area').remove();
+        }
+        option.fn ? option.fn() : '';
+    }
+
+    //分页
+    $(document.body).on('click', '.ques_aks_text .text-cen li', function (e) {
+        child_page = $(this).attr('p_id');
+        ans_id = $(this).attr('ans_id')
+        detil();
+    });
+    $(document.body).on('keyup', '.ques_aks_text .text-cen input', function (e) {
+        if (e.keyCode === 13) {
+            child_page = $(this).val();
+            ans_id = $(this).attr('ans_id');
+            detil();
+            $(this).val('').blur();
+        } else {
+            if ($(this).val() > Number($(this).attr('page'))) {
+                $(this).val($(this).attr('page'));
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g, ''))
+        }
+    })
+    $(document.body).on('click', '.out_page-list li', function (e) {
+        par_page = $(this).attr('p_id');
+        child_page = 1;
+        ans_id = 0;
+        detil();
+        to_top()
+    });
+    $(document.body).on('keyup', '.out_page-list input', function (e) {
+        if (e.keyCode === 13) {
+            par_page = $(this).val();
+            child_page = 1;
+            ans_id = 0;
+            detil();
+            $(this).val('').blur();
+            to_top();
+        } else {
+            if ($(this).val() > Number($(this).attr('page'))) {
+                $(this).val($(this).attr('page'));
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g, ''))
+        }
+    })
+
+    function to_top() {
+        var top_height = parseFloat($('.user_ques_top').css('height'));
+        $('#content')[0].scrollTop = (top_height + 24)
+    }
+
+    function hash_change(ha, fn) {
+        window.location.hash = ha;
+        fn()
+        var tim = window.setTimeout(function () {
+            window.location.hash = '';
+            window.clearTimeout(tim)
+        }, 300)
+    }
+</script>
+</body>
+</html>

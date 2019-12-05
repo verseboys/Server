@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-文章标签管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="public/js/vue.js"></script>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container" class="">
+        <div class="panel_left hide">
+            <div class="left_box">
+                <div class="left_title_box">
+                    <div class="left_title"></div>
+                </div>
+
+                <div v-for="(list,item) in par_lists">
+                    <div v-bind:type_id="list.id"
+                         v-bind:class="[parcheck_id=== list.id? 'left_item active' : '', 'left_item']"
+                         @click="check_parID(list.id)">
+                        <div class="item_name">{{list.tag}}</div>
+                        <input  v-model="add_change"  v-bind:type_id="list.id" v-model="add_change" @blur="change_tag($event,list,item,0)">
+                        <div class="item_toolbox">
+                            <div class="edit" @click="modif_tag($event,0,list)"></div>
+                            <div class="del" v-bind:type_id="list.id" @click="del_tag(list,0,item)"></div>
+                        </div>
+                        <div class="item_next"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="left_add_btn_box">
+                <div class="left_add_btn_border">
+                    <div class="left_add_btn" @click="show_add_box(2)"></div>
+                </div>
+            </div>
+        </div>
+        <div class="panel_right hide">
+            <div class="tag_item" v-for="(lis ,item) in child_list">
+                <div class="tag_del_btn"></div>
+                <div class="tag_text">{{lis.tag}}</div>
+                <input class="tag_edit_input" v-bind:type_id="lis.id" v-model="add_change" @blur="change_tag($event,lis,item,1)">
+                <div class="tag_toolbox">
+                    <div class="edit"  @click="modif_tag($event,1,lis)"></div>
+                    <div class="del" v-bind:type_id="lis.id" @click="del_tag(lis,1,item)"></div>
+                </div>
+            </div>
+
+            <div class="tag_item tag_add_btn page_2_add_btn"><input style="display: none;" v-model="add_child_val.val" @blur="add_child($event)" @keyDown.enter="add_child($event)">
+                <div class="tag_text" style="display: inline-block;" @click="add_show_child($event)"></div>
+            </div>
+        </div>
+        <pc-show-box v-bind:box="box_id" v-bind:tag_val="change"></pc-show-box>
+
+    </div>
+</div>
+
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var id=100
+    Vue.component('pc-show-box', {
+        template: '<div id="alert_area" v-show="box">\n' +
+        '            <div id="alert_box">' +
+        '<div v-if="box===1">\n' +
+        '            <div class="box_header">删除标签</div>\n' +
+        '            <div class="box_content">' +
+        '<p style="width: 100%;">确认删除“{{tag_val.tag}}”这个标签？</p>' +
+        '<div class="tips_box">{{add.msg}}</div>\n'+
+        '</div>\n' +
+        '            <div class="box_item">\n' +
+        '                <div class="item_left"  @click="close(0)">取消</div>\n' +
+        '                <div class="item_right" @click="del_val(tag_val)">确认</div>\n' +
+        '            </div>\n' +
+        '        </div>\n' +
+        '        <div v-if="box===2">\n' +
+        '            <div class="box_header">添加标签</div>\n' +
+        '            <div class="box_content" style="    min-height: 95px;">\n' +
+        '                <div class="add_tag_input">' +
+        '               <input v-model="add_val">' +
+        '<div class="tips_box" style="line-height: 30px;font-size: 14px;">{{add.msg}}</div>\n' +
+        '</div>\n' +
+        '            </div>\n' +
+        '            <div class="box_item">\n' +
+        '                <div class="item_left" @click="close(0)">取消</div>\n' +
+        '                <div class="item_right" @click="add_tag()">添加</div>\n' +
+        '            </div>\n' +
+        '        </div>' +
+        '</div>' +
+        '</div>',
+        props:['box','tag_val'],
+        data:function () {
+            return {
+                    add:{
+                        msg:''
+                    },
+                    add_val:''
+                
+            }
+        },
+        methods:{
+            close:function (num) {
+                check_type(num);
+                if(num===0){
+                    this.add_val='';
+                }
+               this.add.msg = '';
+            },
+            add_tag:function () {
+                var _self=this;
+                AJAX({
+                    url:'/supervisor/add_tag/',
+                    type:'post',
+                    data:{'tag': _self.add_val},
+                    fn:function (data) {
+                        if(data.code===200) {
+                            AJAX({
+                                url: "/supervisor/tag_list/",
+                                type: 'get',
+                                data: '',
+                                fn: function (data) {
+
+                                    if (data.code !== 200) {
+                                        return
+                                    }
+                                    var da = data.data.tags
+                                    tag.parcheck_id = da[0].id
+                                    tag.par_lists = da;
+                                    $('#container .panel_left').removeClass('hide');
+                                    get_child_tag(da[0].id)
+                                    _self.add_val = '';
+                                    _self.add.msg = ''
+                                    check_type(0);
+                                }
+
+                            })
+                        }else{
+                            _self.add.msg='提示: '+data.message;
+                        }
+                    }
+                })
+            },
+            del_val:function (list) {
+                var _self=this;
+                AJAX({
+                    url:'/supervisor/delete_tag/',
+                    type:'post',
+                    data:{'tag_id':list.id},
+                    fn:function (data) {
+                        if(data.code===200){
+                            check_type(0);
+                            _self.add.msg='';
+                            del_list_val(list.type,list.item)
+                        }else{
+                            _self.add.msg=data.message;
+                        }
+                    }
+                })
+            }
+        }
+    })
+    var tag = new Vue({
+        el: "#container",
+        data: {
+            box_id:0,
+            parcheck_id: '',
+            par_lists: [],
+            child_list: [],
+            change:{
+                type:'',
+                id:'',
+                tag:'',
+                item:''
+            },
+            add_child_val:{
+                type:true,
+                val:''
+            },
+            add_change:''
+        },
+        methods: {
+            check_parID: function (num) {
+                this.parcheck_id = num;
+                get_child_tag(this.parcheck_id)
+            },
+            show_add_box:function (num) {
+                check_type(num)
+            },
+            modif_tag:function (e,type,list) {//修改标签
+                var _self=this;
+                $(e.target).parent().prev('input').css('display','inline-block').focus();
+                $(e.target).parent().prev().prev('div').css('display','none');
+
+            },
+            change_tag:function (e,list,item,type) {//提交修改
+                var _self=this
+                $(e.target).css('display','none');
+                $(e.target).prev('div').css('display','inline-block');
+                if(type===1){
+                    $.ajax({
+                        url:'/supervisor/alter_tag/',
+                        type:'post',
+                        data:{tag_id:list.id,tag:list.tag},
+                        success: function (data) {
+                            if(data.code===200){
+                                _self.child_list[item].tag=_self.add_change;
+                                _self.add_change=''
+                            }else {
+                                alert(data.message)
+                            }
+
+                        }
+                    })
+                }else if(type===0){
+                    _self.par_lists[item].tag=_self.add_change;
+                    $.ajax({
+                        url:'/supervisor/alter_tag/',
+                        type:'post',
+                        data:{tag_id:list.id,tag:list.tag},
+                        success: function (data) {
+                            if(data.code===200){
+                                _self.child_list[item].tag=_self.add_change;
+                                _self.add_change=''
+                            }else {
+                                alert(data.message)
+                            }
+                        }
+                    })
+                }
+
+            },
+            del_tag:function (list,num,item) {//删除标签
+                this.box_id=1;
+                this.change.id=list.id;
+                this.change.tag=list.tag;
+                this.change.type=num;
+                this.change.item=item
+            },
+            add_child:function (e) {
+                var _self=this;
+                if(_self.add_child_val.type) {
+                    _self.add_child_val.type=false;
+                    if(_self.add_child_val.val) {
+                        AJAX({
+                            url: '/supervisor/add_tag/',
+                            type: 'post',
+                            data: {tag:_self.add_child_val.val,relevance_tag_id:_self.parcheck_id},
+                            fn: function (data) {
+                                    if(data.code===200){
+                                        _self.child_list.push(data.data);
+                                        e.target.style.display = 'none';
+                                        $(e.target).next().css('display', 'inline-block');
+                                        _self.add_child_val.val = '';
+                                    }else {
+                                        alert(data.message);
+                                        e.target.style.display = 'none';
+                                        $(e.target).next().css('display', 'inline-block');
+                                        _self.add_child_val.val = '';
+                                    }
+                            }
+                        })
+                    }else{
+                        e.target.style.display = 'none';
+                        $(e.target).next().css('display', 'inline-block');
+                        _self.add_child_val.val='';
+                    }
+                }
+            },
+            add_show_child:function (e) {
+                var _self=this;
+                _self.add_child_val.type=true;
+                e.target.style.display='none';
+                $(e.target).prev().css('display','inline-block').focus()
+            }
+        }
+    })
+    AJAX({
+        url: "/supervisor/tag_list/",
+        type: 'get',
+        data: '',
+        fn: function (data) {
+                if(data.code!==200){
+                    return
+                }
+            var da = data.data.tags
+            tag.parcheck_id = da[0].id
+            tag.par_lists = da;
+            $('#container .panel_left').removeClass('hide');
+            get_child_tag(da[0].id)
+        }
+
+    })
+
+    function get_child_tag(num) {
+        AJAX({
+            url: "/supervisor/relevance_tag/"+num+'/',
+            type: 'get',
+            data: '',
+            fn: function (data) {
+                if(data.code!==200){
+                    return
+                }
+                data.data.tags? tag.child_list = data.data.tags: tag.child_list =[];
+                $('#container .panel_right').removeClass('hide');
+            }
+
+        })
+    }
+function del_list_val(num,item) {
+    if(num===0){
+        AJAX({
+            url: "/supervisor/tag_list/",
+            type: 'get',
+            data: '',
+            fn: function (data) {
+                if (data.code !== 200) {
+                    return
+                }
+                var da = data.data.tags
+                tag.parcheck_id = da[0].id
+                tag.par_lists = da;
+                $('#container .panel_left').removeClass('hide');
+                get_child_tag(da[0].id)
+            }
+
+        })
+    /*
+    tag.par_lists.splice(item,1);
+    tag.parcheck_id=tag. par_lists[0].id;
+        child_lis.data.tags.pop();
+        get_child_tag(tag.parcheck_id)
+    }else if(num==1){
+        tag.child_list.splice(item,1)
+        */
+    }
+}
+    $('#container .panel_right').css('width', (window_width - 224 - 25 - 256 - 22) + 'px')
+    $(window).resize(function () {
+        $('#container .panel_right').css('width', (window_width - 224 - 25 - 256 - 22) + 'px')
+    })
+
+    function check_type(item) {
+        tag.box_id = item;
+        switch (item) {
+            case 0:
+
+                break
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+
+                break;
+            case 6:
+
+                break;
+            case 7:
+
+                break;
+            case 8:
+
+                break
+        }
+    }
+    function change_child_input() {
+        $(e.target).next().css('display','inline-block')
+    }
+</script>
+</body>
+</html>

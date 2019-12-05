@@ -1,0 +1,1771 @@
+/*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
+
+                          /**
+                           * 1. Change the default font family in all browsers (opinionated).
+                           * 2. Correct the line height in all browsers.
+                           * 3. Prevent adjustments of font size after orientation changes in
+                           *    IE on Windows Phone and in iOS.
+                           */
+
+                          /* Document
+                             ========================================================================== */
+
+                      html {
+                          font-family: sans-serif; /* 1 */
+                          line-height: 1.15; /* 2 */
+                          -ms-text-size-adjust: 100%; /* 3 */
+                          -webkit-text-size-adjust: 100%; /* 3 */
+                      }
+
+/* Sections
+   ========================================================================== */
+
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+
+body {
+    margin: 0;
+}
+
+/**
+ * Add the correct display in IE 9-.
+ */
+
+article,
+aside,
+footer,
+header,
+nav,
+section {
+    display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in IE.
+ */
+
+figcaption,
+figure,
+main { /* 1 */
+    display: block;
+}
+
+/**
+ * Add the correct margin in IE 8.
+ */
+
+figure {
+    margin: 1em 40px;
+}
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+
+hr {
+    box-sizing: content-box; /* 1 */
+    height: 0; /* 1 */
+    overflow: visible; /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+pre {
+    font-family: monospace, monospace; /* 1 */
+    font-size: 1em; /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+
+a {
+    background-color: transparent; /* 1 */
+    -webkit-text-decoration-skip: objects; /* 2 */
+}
+
+/**
+ * Remove the outline on focused links when they are also active or hovered
+ * in all browsers (opinionated).
+ */
+
+a:active,
+a:hover {
+    outline-width: 0;
+}
+
+/**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+
+abbr[title] {
+    border-bottom: none; /* 1 */
+    text-decoration: underline; /* 2 */
+    text-decoration: underline dotted; /* 2 */
+}
+
+/**
+ * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ */
+
+b,
+strong {
+    font-weight: inherit;
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+
+b,
+strong {
+    font-weight: bolder;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+code,
+kbd,
+samp {
+    font-family: monospace, monospace; /* 1 */
+    font-size: 1em; /* 2 */
+}
+
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Add the correct background and color in IE 9-.
+ */
+
+mark {
+    background-color: #ff0;
+    color: #000;
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+sup {
+    top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ */
+
+audio,
+video {
+    display: inline-block;
+}
+
+/**
+ * Add the correct display in iOS 4-7.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+
+img {
+    border-style: none;
+}
+
+/**
+ * Hide the overflow in IE.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* Forms
+   ========================================================================== */
+
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: sans-serif; /* 1 */
+    font-size: 100%; /* 1 */
+    line-height: 1.15; /* 1 */
+    margin: 0; /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+
+button,
+input { /* 1 */
+    overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+
+button,
+select { /* 1 */
+    text-transform: none;
+}
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
+
+button,
+html [type="button"], /* 1 */
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+    outline: 1px dotted ButtonText;
+}
+
+/**
+ * Change the border, margin, and padding in all browsers (opinionated).
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+
+legend {
+    box-sizing: border-box; /* 1 */
+    color: inherit; /* 2 */
+    display: table; /* 1 */
+    max-width: 100%; /* 1 */
+    padding: 0; /* 3 */
+    white-space: normal; /* 1 */
+}
+
+/**
+ * 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+
+progress {
+    display: inline-block; /* 1 */
+    vertical-align: baseline; /* 2 */
+}
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+
+textarea {
+    overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+
+[type="checkbox"],
+[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+
+[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    outline-offset: -2px; /* 2 */
+}
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+ */
+
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+
+::-webkit-file-upload-button {
+    -webkit-appearance: button; /* 1 */
+    font: inherit; /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ */
+
+details, /* 1 */
+menu {
+    display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+
+summary {
+    display: list-item;
+}
+
+/* Scripting
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 9-.
+ */
+
+canvas {
+    display: inline-block;
+}
+
+/**
+ * Add the correct display in IE.
+ */
+
+template {
+    display: none;
+}
+
+/* Hidden
+   ========================================================================== */
+
+/**
+ * Add the correct display in IE 10-.
+ */
+
+[hidden] {
+    display: none;
+}
+* :after,
+                        * :before {
+                            box-sizing: border-box;
+                        }
+
+* div {
+    font-weight: 400;
+}
+
+* strong {
+    font-weight: 900;
+}
+.video_group_title{
+    font-size: 24px;
+    text-align: left;
+    color: white;
+    margin-top:38px ;
+    display: inline-block;
+    font-weight: 500;
+}
+.video_list_button{
+    width: 33px;
+    height: 104px;
+    border-radius: 10px 0 0 10px;
+    background-color: #403f40;
+    border: solid 1px #575757;
+    position: absolute;
+    top: 200px;
+    right: 0;
+    transition: 0.7s;
+    transition-timing-function: ease-out;
+    cursor: pointer;
+    z-index: 999;
+}
+.video_list_button_open{
+    right: 310px;
+}
+.video_list_button_menu{
+    width: 16px;
+    height: 54px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.69;
+    letter-spacing: normal;
+    text-align: left;
+    display: block;
+    margin: 0 auto;
+    margin-top: 13px;
+    color: #9b9b9b;
+    cursor: pointer;
+}
+.video_list_container{
+    overflow: hidden;
+    position: relative;
+    top:0;
+    left:0;
+    z-index: 99999;
+}
+.video_container{
+    margin: 0 auto;
+    overflow: hidden;
+    width: 1260px;
+    height: 512px;
+    background-color: #595959;
+}
+.video_center_container{
+    overflow: hidden;
+    width:1155px;
+    margin:0 auto;
+    background-color: #000000;
+}
+.video_player{
+    float: left;
+}
+.video_list{
+    transition: 0.7s;
+    transition-timing-function: ease-out;
+    position: absolute;
+    top: 0;
+    right: -313px;
+    width: 312px;
+    height: 510px;
+    background-color: #403f40;
+    border: solid 1px #575757;
+}
+.video_list_open{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 312px;
+    height: 510px;
+    background-color: #403f40;
+    border: solid 1px #575757;
+    z-index:9999;
+}
+.button_container_video{
+    margin: 0 auto;
+    margin-top:54px;
+    height: 101px;
+    background-color: #595959;
+    width: 1260px;
+}
+.button_center_container{
+    width:1155px;
+    overflow: hidden;
+    margin:0 auto;   
+}
+.pay_button{
+    float: right;
+    margin-top:38px; 
+    width: 73px;
+    height: 36px;
+    border-radius: 5px;
+    background-color: #9b9b9b;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 36px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    margin-right:37px; 
+    cursor: pointer;
+}
+.charge{
+    background-color: #ef7e00;
+}
+.study_list{
+    height: 72px;
+}
+.study_list_content{
+    display: block;
+    width: 80px;
+    height: 28px;
+    font-family: PingFangSC;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+    position: relative;
+    top:22px;
+    left:19px;
+}
+.study_list_line{
+    height: 1px;
+    opacity: 0.24;
+    background-color:  #ffffff;
+}
+.free_button{
+    float: right;
+    margin-top:38px; 
+    width: 73px;
+    height: 36px;
+    border-radius: 5px;
+    background-color: #9b9b9b;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 38px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    margin-right:37px; 
+    cursor: pointer;
+}
+.collect_button{
+    margin-top:43px; 
+    float: right;
+    width: 26px;
+    height: 25px;
+    background-color: #ffffff;
+    margin-right:6px; 
+    cursor: pointer;
+}
+.items_container{
+    width: 1200px;
+    background-color: #f9f9f9;
+    margin: 0 auto;
+    padding-top:20px; 
+    position: relative;
+    height: 100%;
+}
+.title_container{
+    width: 1260px;
+    margin: 0 auto;
+    height: 74px;
+    position: relative;
+    border-bottom: solid 1px #d8d8d8;
+}
+.title_active{
+    width: 80px;
+    height: 42px;
+    border-bottom: solid 4px #4a90e2;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a90e2 !important;
+    display: inline-block;
+    margin-top:28px; 
+}
+.point_title{
+    width: 80px;
+    height: 42px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+    display: inline-block;
+    margin-top:28px; 
+    margin-left: 36px;
+    cursor: pointer;
+}
+.study_list_title{
+    width: 80px;
+    height: 42px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+    display: inline-block;
+    margin-top:28px; 
+    margin-left:79px; 
+    cursor: pointer;
+}
+.comment_title{
+    width: 80px;
+    height: 42px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+    display: inline-block;
+    margin-top:28px; 
+    margin-left:79px; 
+    cursor: pointer;
+}
+.introduce_title{
+    width: 80px;
+    height: 42px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+    display: inline-block;
+    margin-top:28px; 
+    margin-left:79px; 
+    cursor: pointer;
+}
+.download_title{
+    width: 80px;
+    height: 42px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #4a4a4a;
+    display: inline-block;
+    margin-top:28px; 
+    margin-left:79px; 
+    cursor: pointer;
+}
+div.head-nav{
+    width: 1260px
+}
+
+
+/* 自定义滚动条 */
+#video_list_container {
+    overflow: hidden;
+}
+  
+#div1 {
+    width: 312px;
+    position: absolute;
+    left: 0;
+}
+  
+#div2 {
+    width: 10px;
+    height: 512px;
+    background-color: #403f40;
+    position: absolute;
+    right: 0;
+}
+  
+#div3 {
+    width: 11px;
+    height: 85px;
+    background-color: #656565;
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+.video_list_item{
+    height: 69px;
+    position: relative;
+}
+.video_list_item_title{
+    width: 270px;
+    height: 25px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #ffffff;
+    position: absolute;
+    top:16px;
+    left:21px;
+}
+.video_list_item_content{
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: rgba(255,255,255,0.6);
+    width: 259px;
+    margin-bottom: 17px;
+    margin-left: 53px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.video_list_item_content:hover{
+    font-weight: 700;
+    color: rgba(255, 255, 255, 1);
+}
+.video_list_active{
+    font-weight: 700;
+    color: rgba(255,255,255,1);
+}
+.main_container{
+    width: 983px;
+    min-height: 600px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 #eaeaf0;
+    margin-left:15px;
+    z-index: 5;
+    margin-bottom:20px; 
+    padding-bottom:22px; 
+}
+.two_d_code_container{
+    position: absolute;
+    width: 150px;
+    height: 218px;
+    border-radius: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 #eaeaf0;
+    left:1040px;
+    top:20px;
+
+}
+.title_container{
+    width: 100%;
+}
+.two_d_code{
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    top:23px; 
+}
+.two_d_code_message{
+    width: 111px;
+    height: 43px;
+    margin: 0 auto;
+    background-color: blue;
+    position: relative;
+    top:43px;
+}
+.collection_container{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(53, 53, 53, 0.9);
+    z-index: 10000;
+}
+.collection_cancel{
+    width: 44px;
+    height: 44px;
+    position: absolute;
+    right: 165px;
+    top: 68px;
+    background-image: url(../images/cancel.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+}
+.neko_shadow_box{
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+#neko_shadow_box {
+    z-index: 100000;
+}
+.point_container_for_target_video{
+    padding-top:37px;
+    padding-left:34px; 
+    padding-right:34px;
+    line-height: 20px; 
+}
+.point_container_for_target_video p{
+    line-height: 30px; 
+}
+.introduce_container p{
+    line-height: 30px; 
+}
+.point_list_title{
+    width: 111px;
+    height: 23px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.67;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3c3c3c;
+    margin-bottom:20px;
+}
+.point_code_title{
+    width: 111px;
+    height: 23px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.67;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3c3c3c;
+    margin-top:20px; 
+    margin-bottom:35px;
+}
+.point_code{
+    width: 910px;
+    border-radius: 6px;
+    background-color: #f4f4f4;
+}
+.study_list_container{
+    padding-top:37px;
+    padding-left:34px;
+    margin-left:-34px; 
+}
+.video_group_block{
+    padding-left:34px;
+}
+.video_group_block_title{
+    height: 25px;
+    font-family: PingFangSC;
+    font-size: 18px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3c3c3c;
+    margin-bottom: 24px;
+}
+.video_block{
+    margin-left:-34px;
+    height:47px; 
+    cursor: pointer;
+    line-height: 47px;
+    position: relative;
+}
+.video_block:hover{
+    background-color: #ecf4f9;
+}
+.video_title{
+    display: inline-block;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #3c3c3c;
+    line-height: 47px;
+    margin-left:60px;
+}
+.video_time{
+    width: 78px;
+    height: 27px;
+    position: absolute;
+    top:10px;
+    right:41px;
+    text-align: center;
+    line-height: 27px;
+    color: #9b9b9b ;
+}
+
+.video_state{
+    width: 78px;
+    height: 27px;
+    position: absolute;
+    top:10px;
+    right:41px;
+    text-align: center;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+    line-height: 27px;
+}
+.video_free{
+    display:inline-block;
+    width: 36px;
+    height: 23px;
+    border-radius: 4px;
+    border: solid 1px #03a675;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 23px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #03a675;
+    margin-left:3px;
+}
+.video_group_negative{
+    opacity: 0.5;
+}
+.video_ready{
+    border-radius: 3px;
+    background-color: #f5a623;
+}
+.video_comming{
+    border-radius: 3px;
+    background-color: #4a90e2;
+}
+.download_container{
+    padding:37px 30px 0 34px;
+}
+.file_container{
+    height: 47px;
+    position: relative;
+}
+.file_name{
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3c3c3c;
+    line-height: 47px;
+}
+.download_button{
+    display: inline-block;
+    width: 73px;
+    height: 25px;
+    border-radius: 3px;
+    background-color: #00bb83;
+    font-size: 16px;
+    text-align: center;
+    position: absolute;
+    top:10px;
+    right: 15px;
+}
+.introduce_container{
+    padding-top: 37px;
+    padding-left: 34px;
+    padding-right: 34px;
+}
+.introduce_content{
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.94;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3c3c3c;
+}
+.new_comment_container_disable{
+    height: 202px;
+    padding-top:24px;
+    padding-left:42px;  
+}
+.fake_input_place{
+    width: 899px;
+    height: 93px;
+    border-radius: 2px;
+    background-color: #f2f3f4;
+    border: solid 1px #e3e3ea;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #b3bac6;
+    padding-top:5px; 
+}
+.login_place{
+    width: 220px;
+    height: 21px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #727a89;
+    margin-top: 27px;
+    margin-left:692px; 
+}
+.new_comment_container{
+    height: 202px;
+    padding-top:24px;
+    padding-left:42px; 
+
+}
+.real_input_place{
+    width: 899px;
+    height: 93px;
+    border-radius: 2px;
+    background-color: #f2f3f4;
+    border: solid 1px #e3e3ea;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    padding-top:5px; 
+    padding-left:10px;
+}
+.real_input_place::-webkit-input-placeholder {
+    color: #b3bac6;
+}
+.real_input_place::-moz-placeholder {
+    color: #b3bac6;
+}
+.real_input_place::-ms-input-placeholder {
+    color: #b3bac6;
+}
+
+.login_button{
+    width: 99px;
+    height: 35px;
+    border-radius: 2px;
+    background-color: #449fea;
+    font-family: HelveticaNeue;
+    font-size: 15px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #f2f3f4;
+    line-height: 35px;
+    margin-top:19px;
+    margin-left: 801px;
+    cursor: pointer;
+}
+.empty_comment{
+    width: 100%;
+    height: 274px;
+}
+.empty_img{
+    width: 115px;
+    height: 92px;
+    margin-left:448px;
+    margin-top:200px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #666666;
+}
+.comment_content{
+    width: 899px;
+    margin-left: 42px;
+    padding-top:15px;
+}
+.comment_content_title{
+    height: 45px;
+    position: relative;
+}
+.comment_avatar{
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; 
+}
+.comment_name{
+    display: inline-block;
+    height: 45px;
+    font-family: HelveticaNeue;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #3260b6;
+    line-height: 45px;
+    position: absolute;
+    top:0px;
+    left:59px;
+}
+.comment_time{
+    display: inline-block;
+    height: 45px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #727a89; 
+    line-height: 45px;
+    position: absolute;
+    top: 0;
+    left: 818px;
+}
+.comment_body{
+    width: 800px;
+    margin-top: 10px;
+    margin-left: 56px;
+    word-wrap: break-word;
+    font-size: 15px;
+    font-family: PingFangSC;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4a4a4a
+}
+.response_container{
+    width: 791px;
+    margin-left:56px;
+    margin-top:21px;
+    border-radius: 2px;
+    background-color: #f9f9f9;
+    border: solid 1px #eaeaf1;
+    padding-top:11px;
+    padding-left: 22px;
+    padding-bottom: 3px;
+}
+.comment_response{
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    margin-right: 20px;
+}
+.response_name{
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #3260b6;
+}
+.response_response{
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #404040;
+}
+.response_words{
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.6;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4a4a4a;
+}
+.response_like{
+    width: 815px;
+    margin-left:56px;
+    height: 72px;
+}
+.response_response_inner{
+    display: inline-block;
+    width: 30px;
+    height:72px;
+    line-height: 72px;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4a90e2;
+    margin-right: 10px;
+    margin-left: 735px;
+}
+.response_like_inner{
+    display: inline-block;
+    min-width: 30px;
+    height:72px;
+    line-height: 72px;
+    font-family: PingFangSC;
+    font-size: 15px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #727a89;
+}
+.response_like_number{
+    position: relative;
+    left:3px;
+    cursor: default;
+}
+.like_img{
+    cursor: pointer;
+}
+.response_tool{
+    width: 815px;
+    margin-left:56px;
+}
+.tool_hide{
+    height: 1px;
+    overflow: hidden;
+    background-color: #eaeaf0;
+}
+.tool_show{
+    height: 36px;
+    background:#fff; 
+}
+.response_input{
+    width: 700px;
+    margin:0;
+    padding: 0;
+    height:36px;
+    border-radius: 2px;
+    background-color: #f2f3f4;
+    border: solid 1px #e3e3ea;
+    padding-left:10px; 
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+
+}
+.response_input::-webkit-input-placeholder {
+    color: #b3bac6;
+}
+.response_input::-moz-placeholder {
+    color: #b3bac6;
+}
+.response_input::-ms-input-placeholder {
+    color: #b3bac6;
+}
+.response_button{
+    width: 75px;
+    height: 34px;
+    border-radius: 2px;
+    background-color: #45a0ea;
+    font-family: PingFangSC;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+    display: inline-block;
+    line-height: 36px;
+    cursor: pointer;
+    margin-left:10px; 
+}
+#yizhu-video{
+    background-color: rgb(89, 89, 89);
+}
+
+.rotate_img {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+}
+.video_top{
+    position: relative;
+    top: -1px;
+}
+.play_button{
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    position: absolute;
+    top:50%;
+    left:50%;
+    z-index: 1;
+    cursor: pointer;
+    margin-left:-46px;
+    margin-top:-46px;
+    opacity: 0.7;
+    transition: 0.5s;
+}
+.play_button:hover{
+    opacity: 1;
+}
+.video_reject{
+    width: 1155px;
+    height: 512px;
+    position: absolute;
+    z-index: 0;
+    background: rgba(53, 53, 53);
+}
+.go_login{
+    width:50px;
+    height: 30px;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    margin-left: -25px;
+    margin-top:-15px;
+    background: #fff;
+    text-align: center;
+    cursor: pointer;
+}
+
+a{
+    color: blue;
+}
+.bill_container{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 718px;
+    height: 368px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    margin-top:-184px;
+    margin-left:-359px;
+    z-index: 11;
+}
+.bill_container_cancel{
+    position: absolute;
+    top:18px;
+    right: 18px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+}
+.bill_container_cancel:hover{
+    opacity: 1;
+}
+.course_img_container{
+    width: 262px;
+    height: 151px;
+    border-radius: 2px;
+    position: absolute;
+    top:66px;
+    left:40px;
+    background: gray;
+}
+.course_title{
+    width: 390px;
+    height: 30px;
+    position: absolute;
+    top: 70px;
+    left: 328px;
+    font-family: PingFangSC;
+    font-size: 22px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 30px;
+    letter-spacing: -1.7px;
+    text-align: left;
+    color: #333333
+}
+.readme_container{
+    width: 280px;
+    height: 22px;
+    position: absolute;
+    top:260px;
+    left: 40px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 22px;
+    letter-spacing: -1.2px;
+    text-align: left;
+    color: #333;
+}
+.checkbox_container{
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+    margin-top:-4px;
+    cursor: pointer;
+    margin-right:3px;
+}
+.readme_show{
+    font-family: PingFangSC;
+    color: #45a0ea;
+    cursor: pointer;
+    line-height: 22px;
+}
+.bill_background{
+    position: fixed;
+    top:0;
+    left:0;
+    height: 100%;
+    width:100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+.price_container{
+    position: absolute;
+    top:254px;
+    right: 38px;
+    height: 33px;
+    width: 270px;
+}
+.price_old{
+    display:inline-block;
+    width:155px;
+    font-family: PingFangSC;
+    font-size: 20px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 33px;
+    letter-spacing: -1.5px;
+    text-align: right;
+    color: #9b9b9b;
+    text-decoration-line: line-through;
+}
+.price_new{
+    display: inline-block;
+    width: 110px;
+    font-family: PingFangSC;
+    font-size: 24px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 33px;
+    letter-spacing: -1.8px;
+    text-align: right;
+    color: #e57163;
+}
+.bill_cancel{
+    width: 121px;
+    height: 38px;
+    border-radius: 2px;
+    background-color: #fcfbfb;
+    border: solid 1px #d8d8d8;
+    position: absolute;
+    top:308px;
+    right: 179px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 40px;
+    letter-spacing: 1.1px;
+    text-align: center;
+    color: #403f40;
+    cursor: pointer;
+}
+
+.bill_confirm{
+    width: 121px;
+    height: 38px;
+    border-radius: 4px;
+    background-color: #37aef2;
+    border: 1px solid rgb(102, 156, 187);
+    position: absolute;
+    top:308px;
+    right: 33px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 40px;
+    letter-spacing: normal;
+    text-align: center;
+    color: #f8f9fd;
+    cursor: pointer;
+}
+.readme{
+    position: fixed;
+    width: 800px;
+    height: 90%;
+    margin-top:-22%;
+    margin-left:-400px;
+    top:50%;
+    left:50%;
+    background: #fff;
+    z-index: 12;
+    border-radius: 5px;
+}
+.readme_cancel{
+    position: absolute;
+    top:25px;
+    right: 25px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: 0.3s;
+}
+.readme_cancel:hover{
+    opacity: 1;
+}
+.readme_title{
+    text-align: center;
+    margin-top:30px;
+    font-family: PingFangSC;
+}
+.readme_comtent{
+    width: 700px;
+    margin: 0 auto;
+    border:1px solid gray;
+    height: 82%;
+    margin-top:25px;
+    overflow-y: scroll;
+}
+
+
+/* 慢阻肺专项科研专项视频部分course_video.html */
+.thead:hover {
+    background:#ecf4f9!important;
+}
+.thead span {
+    line-height:70px;
+    margin:0 auto;
+    color:#404040;
+}
+.thead span:nth-child(1){
+    width:150px;
+    text-align:center;
+    display:inline-block;
+}
+.thead span:nth-child(2) {
+    text-align:left;
+    width:550px;
+    display:inline-block;
+}
+.thead span:nth-child(3) {
+    width:150px;
+    display:inline-block;
+    text-align:center;
+}
+.thead span:nth-child(4) {
+    width:130px;
+    display:inline-block;
+    text-align:center;
+}
+.thead span:nth-child(4) img {
+    vertical-align: middle;
+}
+.success {
+    background:rgba(0,0,0,0.5);
+    width:268px;
+    height:70px;
+    line-height:70px;
+    border-radius: 10px;
+    position:absolute;
+    top: 33%;
+    left: 39%;
+    text-align:center;
+    display:none;
+}
+.success span:nth-child(1) {
+    width:22px;
+    height:22px;
+    display:inline-block;
+}
+.success span:nth-child(1) img {
+    width:100%;
+    height:100%;
+    vertical-align: text-bottom;
+}
+.success span:nth-child(2) {
+    font-size:20px;
+    color:#fff;
+    padding-left:6px;
+}
+.congratulate {
+    background:rgba(0,0,0,0.5);
+    width:354px;
+    height:70px;
+    line-height:70px;
+    border-radius: 10px;
+    position:absolute;
+    top: 20%;
+    left: 35%;
+    text-align:center;
+    display:none;
+}
+.congratulate span:nth-child(1) {
+    width:22px;
+    height:22px;
+    display:inline-block;
+}
+.congratulate span:nth-child(1) img {
+    width:100%;
+    height:100%;
+    vertical-align: text-bottom;
+}
+.congratulate span:nth-child(2) {
+    font-size:20px;
+    color:#fff;
+    padding-left:6px;
+}

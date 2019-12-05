@@ -1,0 +1,222 @@
+<div id="bindContactModal" v-clock class="bind-contact-modal" v-show="isShowModal">
+    <div class="bind-contact-modal-main">
+      <div class="close_btn" @click="closeModal"></div>
+      <div class="bind-contact-box">
+        <h2 v-text="bindType=='phone'?'绑定手机号':'绑定邮箱'"></h2>
+        <div class="error">
+          <p v-show="errorInfo||successInfo" :class="{'success':successInfo}" v-text="errorInfo||successInfo"></p>
+        </div>
+        <div class="input-group">
+          <div class="input-item">
+            <input
+              v-model="formdata.value"
+              type="text"
+              :placeholder="bindType=='phone'?'请输入手机号':'请输入邮箱'"
+            >
+          </div>
+          <div class="input-item clearfix">
+            <div class="float-left">
+              <input v-model="formdata.code" type="text" placeholder="填写验证码">
+            </div>
+            <div class="float-right">
+              <button
+              class="validate-btn validate-phone-btn"
+              :class="{'disable': validateDisable}"
+              :disabled="validateDisable"
+              @click="sendValidateCode()"
+              v-text="validateDisable ? countDownNum + '秒' : '获取验证码'"></button>
+            </div>
+          </div>
+        </div>
+        <button class="form-btn" @click="bindContact">
+          绑定
+        </button>
+      </div>
+  </div>
+</div>
+
+<script type="application/javascript">
+var bindContactVM =new Vue({
+  el: '#bindContactModal',
+  data: {
+    isShowModal:false,
+    bindType:'', //phone email
+    errorInfo:'',
+    successInfo:'',
+    validateDisable: false, // 验证按钮是否失效
+    countDownNum: 60,
+    timer: null,
+    formdata:{
+      value:'',
+      code:'',
+    }
+  },
+  methods: {
+    showModal:function(type){
+      var vm = this;
+      vm.bindType = type;
+      vm.errorInfo='';
+      vm.successInfo='';
+      vm.validateDisable= false;
+      vm.formdata.value='';
+      vm.formdata.code='';
+      vm.countDownNum=60;
+      clearInterval(vm.timer);
+
+      vm.isShowModal = true;
+    },
+    closeModal:function(){
+      this.isShowModal = false;
+      vm.errorInfo='';
+      vm.successInfo='';
+      vm.validateDisable= false;
+      vm.formdata.value='';
+      vm.formdata.code='';
+      vm.countDownNum=60;
+      clearInterval(vm.timer);
+    },
+    // 校验用户邮箱
+    checkEmail (identity){
+      let vm = this;
+      if (!$.trim(identity)) {
+        vm.errorInfo = '邮箱不能为空';
+        return false;
+      }
+      if (!this.isEmail(identity)) {
+        vm.errorInfo = '请输入正确的邮箱';
+        return false;
+      }
+      return true;
+    },
+    // 校验用户手机号
+    checkPhone:function(identity){
+      let vm = this;
+      if (!$.trim(identity)) {
+        vm.errorInfo = '手机号不能为空';
+        return false;
+      }
+      if (!vm.isMobile(identity)){
+        vm.errorInfo = '请输入正确的手机号';
+        return false;
+      }
+      return true;
+    },
+    checkValidateCode:function(code){
+      let vm = this;
+      if (!$.trim(code)) {
+        vm.errorInfo = '验证码不能为空';
+        return false;
+      }
+      return true;
+    },
+    // 校验手机
+    isMobile:function(value){
+      let reg = /^(?:\+?86)?1(?:3\d{3}|5[^4\D]\d{2}|8\d{3}|7(?:[35678]\d{2}|4(?:0\d|1[0-2]|9\d))|9[189]\d{2}|66\d{2})\d{6}$/;
+      if (!reg.test(value)) return false;
+      return true;
+    },
+    // 校验邮箱
+    isEmail:function(value){
+      let reg = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+      if (!reg.test(value)) return false;
+      return true;
+    },
+    // 发送验证码
+    sendValidateCode(){
+      var vm = this;
+      var dataObj=null,url,checkResult;
+      if(vm.bindType==='phone'){
+        dataObj={'phone':vm.formdata.value};
+        url='/send_bind_phone_code/';
+        checkResult=vm.checkPhone(vm.formdata.value)
+      }else{
+        dataObj={'email':vm.formdata.value};
+        url='/send_bind_email_code/';
+        checkResult=vm.checkEmail(vm.formdata.value);
+      }
+      if (checkResult) {
+        vm.validateDisable = true;
+        vm.successInfo = '';
+        vm.errorInfo = '';
+        vm.countDown();
+        $.ajax({
+          url: url,
+          type: 'post',
+          data: dataObj,
+          success: function (res) {
+            if (res.code === 200) {
+              vm.successInfo = res.message;
+            } else {
+              if(res.message==='请绑定新手机号' || res.message==='手机号已经被使用'|| res.message==='请绑定新邮箱' || res.message==='邮箱已经被使用'){
+                vm.validateDisable = false;
+                vm.countDownNum = 60;
+                clearInterval(vm.timer);
+              }
+              vm.errorInfo = res.message||'网络异常，请稍候重试';
+            }
+          }
+        })
+      }
+    },
+    // 倒计时
+    countDown () {
+      var vm = this;
+      vm.timer = setInterval(function () {
+        if (vm.countDownNum !== 0) {
+          vm.countDownNum--
+        } else {
+          vm.validateDisable = false;
+          vm.countDownNum = 60;
+          clearInterval(vm.timer);
+        }
+      }, 1000)
+    },
+    bindContact:function(){
+      var vm = this;
+      var dataObj=null,url,checkResult;
+      if(vm.bindType==='phone'){
+        dataObj={
+          'phone':vm.formdata.value,
+          'captcha':vm.formdata.code,
+        };
+        url='/bind_phone/';
+        checkResult=vm.checkPhone(vm.formdata.value) && vm.checkValidateCode(vm.formdata.code);
+      }else{
+        dataObj={
+          'email':vm.formdata.value,
+          'captcha':vm.formdata.code
+        };
+        url='/bind_email/';
+        checkResult=vm.checkEmail(vm.formdata.value) && vm.checkValidateCode(vm.formdata.code);
+      }
+      if(checkResult){
+        vm.successInfo = '';
+        vm.errorInfo = '';
+        $.ajax({
+          url: url,
+          type: 'post',
+          data: dataObj,
+          success: function (res) {
+            if (res.code === 200) {
+              vm.successInfo = res.message;
+              if(vm.bindType==='phone'){
+                myInfoVM.userInfo.phone=vm.formdata.value;
+                myInfoVM.userInfo.phone_validated = true;
+              }
+              if(vm.bindType==='email'){
+                myInfoVM.userInfo.email=vm.formdata.value;
+                myInfoVM.userInfo.email_validated = true;
+              }
+              setTimeout(function(){
+                vm.isShowModal = false
+              },1000)
+            } else {
+              vm.errorInfo = res.message||'网络异常，请稍候重试';
+            }
+          }
+        })
+      }
+    }
+  }
+})
+</script>

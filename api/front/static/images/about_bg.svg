@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="390px" height="415px" viewBox="0 0 390 415" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>基础训练营</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="382" height="407"></rect>
+        <filter x="-1.8%" y="-1.2%" width="103.7%" height="103.4%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.847   0 0 0 0 0.847   0 0 0 0 0.847  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <path d="M58,190 L58,457 C58,457 71.1505563,446.851934 106.138275,450.441199 C141.125993,454.030464 167.185811,461.493037 229.681115,434.689749 C292.17642,407.88646 303.444878,400.423888 364.25112,407.060155 C425.057362,413.696422 429.400665,418.628433 495.274093,362.258897 C510.475654,347.850193 549.975582,339.87118 559,340.697485 L559,190 L58,190 Z" id="path-4"></path>
+        <filter x="-1.4%" y="-1.9%" width="102.8%" height="105.2%" filterUnits="objectBoundingBox" id="filter-5">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.0262398098 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="慢阻肺专项" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="慢阻肺项目-科研培训主页" transform="translate(-851.000000, -502.000000)">
+            <g id="分组-6" transform="translate(855.000000, 504.000000)">
+                <g id="基础训练营">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Mask">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
+                        <use fill="#E5F4FB" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <g mask="url(#mask-2)">
+                        <g transform="translate(-164.000000, 157.000000)">
+                            <rect id="矩形" fill="#E5F4FB" fill-rule="evenodd" x="0" y="0" width="551" height="256"></rect>
+                            <g id="路径" fill="none" transform="translate(308.500000, 323.500000) rotate(-180.000000) translate(-308.500000, -323.500000) ">
+                                <use fill="black" fill-opacity="1" filter="url(#filter-5)" xlink:href="#path-4"></use>
+                                <use fill="#EFFAFF" fill-rule="evenodd" xlink:href="#path-4"></use>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

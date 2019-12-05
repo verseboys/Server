@@ -1,0 +1,322 @@
+{% extends './_base.html' %}
+{% load static %}
+
+{% block titleblock %}{{ video.video.title }}医咖会{% endblock titleblock %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/video.css' %}">
+    <link rel="stylesheet" href="{% static 'css/front_study.css' %}">
+{% endblock headblock %}
+{% block head_description %}
+    {{video.video.title}}
+{% endblock head_description %}
+
+{% block bodyblock %}
+{% if course.public_scope == 1 and member is not None or course.public_scope == 2 %}
+    <div style="background-color:#595959;margin-top:50px;">
+        <div class="video_container" style="width:1200px;">
+            <p style="color:#fff;font-size:24px;line-height:90px;height:90px;">{{video.video.title}}</p>
+            <div class="video_center_container">
+                <div class="video_list_container" style="position:relative;">
+                    <div id="player" class="video_player" style="width:899px;height:509px;"></div>
+                    <div class="play_button" style="top:40%;">
+                        <img src="{% static 'images/video_play.png' %}" style="border-radius: 50%">
+                    </div>
+                    <p class="success">
+                        <span><img src="{% static 'images/wanbi.png' %}"></span>
+                        <span>该视频您已观看完毕</span>
+                    </p>
+                    <p class="congratulate">
+                        <span><img src="{% static 'images/wanbi.png' %}"></span>
+                        <span>恭喜，全部视频您已观看完毕</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width:100%;background-color: #f9f9f9;">
+        <div class="items_container">
+            <div class="main_container">
+                <div class="title_container">
+                    <div class="point_title title_active">
+                        本期要点
+                    </div>
+                    <div class="study_list_title">
+                        课程目录
+                    </div>
+                    <div class="introduce_title">
+                        讲者介绍
+                    </div>
+                    <div class="download_title">
+                        资料下载
+                    </div>
+                </div>
+                <!-- 本期要点 -->
+                <div class="point_container">
+                    <div class="point_container_for_target_video">
+                        <!-- 复文本编辑 -->
+                        {{video.video.course_main|safe }}
+                    </div>
+                </div>
+                <!-- 课程目录 -->
+                <div class="study_list_container" style="display:none;margin-left:0;padding-left:0;padding-top: 20px;">
+                    <div class="training_course">
+                        <div class="table" style="border:none;margin:0;">
+                        {% for v in videos %}
+                            <a href="{% url 'network_course_video' network_id=network.id course_id=course.id video_id=v.id %}">
+                                <div class="thead" style="background: none;">
+                                    <span>第{{v.order}}节</span>
+                                    <span style="width:590px;">{{ v.video.title}}</span>
+                                    <span>时长：{{v.video.video_time}}</span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <!-- 讲者介绍 -->
+                <div class="introduce_container" style="display:none">
+                    <!-- 复文本编辑 -->
+                    {{video.video.teacher_introduction|safe }}
+                </div>
+                <!-- 资料下载 -->
+                <div class="download_container" style="display:none">
+                    {% if video_related_data %}
+                        {% for v in video_related_data %}
+                            <div class="file_container">
+                                <span class="file_name">
+                                    {{ v.file_name }}
+                                </span>
+                                <span class="download_button">
+                                    {% if front_user %}
+                                        <a class="user_download" data-href="{% url 'front_download_article' article_id=video.video.id type_id=3 file_id=v.file_id %}" style="color:#fff;">
+                                            <div class="down_load_button_flag" style="height:25px;line-height:25px;cursor:pointer">下载</div>
+                                        </a>
+                                    {% else %}
+                                        <a href="javascript:( window.location.href = '/login/?next=' + window.location.pathname+'#1')" style="color:#fff;">下载</a>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="two_d_code_container">
+                <img src="{% static 'images/erweima1.png' %}" width="105" height="105" class="two_d_code">
+                <div class="two_d_code_message">
+                    <img src="{% static 'images/bitmap-copy-2@3x.png' %}">
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <!--无权限-->
+    <div class="tab_three authority" style="display:block;width:1145px;"> 
+        <div class="train research">
+            <div style="text-align: center;">
+                <img src="{% static 'images/sorry.svg' %}" alt="" style="margin-top:145px;" class="avatar">
+            </div>
+            <div class="sorry">
+                <h3>抱歉，您无法参与科研培训！</h3>
+                <p style="text-align:center;font-weight: bolder;line-height:32px;">本培训课程是<span>“慢阻肺临床研究专项”</span>研究人员的定制化课程。</p>
+                <p>如果您是“慢阻肺临床研究专项”的研究人员，请先在本平台内提交申请信息。运营人员会在1~3个工作日内进行审核，审核通过后，会给您发送通知邮件（可能在您的垃圾邮件中），点击邮件中的课程链接即可获得培训课程权限。如有疑问，请发送邮件至<a href="javascript:;">help@natureself.cn</a>。</p>
+                <p>如果您还不是“慢阻肺临床研究专项”的研究人员，有意向参与本项目，请发送邮件至<a href="javascript:;">help@natureself.cn</a>进行咨询。</p>
+            </div>
+        </div>
+    </div>
+{% endif %}
+    <script type="text/javascript" src="{% static 'js/user_download.js' %}"></script>
+    <script src='https://player.polyv.net/script/polyvplayer.min.js'></script>
+    <div id='previewArea'></div>
+    <script>
+        //屏幕适配
+        let screenwid= window.innerWidth>=1278? window.innerWidth:1278
+        let sizeParam=Math.sqrt(screenwid/1885)
+        let fitScreen=function(){
+            $(".video_list_container").width(1140* sizeParam+"px").height(613* sizeParam+"px")
+            $(".video_center_container").width(1140* sizeParam+"px").height(613* sizeParam+"px")
+            $(".video_container").height(613* sizeParam+"px")    
+            $("#video_list_container").height(613* sizeParam+"px")
+            $(".video_list_container .video_list_button").css('top',200* sizeParam+"px")
+        }
+        fitScreen()
+        let reg = new RegExp("[<>]", 'ig')
+        //播放页面逻辑
+        var player = polyvObject('#player').videoPlayer({
+            'width': 1140*sizeParam,
+            'height': 512*sizeParam,
+            'vid': '{{ video.video.polyv_vid }}', // 源文件播放
+            'code': '{{ user.id }}',
+            'flashvars': {'ban_skin_big_play_btn': "on"}
+        });
+
+        window.s2j_onPlayOver = function(course_id,video_id){  // 培训课程视频播放完后的回调
+            localStorage.setItem("videoPlayOver","{{video.id}}")
+            $.ajax({
+                url:"/networks/1/courses/"+{{course.id}}+"/videos/"+{{video.id}}+"/watch",
+                type:"POST",
+                contentType:"application/json",
+                dataType:"json",
+                success:function(data){
+                    if (data.data.earnedMedal == true) {
+                        var dialog;
+                        dialog += `<div class="medal-dialog" style="display:none;">
+                            <div class="dialog-content">
+                                <span class="close" id="close"><b>×</b></span>
+                                <p><img src="{{course.medal.ss_pic_url}}" alt=""></p>
+                                <ul style="padding-top:135px;text-align: center;">
+                                    <li>
+                                        <span style="display:inline-block;width: 40px;height: 40px;margin-right: 12px;">
+                                            <img src="${"/images/avatar/" + data.data.avatar }" style="width: 100%;height: 100%;vertical-align: middle;" alt="">
+                                        </span>
+                                        <span style="color: #353535;font-size:20px;" class="new_medal">恭喜你获得新勋章</span>
+                                    </li>
+                                    <li style="color: #5e1cc6;font-size:30px;line-height:90px;">{{course.medal.name}}</li>
+                                    <li style="color: #999;font-size:14px;">{{course.medal.description}}</li>
+                                    <li style="color: #999;font-size:14px;padding-top:40px;">已有<span style="color: #5e1cc6;" id="number">${data.data.medalCount}</span>人获得</li>
+                                </ul>
+                            </div>
+                        </div>`
+                        $('body').append(dialog)
+                        {% if course.serial_state == 'finished' %}
+                            $('.new_medal').text('恭喜你获得新勋章')
+                        {% elif course.serial_state == 'loading' %}
+                            $('.new_medal').text('尚未获得，仍需努力')
+                        {% endif %}
+                        // 点击勋章关闭按钮 勋章弹框消失
+                        $("#close").click(function(){
+                            $('.medal-dialog').fadeOut();
+                        })
+                        // 连载中+数据采集为'否'：2秒的提示信息“该视频您已看完”,而且无获得勋章的弹框
+                        if (data.data.serialState == 'loading' && data.data.dataCollection == false) {
+                            $(".success").fadeIn()
+                            setTimeout(function(){
+                                $(".success").fadeOut()
+                            },1000)
+                        }else if (data.data.serialState == 'loading' && data.data.dataCollection == true) { 
+                            // 连载中+数据采集为'是'：2秒的提示信息“该视频您已看完”,而且无获得勋章的弹框
+                            $(".success").fadeIn()
+                            setTimeout(function(){
+                                $(".success").fadeOut()
+                            },1000)
+                        }else if (data.data.serialState == 'finished' && data.data.dataCollection == true ) {
+                            // 数据采集为'是'并'已完结'，观看完最后一个课时视频时，2秒的提示信息+跳转数据采集页面，不用弹出获得勋章的对话框，但是个人中心中该课程关联的勋章为已获得状态
+                            $(".congratulate").fadeIn();
+                            setTimeout(function(){
+                                $(".congratulate").fadeOut();
+                                window.location.href= "/networks/1/courses/"+{{course.id}}+"/#data-collection"
+                            },1000)
+                        } else if (data.data.serialState == 'finished' && data.data.dataCollection == false) {
+                            // 已完结+数据采集为否：2秒的提示信息“恭喜您已看完全部视频”+弹出获得勋章的对话框且个人中心中该课程关联的勋章为已获得状态
+                            $(".congratulate").fadeIn();
+                            $('.medal-dialog').fadeIn(); // 勋章弹框
+                            setTimeout(function(){
+                                $(".congratulate").fadeOut();
+                            },1000)
+                        }
+                    } else {
+                        $(".success").fadeIn()
+                        setTimeout(function(){
+                            $(".success").fadeOut()
+                        },1000)
+                    }
+                },
+                error:function(data){
+                    alert(data.message)
+                }
+            })
+        }
+
+        let video_play_button = $(".play_button")
+
+        video_play_button.click(function () {
+            player.j2s_resumeVideo(); // 执行播放器播放动作
+            video_play_button.hide()
+        })
+        window.s2j_onVideoPause = function () { // 当触发'暂停事件'时，FLASH尝试调用JS函数
+            video_play_button.show()
+        }
+        window.s2j_onPlayerError = function (e) { // 当触发'播放失败事件'时，FLASH尝试调用JS函数
+            if (e == '__onVerificationBan') {
+                video_play_button.hide()
+            }
+        }
+        window.s2j_onVideoPlay = function () { // 当触发'播放事件'时，FLASH尝试调用JS函数
+            video_play_button.hide()
+        }
+
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            }     
+        });
+
+        //底部菜单切换逻辑
+        $('.title_container').click(function(e){
+            let t =$(e.target)
+            let animatedCount=$(".main_container").find("div:animated").length;
+            let toggleClass=function(){
+                if(t.hasClass('title_active')){
+                    return
+                }else{
+                    $(".title_active").removeClass('title_active')
+                    t.addClass('title_active')
+                }
+            }
+            let toggleContainer=function(selector){
+                $(selector).siblings(":visible").not(".title_container").animate({opacity:"0"},300,function(e){
+                    $(selector).siblings().not(".title_container").hide()
+                    $(selector).show().css("opacity",0)
+                     $(selector).animate({opacity:"1"},300)
+                })
+            }
+            switch(t.text().trim()){
+                case "本期要点":
+                if(animatedCount==0){
+                    toggleClass()
+                    toggleContainer('.point_container')
+                }else{
+                    return
+                }
+                break;
+                case "课程目录":
+                if(animatedCount==0){
+                    toggleClass()
+                    toggleContainer('.study_list_container')
+                }else{
+                    return
+                }
+                break;
+                case "讲者介绍":
+                if(animatedCount==0){
+                    toggleClass()
+                    toggleContainer('.introduce_container')
+                }else{
+                    return
+                }
+                break;
+                case "资料下载":
+                if(animatedCount==0){
+                    toggleClass()
+                    toggleContainer('.download_container')
+                }else{
+                    return
+                }
+                break;
+            }
+        })
+    </script>
+{% endblock bodyblock %}

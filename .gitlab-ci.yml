@@ -1,0 +1,25 @@
+image: registry.natureself.site/ci/base:master
+
+stages:
+  - build
+  - deploy
+
+Build Docker Image:
+  stage: build
+  script:
+    - nsci build-image --project build --repo medieco-server
+
+Update Testing Env:
+  stage: deploy
+  only:
+    - master
+  script:
+    - nsci update-kube-service --kubectx bjo --kubens testing-master --project build --repo medieco-server deploy/medieco-server "*"
+
+Update Production Env:
+  stage: deploy
+  only:
+    - tags
+  when: manual
+  script:
+    - nsci update-kube-service --kubectx alibj --kubens yizhu --project build --repo medieco-server deploy/yizhu "*"

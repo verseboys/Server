@@ -1,0 +1,113 @@
+.tag-cla{
+    display: flex;
+    border-bottom: 1px solid #d8d8d8;
+    line-height: 33px;
+    font-size: 13px;
+    color: #403f40;
+}
+.panel_body{
+   padding: 0;
+}
+.tag-cla-1{
+    flex: 1;
+    padding-left:27px;
+    padding-right: 15px;
+    text-align: left;
+    word-break: keep-all;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.tag-cla-2{
+    width: 130px;
+    text-align: center;
+}
+.tag-cla-3{
+    width: 125px;
+    text-align: center;
+}
+.tag-cla-4{
+    width: 140px;
+    text-align: center;
+}
+.tag-cla-5{
+    padding-left: 15px;
+    width: 190px;
+    text-align: left;
+}
+.tag-cla-6{
+    width: 180px;
+    padding-left: 20px;
+    text-align: left;
+}
+.edit{
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.9px;
+    color: #4588f1;
+
+}
+.gang{
+    opacity: 0.59;
+    font-family: PingFangSC;
+    font-size: 14px;
+    letter-spacing: 0.9px;
+    color: #000000;
+}
+.del{
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.9px;
+    color: #e57163;
+}
+.tag-cla a{
+    text-decoration: none;
+}
+.thumbnail{
+    width: 208px!important;
+    height: 260px!important;;
+}
+.pulish_time_nu{
+    background: #ECECEC;
+    border-radius: 2px;
+    width: 264px;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 0;
+}
+input:focus{
+    box-sizing: border-box!important;
+}
+.taf-rad-ok:after {
+    content: '隐藏';
+    width: 58px;
+    height: 20px;
+    line-height: 20px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #000000;
+    opacity: 0.71;
+    display: block;
+    position: absolute;
+    left: 27px;
+}
+.taf-rad-caogao:after {
+    content: '显示';
+    width: 58px;
+    height: 20px;
+    line-height: 20px;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #000000;
+    opacity: 0.71;
+    display: block;
+    position: absolute;
+    left: 27px;
+}
+#panel_content{
+    background: #fff;
+    padding-bottom: 80px;
+}

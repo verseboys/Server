@@ -1,0 +1,169 @@
+.clearfix ::after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.float-left{
+  float: left;
+}
+.float-right{
+  float: right;
+}
+
+.user_pwd_submit.disabled {
+  background: #999;
+  cursor: inherit;
+}
+.information_box{
+  min-width: 350px!important;
+}
+.user-info input, .user-info textarea {
+  color:#060606;
+}
+.user-info .chooser{
+  color:#060606;
+}
+.collect-dict-modal,.bind-contact-modal{
+  position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(53, 53, 53, 0.6);
+    z-index: 9999;
+}
+
+.collect-dict-modal .close_btn{
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  right: 165px;
+  top: 68px;
+  background-image: url(../images/cancel.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.bind-contact-modal .close_btn{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background-image: url(../images/cancel.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.collect-dict-modal-main,.bind-contact-modal-main{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bind-contact-modal-main{
+  box-sizing: border-box;
+  padding:38px 39px 0 38px;
+  width: 456px;
+  height: 377px;
+  border-radius: 4px;
+  box-shadow: 0 2px 13px 5px rgba(69, 160, 234, 0.17);
+  background-color: #fff;
+}
+
+.bind-contact-box h2{
+  text-align: center;
+  font-size: 24px;
+}
+
+.bind-contact-box .error{
+  margin-top: 20px;
+  margin-bottom: 8px;
+  height: 26px;
+}
+.bind-contact-box .error p{
+  background-color: #e46d7c;
+  line-height: 26px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  /* display: none; */
+}
+.bind-contact-box .error p.success{
+  background-color: #03a675;
+}
+
+.bind-contact-box .input-item{
+  margin-bottom: 20px;
+  width:100%;
+}
+.bind-contact-box .input-item:last-child{
+  margin-bottom: 33px;
+}
+
+.bind-contact-box input{
+  box-sizing: border-box;
+  padding:0 10px;
+  width: 379px;
+  height: 50px;
+  border-radius: 2px;
+  background-color: #f0f6ff;
+}
+.bind-contact-box input:focus {
+  box-sizing: border-box;
+  outline: none;
+}
+.bind-contact-box .input-item:last-child input{
+  width:261px;
+}
+
+.bind-contact-box ::placeholder {
+  color: #b3bac6;
+  font-weight: 300;
+}
+.bind-contact-box .validate-btn {
+  box-sizing: border-box;
+  border-radius: 2px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  width: 103px;
+  cursor: pointer;
+}
+.bind-contact-box .validate-email-btn{
+  border: 1px solid #d8d8d8;
+  overflow: hidden;
+}
+
+.bind-contact-box .validate-email-btn img{
+  width:103;
+  height: 50px;
+}
+.bind-contact-box .validate-phone-btn{
+  background-color: #4990e2;
+  color:#fff;
+  cursor: pointer;
+}
+.bind-contact-box .validate-phone-btn.disable{
+  color: #666;
+  background-color: #d8d8d8;
+  cursor: auto;
+}
+
+.bind-contact-box .form-btn{
+  width: 100%;
+  height: 46px;
+  text-align: center;
+  line-height: 46px;
+  border-radius: 2px;
+  background-color: #4990e2;
+  color:#fff;
+  cursor: pointer;
+}
+

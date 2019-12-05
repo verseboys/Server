@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-资源分发管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content{
+            display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav"></div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar " style="text-align: center">
+            <div class="search_box" style="margin-left: 0;float: left"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+            <div class="send_tag_btn">
+                <span class="checked" p_type="0">全部</span><span p_type="2">已发送</span><span p_type="1">未发送</span>
+            </div>
+
+        </div>
+        <div class=" send_ema_box" style="color: rgba(0,0,0,.5);margin-top: 15px;line-height: 63px">
+            <div class="send_ema_box_left">
+                <div class="page_list">&nbsp;</div>
+            </div>
+            <div class="send_ema_box_right">
+                <div class="author">邮箱</div>
+                <div class="pub_time">用户名</div>
+                <div class="stat">资源ID</div>
+                <div class="control">状态</div>
+            </div>
+        </div>
+        <div class="panel_body">
+            <div id="panel_content">
+            </div>
+            <div id="compents_paginator">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+            <div id="no_resour" class="hide" style="line-height: 200px;text-align: center;">暂无资源</div>
+        </div>
+    </div>
+</div>
+
+<div id="send_before" class="flex_center hide">
+    <div class="user_change" id="user_change">
+        <div class="flex_box">
+        <div class="flex_box_left">备注</div><div class="flex_box_right"><textarea
+                id="text_msg"></textarea></div>
+        </div>
+        <div class="file_top">文件上传</div>
+        <div class="flex_box">
+            <div class="flex_box_left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="flex_box_right">
+                <input type="file" id="file_up" class="hide">
+                <label for="file_up" id="file_up_box">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="19" viewBox="0 0 25 19">
+                        <g fill="none" fill-rule="evenodd" transform="translate(-619 -690)">
+                            <use fill="#000" filter="url(#b)" xlink:href="#c"></use>
+                            <use fill="#FDFDFD" xlink:href="#c"></use>
+                            <path fill="#BCC1CC" fill-rule="nonzero" d="M627.933 694.66c-.984-.965-2.39-1.082-3.484-.294-1.046.751-1.623 2.14-1.477 3.556 0 0-3.972.879-3.972 5.487.089 4.602 4.317 4.644 4.317 4.644h6.669v-4.814h-2.096l3.53-4.307 3.529 4.307h-2.096v4.814h6.047s3.95 0 4.505-4.372c.135-2.749-1.493-5.194-3.816-5.731 0 0 .466-7.087-5.26-7.894-2.795-.365-5.437 1.538-6.396 4.605z"></path>
+                            <use stroke="#A966DC" stroke-dasharray="8" stroke-opacity=".811" stroke-width="2" mask="url(#d)" xlink:href="#a"></use>
+                        </g>
+                    </svg> <span>选择文件</span>
+                </label>
+                <span class="file_item hide" id="file_item_box">
+                                <span style="line-height: 43px;">
+                                    <?xml version="1.0" encoding="UTF-8"?>
+                                    <svg width="10px" height="13px" viewBox="0 0 10 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <rect id="path-1" x="-1" y="-14" width="1447" height="980"></rect>
+        <rect id="path-3" x="286" y="272" width="1082" height="578" rx="2"></rect>
+        <filter x="-0.3%" y="-0.4%" width="100.6%" height="101.2%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.05 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <path d="M497,316 L786.5,316 L1076,316 L1076,316 C1077.10457,316 1078,316.895431 1078,318 L1078,696 L1078,696 C1078,697.104569 1077.10457,698 1076,698 L497,698 L497,698 C495.895431,698 495,697.104569 495,696 L495,318 L495,318 C495,316.895431 495.895431,316 497,316 Z" id="path-5"></path>
+        <filter x="-0.6%" y="-0.7%" width="101.2%" height="101.8%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.547928143   0 0 0 0 0.586816749   0 0 0 0 0.664593963  0 0 0 0.350486866 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <path d="M568.629555,518.540541 L773.829008,518.540541 L1032.69433,518.540541 L1032.69433,518.540541 C1034.90347,518.540541 1036.69433,520.331402 1036.69433,522.540541 L1036.69433,591.283073 L1036.69433,591.283073 C1036.69433,593.492212 1034.90347,595.283073 1032.69433,595.283073 L568.629555,595.283073 L568.629555,595.283073 C566.420416,595.283073 564.629555,593.492212 564.629555,591.283073 L564.629555,522.540541 L564.629555,522.540541 C564.629555,520.331402 566.420416,518.540541 568.629555,518.540541 Z" id="path-7"></path>
+        <mask id="mask-8" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="472.064777" height="76.742532" fill="white">
+            <use xlink:href="#path-7"></use>
+        </mask>
+    </defs>
+    <g id="医咖会web2.0后台" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="创建文章-弹框" transform="translate(-721.000000, -551.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Shape" fill="#F5F6FA" xlink:href="#path-1"></use>
+            <rect id="Rectangle-5" fill="#EDEDED" mask="url(#mask-2)" x="219" y="71" width="1227" height="898"></rect>
+            <g id="Rectangle-3-Copy-4" mask="url(#mask-2)">
+                <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-3"></use>
+            </g>
+            <text id="秀玲-copy-3" mask="url(#mask-2)" font-family="PingFangSC-Regular, PingFang SC" font-size="14" font-weight="normal" fill="#000000">
+                <tspan x="719" y="574">秀玲</tspan>
+            </text>
+            <rect id="Gallery" fill="#000000" opacity="0.5" mask="url(#mask-2)" x="0" y="0" width="1447" height="980"></rect>
+            <g id="Rectangle-Copy" mask="url(#mask-2)">
+                <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                <use fill="#FDFDFD" fill-rule="evenodd" xlink:href="#path-5"></use>
+            </g>
+            <g id="Rectangle-5" stroke-dasharray="6" mask="url(#mask-2)" stroke-width="2" stroke="#465A79">
+                <use mask="url(#mask-8)" xlink:href="#path-7"></use>
+            </g>
+            <g id="文件" mask="url(#mask-2)" fill-rule="nonzero" fill="#BCC1CC">
+                <g transform="translate(721.000000, 551.000000)" id="Shape">
+                    <path d="M4.88461984,3.66615207 L4.88461984,0 L1.68186552,0 C1.30525352,9.55995072e-05 0.999999988,0.304611893 1,0.680218714 L1,11.3199543 C1,11.6955331 1.30528159,11.9999999 1.68186552,11.9999999 L9.31778729,11.9999999 C9.49868942,12.0000918 9.67221379,11.9284849 9.80016348,11.8009416 C9.92811317,11.6733984 10,11.5003736 10,11.3199543 L10,4.8003116 L6.26709872,4.78144067 C4.84625622,4.78126754 4.88461984,3.66615207 4.88461984,3.66615207 Z"></path>
+                    <path d="M0.614198224,11.9069002 L0.670158497,1.03631318 C0.3000516,1.03650372 9.4127787e-05,1.34004274 0,1.71447349 L0,12.3216671 C-4.79356625e-08,12.6961652 0.299984989,12.9998094 0.670158497,13 L8.17531946,13 C8.46389795,12.9997102 8.72002606,12.8129267 8.81152646,12.536041 L1.10794534,12.536041 C1.10794534,12.536041 0.567792126,12.5384574 0.614198224,11.9069002 L0.614198224,11.9069002 Z M6.72274069,4.19030233 L10,4.19030233 L5.53051372,0 L5.53051372,3.0521529 C5.53051372,3.0521529 5.34488936,4.19030231 6.72274069,4.19030233 Z"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+                                </span>
+                                <span class="text"></span>
+                                <span class="del" p_id="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="24" viewBox="0 0 20 24">
+    <g fill="none" fill-rule="evenodd" transform="translate(-1025 -669)">
+        <path fill="#D8D8D8" fill-rule="nonzero" d="M1025 672.724c0-.686.56-1.244 1.25-1.244h6.25v-1.239c0-.687.56-1.241 1.251-1.241h2.5c.69 0 1.25.556 1.25 1.241v1.244h6.249c.689 0 1.25.555 1.25 1.241v1.243h-20v-1.245zm18.75 3.722v15.31c0 .688-.561 1.244-1.25 1.244h-15c-.69 0-1.25-.556-1.25-1.244v-16.549h17.5v1.24zm-12.5 2.485a1.25 1.25 0 0 0-2.5 0v10.345c0 .685.561 1.241 1.25 1.241.692 0 1.25-.556 1.25-1.24V678.93zm5.001 0a1.25 1.25 0 0 0-2.5 0v10.345c0 .685.56 1.241 1.25 1.241.687 0 1.25-.556 1.25-1.24V678.93zm4.999 0c0-.685-.561-1.243-1.25-1.243-.692 0-1.25.558-1.25 1.243v10.345c0 .685.56 1.241 1.25 1.241.689 0 1.25-.556 1.25-1.24V678.93z"></path>
+    </g>
+</svg>
+                                </span>
+                            </span>
+            </div>
+        </div>
+        <div class="user_change_btn">
+            <span class="user_change_remove">取消</span><span class="user_change_sub" p_id="" type="0">完成</span>
+        </div>
+    </div>
+</div>
+<div id="send_in" class="flex_center hide">
+    <div style=" display: flex;align-items: center;width: 583px;justify-content: center;height: 382px;background: #fff;border-radius: 5px;">发送中，请稍后...</div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    $.prototype.send_email=function (option) {
+        option=option?option:{}
+        $('#send_box').remove();
+        var str='<div class="flex_center" id="send_box">\n' +
+            '    <div class="assign_email send_email_true">\n' +
+            '        <div class="text_center">\n' ;
+        if(option.type) {
+            str += '            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="81" height="81" viewBox="0 0 109 109">\n' +
+                '                <g fill="none" fill-rule="evenodd">\n' +
+                '                    <path fill="#1cba84" fill-rule="nonzero" d="M31.654 53.855a5.113 5.113 0 0 0-7.231 7.23l21.032 21.031a5.095 5.095 0 0 0 3.619 1.5 5.103 5.103 0 0 0 3.612-1.498l48.117-48.116a5.114 5.114 0 0 0-7.233-7.232L49.072 71.275l-17.418-17.42zm77.054-5.023a3.893 3.893 0 0 0-7.746.8c.168 1.602.251 3.24.251 4.866 0 25.759-20.956 46.715-46.715 46.715-25.76 0-46.715-20.956-46.715-46.715 0-25.759 20.956-46.715 46.717-46.715 9.187 0 18.079 2.666 25.71 7.708a3.893 3.893 0 0 0 4.293-6.496A54.269 54.269 0 0 0 54.5 0C24.449 0 0 24.45 0 54.5S24.449 109 54.5 109 109 84.551 109 54.5c0-1.892-.098-3.798-.29-5.666l-.002-.002z"/>\n' +
+                '                </g>\n' +
+                '            </svg>\n'
+        } else {
+            str += '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="109" height="109" viewBox="0 0 109 109">\n' +
+                '    <g fill="none" fill-rule="evenodd">\n' +
+                '        <g fill="#F00" fill-rule="nonzero">\n' +
+                '            <path d="M108.708 48.832a3.893 3.893 0 0 0-7.746.8c.168 1.602.251 3.24.251 4.866 0 25.759-20.956 46.715-46.715 46.715-25.76 0-46.715-20.956-46.715-46.715 0-25.759 20.956-46.715 46.717-46.715 9.187 0 18.079 2.666 25.71 7.708a3.893 3.893 0 0 0 4.293-6.496A54.269 54.269 0 0 0 54.5 0C24.449 0 0 24.45 0 54.5S24.449 109 54.5 109 109 84.551 109 54.5c0-1.892-.098-3.798-.29-5.666l-.002-.002z"/>\n' +
+                '            <path d="M61.197 55.938l19.914-19.244a4.428 4.428 0 0 0 1.368-3.17 4.427 4.427 0 0 0-1.328-3.186 4.684 4.684 0 0 0-6.514-.04L54.69 49.566 35.05 30.322a4.684 4.684 0 0 0-6.514-.008 4.427 4.427 0 0 0-1.351 3.176 4.427 4.427 0 0 0 1.343 3.18l19.615 19.212-19.776 19.116A4.428 4.428 0 0 0 27 78.168a4.427 4.427 0 0 0 1.328 3.186 4.7 4.7 0 0 0 6.514.04l19.8-19.132L74.605 81.82a4.651 4.651 0 0 0 6.515.008 4.427 4.427 0 0 0 1.351-3.177 4.427 4.427 0 0 0-1.343-3.18l-19.93-19.532z"/>\n' +
+                '        </g>\n' +
+                '    </g>\n' +
+                '</svg>'
+        }
+        str+='            <div style="font-size: 25px;">'+option.str+'</div>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '</div>' ;
+        $(document.body).append(str);
+
+        window.setTimeout(function () {
+            if(option.fn) {
+                option.fn()
+            }
+            $('#send_box').remove();
+        },1000)
+    };
+    //选中列表
+    var check_list={},check_ary=[];
+    var check_type=0//选中类型
+    var page = 1, page_num = 0;
+    var url='/supervisor/get_resource_user_list/',type='get',val='',data_type=true;
+    $(document).on('click','.selector',function () {
+        var p=$(this).attr('tid')
+        if($(this).hasClass('selected')){
+            $(this).removeClass('selected')
+            delete check_list[p];
+        }else {
+            $(this).addClass('selected')
+            check_list[p]=$(this).attr('p_email');
+
+        }
+    })
+    $('.send_tag_btn span').on('click',function () {
+        data_type=true
+        check_type=$(this).attr('p_type');
+        $(this).addClass('checked').siblings().removeClass('checked');
+        page = 1;
+        type='get';
+        url='/supervisor/get_resource_user_list/';
+        val='';
+        get_methods()
+    })
+    
+
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            get_methods()
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            get_methods()
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            get_methods()
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            get_methods()
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            get_methods()
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup','input',function (e) {
+        if(e.keyCode===13){
+            page=$(this).val();
+            get_methods();
+            $(this).val('').blur();
+        } else {
+            if($(this).val()>page_num){
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g,''))
+        }
+    })
+
+    get_methods()
+    function get_methods() {
+        var u
+        if (data_type) {
+
+            u = url + check_type + '/' + page + '/'
+        } else {
+
+            u = url + page + '/'
+        }
+        AJAX({
+            type: type,
+            url: u,
+            data: val,
+            fn: function (data) {
+                check_list = {}
+                if (data.code !== 200) {
+                    $('#panel_content').addClass('hide')
+                    $('#compents_paginator').addClass('hide')
+                    $('#no_resour').removeClass('hide')
+                    return
+                } else {
+                    $('#panel_content').removeClass('hide')
+                    $('#compents_paginator').removeClass('hide')
+                    $('#no_resour').addClass('hide')
+                }
+
+                var str = '';
+                var content = data.data.user_list
+                for (var i = 0; i < content.length; i++) {
+                    var da = content[i];
+                    str += '<div class=" send_ema_box">\n' +
+                            '                    <div class="send_ema_box_left">\n' +
+                            '                        <div class="selector" type="search_article" tid="' + i + '" p_email="' + da.email + '"></div>\n' +
+                            '                    </div>\n' +
+                            '                    <div class="send_ema_box_right">\n' +
+                            '                        <div class="author">' + da.email + '</div>\n' +
+                            '                        <div class="pub_time">' + da.username + '</div>\n' +
+                            '                        <div class="stat">' + da.article_id + '</div>\n' +
+                            '                        <div class="control"><select tid="' + da.article_id + '" p_email="' + da.email + '">' + methods_status(da.is_send) + '</select></div>\n' +
+                            '                    </div>\n' +
+                            '                </div>'
+                }
+                $('#panel_content').html(str);
+                var str_li = '';
+                if (page !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                var pagecount = data.data.page_count, start, last;
+                if (data.data.page_count > 1) {
+                    if (pagecount - Number(page) > 2 && Number(page) > 2) {
+                        start = Number(page) - 3;
+                        last = Number(page) + 2
+                    }
+                    else if (pagecount - Number(page) <= 2 && pagecount >= 5) {
+                        start = pagecount - 5;
+                        last = pagecount;
+                    }
+                    else if (Number(page) <= 2 && pagecount >= 5) {
+                        start = 0;
+                        last = 5
+                    }
+                    else if (pagecount <= 5) {
+                        start = 0;
+                        last = pagecount;
+                    }
+                    for (var p = start; p < last; p++) {
+                        if (Number(page) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.page_count !== 1 && page !== data.data.page_count) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+                $('#compents_paginator .paginator').html(str_li);
+                $('#page_number').html(data.data.page_count);
+                page_num = data.data.page_count;
+                if (data.data.page_count === 1) {
+                    $('#compents_paginator .paginator_controller').hide()
+                } else {
+                    $('#compents_paginator .paginator_controller').show()
+                }
+                $('#content')[0].scrollTop = 0
+            }
+        })
+    }
+    //状态管理
+    function methods_status(num) {
+        switch (num) {
+            case 2:
+                return '                                                      <option value="2" selected>已发送</option>\n' +
+                        '                                                      <option value="1" >未发送</option>'
+//                return '<span style="color: #4a90e2;">已发送</span>';
+            case 1:
+                return '                                                      <option value="2">已发送</option>\n' +
+                        '                                                      <option value="1" selected>未发送</option>'
+//                return '<span style="color:#e57163">未发送</span>';
+        }
+
+    }
+    var select_type = true
+    $(document).on('change', 'select', function () {
+        var self = $(this)
+        var val = $(this).val()
+        var t = $(this).attr('tid');
+        var em = $(this).attr('p_email')
+
+        if (select_type) {
+            $.ajax({
+                url: '/supervisor/is_send_resource/',
+                type: 'post',
+                data: {email: em, is_send: val, article_id: t},
+                success: function (data) {
+                    if (data.code !== 200) {
+                        select_type = false;
+                        self.find('option').each(function () {
+                            if ($(this).attr('value') !== val) {
+                                $(this).attr('selected', true)
+                            } else {
+                                $(this).attr('selected', false)
+                            }
+                        })
+                        $().send_email({
+                            type: false,
+                            str: '更改状态失败',
+                            fn: function () {
+                                select_type = true
+                            }
+                        })
+                    }
+                }
+            })
+        }
+    })
+    function search_list() {
+        data_type=false
+        url='/supervisor/search_get_resource/';
+        type='post',val={'search_resource_info':$('#container .search_box input').val()}
+        page = 1;
+        get_methods()
+    }
+    $('#container .search_box .search_img').click(search_list)
+    $('#container .search_box input').keyup(function (e) {
+        if(e.keyCode===13){
+            search_list()
+        }
+    })
+    var oMyForm = new FormData(),file_path
+    $(document).on('click','.send_all_btn',function () {
+        var ary=''
+        for(var key in check_list){
+            ary+=check_list[key]
+        }
+        if(!ary){
+            $().send_email({
+                type:false,
+                str:'您还未选择邮箱'
+            })
+            return
+        }
+        $('#send_before').removeClass('hide')
+    })
+    $(document).on('change','#file_up', function () {
+        var file = $(this)[0].files[0]
+        var reader = new FileReader();
+        reader.readAsDataURL(file)
+        reader.addEventListener('load', function () {
+                         oMyForm.append('file_path', file);
+                        $('#file_item_box .text').html(file.name)
+                        $('#file_up_box').addClass('hide');
+                        $('#file_item_box').removeClass('hide');
+
+        })
+    })
+    $(document).on('click', '#file_item_box .del svg', function () {
+        $('#file_up').val('');
+        oMyForm.delete('file_path');
+            $('#file_up_box').removeClass('hide');
+            $('#file_item_box').addClass('hide');
+    })
+    $(document).on('click', '.user_change_remove', function () {
+        $('#send_before').addClass('hide');
+        $('#text_msg').val('');
+        oMyForm.delete('file_path');
+        $('#file_up_box').removeClass('hide');
+        $('#file_item_box').addClass('hide');
+    })
+        $(document).on('click','.user_change_sub',function () {
+            var ary=[]
+
+            for(var key in check_list){
+                ary.push(check_list[key])
+            }
+
+            oMyForm.append('email_list',ary)
+            oMyForm.append('body',$('#text_msg').val())
+            var da=new Date()
+
+            $.ajax({
+                type: 'post',
+                url:'/supervisor/send_resource/',
+                data: oMyForm,
+                contentType: false,
+                processData: false,
+                success:function (data) {
+                    if(data.code!==200){
+                        if(new Date()-da>500) {
+                            $('#send_in').addClass('hide');
+                            $().send_email({
+                                type:false,
+                                str:'发送失败',
+                                fn:function () {
+                                    $('#send_before').removeClass('hide');
+                                }
+                            })
+
+                        }else {
+                            window.setTimeout(function () {
+                                $('#send_in').addClass('hide')
+                                $().send_email({
+                                    type:false,
+                                    str:'发送失败',
+                                    fn:function () {
+                                        $('#send_before').removeClass('hide');
+                                    }
+                                })
+
+                            },500)
+                        }
+                        return
+                    }
+                    else{
+                        if(new Date()-da>500) {
+                            $('#send_in').addClass('hide')
+                            $().send_email({
+                                type:true,
+                                str:'发送成功',
+                                fn:function () {
+                                    $('#text_msg').val('');
+                                    oMyForm.delete('file_path');
+                                    $('#file_up_box').removeClass('hide');
+                                    $('#file_item_box').addClass('hide');
+                                }
+                            })
+                        }else {
+                            var timer=  window.setTimeout(function () {
+                                $('#send_in').addClass('hide')
+                                $('#send_after').removeClass('hide');
+                                $().send_email({
+                                    type:true,
+                                    str:'发送成功',
+                                    fn:function () {
+                                        $('#text_msg').val('');
+                                        oMyForm.delete('file_path');
+                                        $('#file_up_box').removeClass('hide');
+                                        $('#file_item_box').addClass('hide');
+                                        window.clearTimeout(timer)
+                                    }
+                                })
+                            },500)
+
+                        }
+                    }
+
+                }
+            })
+            $('#send_before').addClass('hide');
+            $('#send_in').removeClass('hide')
+        })
+</script>
+</body>
+</html>

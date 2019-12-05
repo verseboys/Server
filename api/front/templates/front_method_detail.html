@@ -1,0 +1,1078 @@
+{% extends 'front_methods.html'%}
+{% load static %}
+{% load custom_filter %}
+
+{% block titleblock %}
+    {{ title }}-医咖会
+{% endblock titleblock %}
+
+{% block head_description %}
+    {% comment %}spaceless删除所有空格键和回车符{% endcomment %}
+    {% spaceless %}
+        {% if contents %}
+            {% for content in contents %}
+                {{ content.content|safe|striptags }}
+            {% endfor %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock head_description %}
+
+{% block bodyblock %}
+
+    <div id="container" style="margin-top:0;">
+        <div >
+            <div class="methods-content-head">
+                <h2>{{ title }}{% if rank %}
+                    {% if rank == 2 %}(简洁版){% elif rank == 3 %}(详细版){% endif %}
+                {% endif %}</h2>
+                <div>
+                   {{ category|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div id="container_body" oncopy="return false;" >
+             <div class="methods-content-box">
+                 <ul class="methods-content-tag">
+                     {% if contents %}
+                        {% for content in contents %}
+                            <li scroll_id={{ forloop.counter }} {% if forloop.counter == 1 %} class="checked"{% endif %}>
+                                <h3>{{ content.section }}</h3>
+                            </li>
+                        {% endfor %}
+
+                        {% if related_reading_articles %}
+                         <li scroll_id={{ content_count|add:1 }}>
+                             <h3>更多阅读</h3>
+                         </li>
+                        {% endif %}
+
+                         {% if file_name %}
+                             <li scroll_id={% if related_reading_articles %}{{ content_count|add:2 }}{% else %}{{ content_count|add:1 }}{% endif %}>
+                                 <h3>数据下载</h3>
+                             </li>
+                         {% endif %}
+                     {% endif %}
+                 </ul>
+                 <div class="methods-question">
+                     <div>
+                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+                             <g fill="none" fill-rule="evenodd">
+                                 <g fill="#B4B3B3" fill-rule="nonzero" class="methods-question-checked-path">
+                                     <path d="M18.91 0H2.09C.943 0 0 .929 0 2.075v14.247c0 1.137.936 2.074 2.09 2.074h6.22l1.588 2.25c.333.472.871.472 1.204 0l1.589-2.25h6.219c1.147 0 2.09-.929 2.09-2.074V2.075A2.088 2.088 0 0 0 18.91 0zm-3.16 12.537H5.25c-.58 0-1.05-.467-1.05-1.044s.47-1.045 1.05-1.045h10.5c.58 0 1.05.468 1.05 1.045s-.47 1.044-1.05 1.044zm0-5.224H5.25c-.58 0-1.05-.467-1.05-1.044s.47-1.045 1.05-1.045h10.5c.58 0 1.05.468 1.05 1.045s-.47 1.044-1.05 1.044z"/>
+                                 </g>
+                             </g>
+                         </svg>
+                     </div>
+                     <div>
+                         问答
+                     </div>
+                     <div id="ques_message">
+                         <div>
+                             <p>点击绿色“提问”按钮</p>
+                             <ul>
+                                 <li>针对本文提问</li>
+                                 <li>查看历史问答</li>
+                             </ul>
+                         </div>
+                         <div>
+                             <p>长按鼠标选中正文某句话</p>
+                             <ul>
+                                 <li>对选中的内容进行针对性提问</li>
+                             </ul>
+                         </div>
+                     </div>
+
+                 </div>
+                 <div class="move-to-top hide"></div>
+                 <div class="methods-content-body" style="width: 941px">
+                     <div class="methods-content-body-text">
+                <div class="methods-content-checked-box">
+                    {% comment %}文章内容版块{% endcomment %}
+                    {% if contents %}
+                        {% for content in contents %}
+                            <div class="scroll_id_{{ forloop.counter }} scroll_move_tag" >
+                                {% if content.section != '阅读全文' %}
+                                    <h5 style="color: #45a0ea;">{{ forloop.counter|number_convert_chinese }}、{{ content.section }}</h5>
+                                {% endif %}
+
+                                {% if content.is_login == 1 %}
+                                    {% if front_user %}
+                                        {{ content.content|safe }}
+                                    {% else %}
+                                        <div class="down_data_load">
+                                            <div style="width: 242px">
+                                                <div><img src="{% static 'images/not_login.png' %}"></div>
+                                                <div class="down_data_load_c">请先登录</div>
+                                                <div class="down_data_load_b">这么重要的内容，赶快登录查看吧！</div>
+                                                 <div class="down_data_load_a login_methods pointer">登录</div>
+                                            </div>
+                                        </div>
+
+                                    {% endif %}
+                                {% else %}
+                                    {{ content.content|safe }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% comment %}更多阅读版块{% endcomment %}
+                    {% if related_reading_articles %}
+                        <div class="scroll_id_{{ content_count|add:1 }} scroll_move_tag" >
+                            <h5 style="color: #45a0ea;">{{ content_count|add:1|number_convert_chinese }}、更多阅读</h5>
+                            <ul class="methods-more-list">
+                                {% for r_articles in related_reading_articles %}
+                                    <li>
+                                        <a href="{% url 'front_method_article_detail' article_id=r_articles.id %}" target="_blank">
+                                            <h4 class="methods-more-list-head"><span class="title">
+                                                 {% if r_articles.parent_category %}
+                                                     【{{ r_articles.parent_category }}】{{ r_articles.title }}
+                                                 {% else %}{{ r_articles.title }}{% endif %}
+                                                </span></h4>
+                                            <div class="methods-more-list-content">
+                                                {% if r_articles.thumbnail %}
+                                                    <img src="/images/article_images/{{ r_articles.thumbnail }}" alt="医咖会">
+                                                {% endif %}<span>{{ r_articles.summary }}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {% if file_name %}
+                        <div class="scroll_id_{% if related_reading_articles %}{{ content_count|add:2}}{% else %}{{ content_count|add:1 }}{% endif %} scroll_move_tag" >
+                           {% if front_user %}
+                               <div class="down_data_load">
+                                   <div style="width: 242px">
+                                       <div><img src="{% static 'images/method_article_download_img.png' %}"></div>
+                                       <div class="down_data_load_c">数据下载</div>
+                                       <div class="down_data_load_b">想要使用本文的数据进行练习，快点击下方按钮，免费获取原始数据</div>
+                                       <a data-href="{% url 'front_download_article' article_id=id type_id=1 file_id=0 %}" class="user_download">
+                                           <div class="down_data_load_a down_load_button_flag">下载</div>
+                                           <!--定制化模态框-->
+                                           <!--<div class="user_download_alert_container" style="display:none;position:fixed;height:100%;background:rgba(53, 53, 53, 0.9);width:100%;top:0;left:0;z-index:10000;font-family: -apple-system-font, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif;">
+                                                <div style="width: 44px;
+                                                height: 44px;
+                                                position: absolute;
+                                                right: 165px;
+                                                top: 68px;
+                                                background-image: url({% static 'images/cancel.svg' %});
+                                                background-repeat: no-repeat;
+                                                background-size: cover;
+                                                cursor: pointer;" class="user_download_close"></div>
+                                                <div class="user_download_alert" style="width:400px;height:200px;text-align:center;position:fixed;top:50%;left:50%;background:#fff;margin-top:-100px;margin-left:-200px;font-size: 20px;color: #4a4a4a;border-radius:2px;">
+                                                    <div style="margin-top:50px;margin-bottom:50px;font-weight: 300;font-size:20px;">请先到个人中心补充完善个人资料信息</div>
+                                                    <div style="width:120px;height:40px;margin:0 auto;background-color: rgb(55, 174, 242);font-size: 18px;line-height:40px;color: #f8fafd;cursor:pointer;font-weight: 500;border-radius: 4px;" class="go_to_personal_center">前往个人中心</div>
+                                                </div>
+                                           </div>-->
+                                       </a>
+                                   </div>
+                               </div>
+                           {% else %}
+                               <div class="down_data_load">
+                                   <div style="width: 242px">
+                                       <div><img src="{% static 'images/not_login.png' %}"></div>
+                                       <div class="down_data_load_c">请先登录</div>
+                                       <div class="down_data_load_b">这么重要的内容，赶快登录查看吧！</div>
+                                           <div class="down_data_load_a login_methods pointer">登录</div>
+                                   </div>
+                               </div>
+                           {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+                     <div class="methods-content-body-question hide">
+                         <div class="methods-ask-question-tag"><a class="tag pointer" type="ask">提问</a><a  class="tag pointer checked" type="history">历史提问</a></div>
+                         <div class="methods-ask-question-con">
+                             <!--提问-->
+                             <div type="ask" class="hide">
+                                 <div class="methods-ask-question methods-ask-question-setial" >
+                                     <div class="ask-title">描述问题</div>
+                                     <div class="ask-text">
+                                         <div  style="padding: 0">
+                                             <div >
+                                                 <textarea id="methods_ask_1"  name="editor"></textarea>
+                                                 <input  type="file" id="yika_img_methods_1" style="display:none;" accept="image/*"/>
+                                             </div>
+                                         </div>
+                                     </div>
+                                     <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                                     <div>
+                                         <ul class="model_tag_list model_tag_list_2">
+                                            </ul>
+                                     </div>
+                                     <div class="text-rig">
+                                         <div class="model_btn inline mar-top38" style="background-color: #ccc;cursor: no-drop" id="article_ask_btn_sub">提交问题</div>
+                                     </div>
+                                 </div>
+                             </div>
+                             <!--问题-->
+                             <div type="history" >
+                             </div>
+                         </div>
+                     </div>
+
+                 </div>
+                 <div class="scroll_move_btn">
+
+                     <div class="scroll_move_next dis_btn">Next<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1514961391644" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" p-id="5277" width="18" height="18">
+                             <path d="M232.883 459.266h621.891c14.561 0 26.367 11.806 26.367 26.367s-11.806 26.367-26.367 26.367h-621.891l165.926 165.926c10.297 10.297 10.297 26.992 0 37.289s-26.993 10.298-37.289 0l-210.938-210.938c-10.297-10.298-10.297-26.992 0-37.289l210.938-210.938c10.298-10.297 26.992-10.297 37.289 0s10.297 26.992 0 37.289l-165.926 165.926z"
+                                   p-id="5278"/>
+                         </svg>
+                     </div>
+                     <div class="scroll_move_prev dis_btn">
+                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" t="1514961391644" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" p-id="5277" width="18" height="18">
+                             <path d="M232.883 459.266h621.891c14.561 0 26.367 11.806 26.367 26.367s-11.806 26.367-26.367 26.367h-621.891l165.926 165.926c10.297 10.297 10.297 26.992 0 37.289s-26.993 10.298-37.289 0l-210.938-210.938c-10.297-10.298-10.297-26.992 0-37.289l210.938-210.938c10.298-10.297 26.992-10.297 37.289 0s10.297 26.992 0 37.289l-165.926 165.926z"
+                                   p-id="5278"/>
+                         </svg>
+                         Previous
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+    <div class="flex-box hide">
+            <div class="flex-close_btn"></div>
+            <div class="flex-content">
+                <div class="methods-ask-question">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_methods" name="editor"></textarea>
+                                <input id="yika_ask_methods" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list model_tag_list_1">
+
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop" id="article_ask_sub">提交问题</div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div id="pc-state-box" class="hide">
+            <div class="hide">{{ check_typ }}</div>
+            <div id="neko_shadow_box" v-show="check_type">
+                <div class="close_btn" @click="close()"></div>
+                <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+                <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+                <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+                <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+                <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                    <div id="model_ask_ques">
+                        <div class="ask-title">描述问题</div>
+                        <div class="ask-text">
+                            <div id="box_content" style="padding: 0">
+                                <div id="common_content">
+                                    <textarea id="ask_area" name="editor"></textarea>
+                                    <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                        <div>
+                            <ul class="model_tag_list"></ul>
+                        </div>
+                        <div>
+                            <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    <script type="text/javascript" src="{% static 'plug/ckeditor/adapters/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/user_download.js' %}"></script>
+    <script>
+        var isQuestionReleasing = false;
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        siccess: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+        var m_x = 0, m_y = 0, mouse_select_text, check_methods_tag, check_methods_tag_2, methods_ask_type = false, head_top_type = true, scroll_tag_fn, scroll_tag_type = true;
+        window.escapeHtml = function (n) {
+            var t;
+            return t = {
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+                "/": "&#x2F;"
+            },
+            String(n).replace(/[&<>"'\/]/g, function (n) {
+                return t[n]
+            })
+        }
+        window.methods_link = function () {
+            return $("body").append('<div id="shadow_box"><div class="tips_box tps_link"><div class="content_area content_link"><div class="link_name"><input placeholder="请输入内容..."/></div><div class="link_address"><input placeholder="请输入链接..."/></div></div><div class="box_btn_area"><div class="box_btn_multi_left cancel">取消</div><div class="box_btn_multi_right submit submit2">添加</div></div></div></div>'), $(document).on("click", ".submit2", function () {
+                var t;
+                return t = new RegExp(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/), t.test($(".link_address input").val()) ? (CKEDITOR.instances.ask_methods.insertHtml("<a href='" + $(".link_address input").val() + "'>" + escapeHtml($(".link_name input").val()) + "</a>"), $("#shadow_box").remove()) : ($(".wrong_image,.wrong_link").remove(), $(".content_link").append('<div class="wrong_image"></div><div class="wrong_link">超链接格式错误</div>'), $(".tps_link").css("min-height", "13.36rem"))
+            }), $(document).on("click", ".cancel", function () {
+                return $("#shadow_box").remove(), $(document).off("click", ".cancel")
+            })
+        }
+        $(document).ready(function () {
+            move_btn();
+            $('.methods-content-body').css('min-height',function(){
+                var n=parseFloat($('.methods-content-tag').height())+74
+                return n<450?'450px':n+'px'
+            })
+
+            var max_height = window.innerHeight;
+            var z = 3, ele, inde, nav_type = false;
+            if ($('#header-pc2').css('top') === '0px') {
+                $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+            } else {
+                $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+            }
+            var SCROLL_OLD_SIZE = window.scrollY;
+            var SCROLL_TOP_SIZE = $('.head-nav').height() + 'px';
+
+            window.onscroll = function (e) {
+                if (nav_type !== true) {
+                    if (head_top_type) {
+                        if (window.scrollY > SCROLL_OLD_SIZE && window.scrollY > 0) {
+                            $('#header-pc2').css('top', '-' + SCROLL_TOP_SIZE)
+                            $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+                        } else if ((window.scrollY < SCROLL_OLD_SIZE) || window.scrollY <= 0) {
+                            $('#header-pc2').css('top', '0px');
+                            $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+                        }
+                    }
+                }
+                if (window.scrollY > 1200) {
+                    $('.move-to-top').removeClass('hide')
+                } else {
+                    $('.move-to-top').addClass('hide')
+                }
+                if (window.scrollY >= 170) {
+                    $('.methods-question').css({
+                        'position': 'fixed',
+                        'top': '150px',
+                        'left': $('.methods-content-box')[0].offsetLeft - window.scrollX  + 1079 + 'px'
+                    })
+                    $('.move-to-top').css({
+                        'position': 'fixed',
+                        'left': $('.methods-content-box')[0].offsetLeft - window.scrollX  + 1079 + 'px',
+                    })
+                } else {
+                    var o_t = $('.methods-content-box')[0].offsetTop + 42 - window.scrollY
+                    $('.methods-question').css({
+                        'position': 'fixed',
+                        'top': o_t + 'px',
+                        'left': $('.methods-content-box')[0].offsetLeft - window.scrollX  + 1079 + 'px'
+                    })
+                    $('.move-to-top').css({
+                        'position': 'fixed',
+                        'left': $('.methods-content-box')[0].offsetLeft - window.scrollX  + 1079 + 'px',
+                    })
+                }
+                SCROLL_OLD_SIZE = window.scrollY;
+            }
+            if (window.innerWidth >= 1200) {
+                $('.head-methods-list').css('overflow-x', 'hidden')
+            } else {
+                $('.head-methods-list').css('overflow-x', 'auto')
+            }
+            $(window).resize(function () {
+                max_height = window.innerHeight
+                if ($('#header-pc2').css('top') === '0px') {
+                    $('.head-methods-list').css('max-height', max_height - $('#header-pc2').height())
+                } else {
+                    $('.head-methods-list').css('max-height', max_height - $('.head-methods').height())
+                }
+                if (window.innerWidth >= 1200) {
+                    $('.head-methods-list').css('overflow-x', 'hidden')
+                } else {
+                    $('.head-methods-list').css('overflow-x', 'auto')
+                }
+                $('.methods-question').css({
+                    'position': 'fixed',
+                    'left': $('.methods-content-box')[0].offsetLeft  + 1079 + 'px'
+                })
+                $('.move-to-top').css({
+                    'position': 'fixed',
+                    'left': $('.methods-content-box')[0].offsetLeft  + 1079 + 'px',
+                })
+            })
+            var win_off_top = $('#container_body')[0].offsetTop
+            $('.methods-content-checked-box .scroll_id_1').addClass('checked')
+            $('.methods-content-tag li').each(function (i, t) {
+                var p = $(this).attr('scroll_id');
+                $(this).addClass('scroll_id_' + p)
+                var el = $('.methods-content-body  .scroll_id_' + p)
+                var off_t = el[0].offsetTop
+                $(this).click(function () {
+                    var self = this;
+                    if (window.scrollY !== 0) {
+                        head_top_type = false;
+
+                    }
+
+                    $('html,body').animate({
+                        scrollTop: 210
+                    }, 300, function () {
+                    })
+
+                    var ele_con = $('.methods-content-checked-box .checked')
+                    var ele_con_hei = $('.methods-content-checked-box .checked').height();
+                    $('.methods-content-checked-box').height(ele_con_hei)
+                    var tar_hei = $('.methods-content-checked-box .scroll_id_' + p).addClass('checked').height()
+                    var ele_id = $('.methods-content-tag .checked').attr('scroll_id');
+                    var tar_id = $(this).attr('scroll_id')
+                    $(this).addClass('checked').siblings().removeClass('checked')
+                    if (!methods_ask_type) {
+                        if (Number(ele_id) < Number(tar_id)) {
+                            $('.methods-content-checked-box').height(tar_hei);
+                            $(ele_con).animate({
+                                top: -ele_con_hei + 'px'
+                            }, 300, function () {
+                                $('.methods-content-checked-box').height('auto');
+                                $(ele_con).removeClass('checked').css('top', '0')
+                                var a = $(document.body).height(), b = $(window).height()
+                                if (b >= a ||(a-b)<40 ) {
+                                    $('#header-pc2').css('top', 0)
+                                } else {
+                                    $('#header-pc2').css('top', '-' + $('.head-nav').height() + 'px')
+                                }
+                                fix_foot()
+                            })
+                            $('.methods-content-checked-box .scroll_id_' + p).animate({
+                                top: -ele_con_hei + 'px'
+                            }, 300, function () {
+                                $('.methods-content-checked-box .scroll_id_' + p).css('top', '0');
+                                if (window.scrollY !== 0) {
+                                    var tt = setTimeout(function () {
+                                        head_top_type = true;
+                                        fix_foot()
+                                        clearTimeout(tt)
+                                    }, 10)
+                                }
+                            })
+
+                        } else if (Number(ele_id) > Number(p)) {
+
+                            $('.methods-content-checked-box .scroll_id_' + p).css('top', -tar_hei + 'px')
+                            $(ele_con).css('top', -tar_hei + 'px')
+                            $('.methods-content-checked-box').height(tar_hei);
+                            $(ele_con).animate({
+                                top: tar_hei + 'px'
+                            }, 300, function () {
+                                $('.methods-content-checked-box').height('auto');
+                                $(ele_con).removeClass('checked').css('top', '0')
+                                var a = $(document.body).height(), b = $(window).height()
+                                if (b >= a || (a - b) < 40) {
+                                    $('#header-pc2').css('top', 0)
+                                } else {
+                                    $('#header-pc2').css('top', '-' + $('.head-nav').height() + 'px')
+                                }
+                                fix_foot()
+                            })
+
+                            $('.methods-content-checked-box .scroll_id_' + p).animate({
+                                top: 0
+                            }, 300, function () {
+                                $('.methods-content-checked-box .scroll_id_' + p).css('top', '0');
+                                if (window.scrollY !== 0) {
+                                    var tt = setTimeout(function () {
+                                        head_top_type = true;
+                                        fix_foot()
+                                        clearTimeout(tt)
+                                    }, 10)
+                                }
+                            })
+                        }
+                    } else {
+                        methods_ask_type = false;
+                        $('.methods-content-checked-box').height('auto')
+                        $('.methods-content-checked-box .scroll_id_' + p).addClass('checked').siblings().removeClass('checked')
+                    }
+                    move_btn()
+
+                    $('.methods-content-body-text').removeClass('hide');
+                    $('.methods-content-body-question').addClass('hide');
+                    $('.methods-question').removeClass('methods-question-checked')
+                })
+
+
+            })
+            $(document).on('click', '.methods-question', function () {
+                $('.scroll_move_btn').addClass('hide')
+                methods_ask_type = true;
+{#                check_methods_tag = null#}
+                $(document).scrollTop(0)
+                $(this).addClass('methods-question-checked')
+                $('.methods-content-body-text').addClass('hide');
+                $('.methods-content-body-question').removeClass('hide');
+                $('.methods-content-tag .scroll_id_1').removeClass('checked').siblings().removeClass('checked');
+                $('.methods-ask-question-tag .tag[type="history"]').trigger('click')
+            })
+            function move_btn() {
+                if ($('.methods-content-tag .checked').attr('scroll_id') === '1') {
+                    $('.scroll_move_prev').addClass('dis_btn')
+                } else {
+                    $('.scroll_move_prev').removeClass('dis_btn')
+                }
+                if ($('.methods-content-tag .checked').next().length) {
+                    $('.scroll_move_next').removeClass('dis_btn')
+                } else {
+                    $('.scroll_move_next').addClass('dis_btn')
+                }
+            }
+
+            $(document).on('click', '.scroll_move_prev', function () {
+                $('.methods-content-tag .checked').prev().trigger('click')
+            })
+            $(document).on('click', '.scroll_move_next', function () {
+                $('.methods-content-tag .checked').next().trigger('click')
+            })
+
+            $(document).on('mouseenter', '.header-methods-bot .item-part', function () {
+                    $(this).find('a').addClass('checked').parent().siblings('.item-part').find('a').removeClass('checked')
+                    ele = $(this);
+                    inde = $(this).index()
+                    var cla = '.item-part-' + inde
+                    if (!$('.header-methods-list-bot').find(cla)[0]) {
+                        $('.header-methods-list-bot').find('.item-part-0').addClass('hide').siblings('.methods-list-item ').addClass('hide')
+                        $('.header-methods-list-bot').find('.item-part-0').removeClass('no_hide').siblings('.methods-list-item ').removeClass('no_hide')
+                        $('.head-methods-list').height(0);
+                        $('.header-methods-list-bot').removeClass('height_none')
+                        $('.header-methods-list-bot').removeClass('no_hide')
+                        nav_type = false;
+                        return
+                    }
+                    nav_type = true;
+                    $('.header-methods-list-bot').find(cla).removeClass('hide').siblings('.methods-list-item ').addClass('hide')
+                    var h = $('.header-methods-list-bot').find(cla).height()
+                    $('.header-methods-list-bot').find(cla).css('z-index', '3').siblings('.methods-list-item ')
+
+                    if ($('#header-pc2').css('top') === '0px') {
+                        if (h + 70 >= window.innerHeight - $('#header-pc2').height()) {
+                            $('.head-methods-list').css('overflow-y', 'auto')
+                        } else {
+                            $('.head-methods-list').css('overflow-y', 'hidden')
+                        }
+                    } else {
+                        if (h + 70 >= window.innerHeight - $('.head-methods').height()) {
+                            $('.head-methods-list').css('overflow-y', 'auto')
+                        } else {
+                            $('.head-methods-list').css('overflow-y', 'hidden')
+                        }
+                    }
+                    if (h + 70 > 400) {
+                        $('.line-to-bott').css('transition', 'height ' + (h + 70) / 400 * .5 + 's ease')
+                    } else {
+                        $('.line-to-bott').css('transition', 'height .5s ease')
+                    }
+
+                    $('.head-methods-list').height(h + 70);
+
+                    if (h + 70 > max_height) {
+                        $(document.body).css('overflow', 'hidden')
+                    } else {
+                        $(document.body).css('overflow', 'auto')
+                    }
+                    if (!$('.header-methods-list-bot').hasClass('height_none')) {
+                        $('.header-methods-list-bot').addClass('height_none')
+                        $('.header-methods-list-bot').addClass('no_hide')
+                    }
+
+                    return false
+                })
+                $(document).on('mouseleave', '.header-methods-bot .item-part', function (e) {
+                    var self = this;
+                    nav_type = false;
+                    var nav_tim = window.setTimeout(function () {
+                        var cla = '.item-part-' + inde
+                        if (nav_type === false) {
+                            $('.header-methods-bot .item-part').each(function () {
+                                $(self).find('a').removeClass('checked');
+                                $('.header-methods-list-bot').find(cla).addClass('hide').siblings('.methods-list-item').addClass('hide')
+
+                                $('.head-methods-list').height(0)
+                                $('.header-methods-list-bot').removeClass('height_none')
+                                $('.header-methods-list-bot').removeClass('no_hide')
+                                $(document.body).css('overflow', 'auto')
+                                nav_type = false;
+
+                            })
+                        } else {
+
+                        }
+                        window.clearTimeout(nav_tim)
+                    }, 10)
+                })
+                $(document).on('mouseenter', '.head-methods-list', function (e) {
+                    nav_type = true;
+                    var cla = '.item-part-' + inde
+                    $('.header-methods-list-bot').find(cla).removeClass('hide').siblings('.methods-list-item').addClass('hide')
+                    $('.header-methods-bot .item-part').eq(inde).find('a').addClass('checked')
+
+                    $('.header-methods-list-bot').addClass('height_none')
+                    $('.header-methods-list-bot').addClass('no_hide')
+
+
+                })
+                $(document).on('mouseleave', '.head-methods-list', function (e) {
+                    var self = this;
+                    $('.header-methods-bot .item-part').each(function () {
+                        $(this).find('a').removeClass('checked')
+                    })
+                    $('.header-methods-list-bot').find(cla).addClass('hide').siblings('.methods-list-item').addClass('hide')
+                    var cla = '.item-part-' + inde
+                    $('.header-methods-list-bot').removeClass('height_none')
+                    $('.header-methods-list-bot').removeClass('no_hide')
+                    $(self).height(0)
+                    $(document.body).css('overflow', 'auto')
+                    nav_type = false;
+                })
+            })
+
+        $(document).ready(function () {
+            check_methods_tag = $('.methods-ask-question .model_tag_list li').find('.checked').attr('pid')
+            CKEDITOR.replace("ask_methods", {customConfig: "../ckeditor.ask_methods.js"}, CKEDITOR.on("instanceCreated", function (n) {
+                return n.editor.on("change", function (n) {
+                    var con = CKEDITOR.instances.ask_methods.getData().replace('&quot;' + mouse_select_text + '&quot;&nbsp;&nbsp;&nbsp;', '')
+
+                    con.toString().length > 0 && check_methods_tag  ? $('.methods-ask-question .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                    // return (CKEDITOR.instances.ask_area_2.getData().length > 0 && post_tag !== null) ?
+                    //     $('#model_ask_ques .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('#model_ask_ques .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                })
+            }))
+            CKEDITOR.replace("methods_ask_1", {customConfig: "../ckeditor.ask_methods_1.js"}, CKEDITOR.on("instanceCreated", function (n) {
+                return n.editor.on("change", function (n) {
+                    CKEDITOR.instances.methods_ask_1.getData().length > 0 && check_methods_tag_2 ? $('.methods-ask-question-setial .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question-setial .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                })
+            }))
+
+            var funcGetSelectText = function () {
+                var txt = '';
+                if (document.selection) {
+                    txt = document.selection.createRange();//ie
+                } else {
+                    txt = document.getSelection();
+                }
+                return txt.toString();
+                return txt;
+            }
+            c_click({
+                el: $('#container_body .methods-content-checked-box'),
+                down: function (e) {
+                },
+                move: function (e) {
+                    $(".fix-to-question").remove()
+                },
+                up: function (e) {
+                    mouse_select_text = funcGetSelectText();
+                    if (m_x == 0 && m_y == 0 && $(".fix-to-question")[0]) {
+                        $(".fix-to-question").remove();
+                        mouse_select_text = null
+                        m_x = 0;
+                        m_y = 0
+                    } else {
+                        if($(".fix-to-question")[0]){
+                            $(".fix-to-question").remove();
+                            return
+                        }
+                        mouse_select_text = funcGetSelectText();
+                        if(m_x == 0 && m_y == 0 && old_mouse_select_text === mouse_select_text ){
+                            $(".fix-to-question").remove();
+                            return
+                        }
+                        if (mouse_select_text ) {
+                            old_mouse_select_text= mouse_select_text
+                            m_x = 0;
+                            m_y = 0
+                            var x = e.pageX - 44
+                            var y = e.pageY + 30
+                            $(document.body).append('<div class="fix-to-question" style="left:' + x + 'px;top:' + y + 'px;">去提问</div>')
+                        }
+                    }
+                }
+            })
+            c_click({
+                el: $(document),
+                down: function (e) {
+                    if ($(e.target).hasClass('fix-to-question')) {
+                        return
+                    } else {
+                        $(".fix-to-question").remove()
+                    }
+                },
+                move: function (e) {
+                },
+                up: function (e) {
+                    if ($(e.target).hasClass('fix-to-question')) {
+                        return
+                    }
+                }
+            })
+            function c_click(option) {
+                var d_x, d_y;
+                var el = option.el;
+
+                function down(e) {
+                    d_x = e.clientX;
+                    d_y = e.clientY;
+                    option.down(e)
+                    el.on('mousemove', move)
+                    el.on('mouseup', up)
+                }
+
+                function move(e) {
+                    option.move(e)
+                }
+
+                function up(e) {
+                    m_x = e.clientX - d_x;
+                    m_y = e.clientY - d_y;
+                    option.up(e)
+                    el.off('mousemove', move)
+                    el.off('mouseup', up)
+                }
+
+                el.on('mousedown', down)
+            }
+
+            $(document).on('click', ".fix-to-question", function () {
+                CKEDITOR.instances.ask_methods.setData('"' + mouse_select_text + '"&nbsp;&nbsp;&nbsp;')
+                $('.flex-box').removeClass('hide')
+                $(".fix-to-question").remove()
+            })
+            tag_class([
+                {
+                    el: '.methods-ask-question .model_tag_list_1 li',
+                    cl: 'checked',
+                    fn: function (e) {
+                        check_methods_tag = $(e.target).attr('pid');
+                        var con = CKEDITOR.instances.ask_methods.getData().replace('&quot;' + mouse_select_text + '&quot;&nbsp;&nbsp;&nbsp;', '')
+                        con.toString().length > 0 && check_methods_tag !== null ? $('.methods-ask-question .model_btn').css('background', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question.model_btn').css('background', '#ccc').css('cursor', 'no-drop')
+                    }
+                }, {
+                    el: '.methods-ask-question .model_tag_list_2 li',
+                    cl: 'checked',
+                    fn: function (e) {
+                        check_methods_tag_2 = $(e.target).attr('pid');
+                        CKEDITOR.instances.methods_ask_1.getData().length > 0 && check_methods_tag_2 ? $('.methods-ask-question-setial .model_btn').css('background', '#37aef2').css('cursor', 'pointer') : $('.methods-ask-question-setial .model_btn').css('background', '#ccc').css('cursor', 'no-drop')
+                    }
+                }
+            ])
+            $(document).on('click', '.flex-close_btn', function () {
+                $('.flex-box').addClass('hide');
+                CKEDITOR.instances.ask_methods.setData('')
+            })
+            $(document).on('click', '.move-to-top', function () {
+                $("html,body").animate({
+                    scrollTop: 0
+                }, 300)
+            })
+            $(document).on('click', '.methods-ask-question-tag .tag', function () {
+                if($(this).attr('type')==='ask'){
+                    if (!$('.login-on')[0]) {
+                        window.location.href = '/login/?next=' + window.location.pathname+'#1'
+                        //check_type(1)
+                        return
+                    }
+                }
+                $(this).addClass('checked').siblings().removeClass('checked')
+                var attr = $(this).attr('type');
+                $('.methods-ask-question-con div[type="' + attr + '"]').removeClass('hide').siblings().addClass('hide');
+                if(attr==='history'){
+                    get_page_data(1)
+                }
+
+            })
+
+            function get_page_data(p) {
+                $.ajax({
+                    url: '/method_article_detail_ask_list/'+{{ id }}+'/'+p+'/',
+                    type: 'get',
+                    success: function (data) {
+                        if (data.code !== 200) {
+                            str = '<div style="display: flex;justify-content: center;align-items: center; height: 370px;">' +
+                                    '<div>' +
+                                    ' <svg xmlns="http://www.w3.org/2000/svg" width="94" height="96" viewBox="0 0 94 96">' +
+                                    '<path fill="#BCC1CC" fill-rule="evenodd" d="M57.744 71.226h-37.56c-4.51 0-8.202-3.742-8.202-8.316V18.583L.85 5.776 7.482.011l78.42 90.213-6.632 5.765-21.526-24.763zm-2.283-29.458a5.962 5.962 0 0 0 1.924-4.402c0-3.281-2.622-5.94-5.858-5.94a5.788 5.788 0 0 0-3.813 1.43L23.233 4.693h62.566c4.511 0 8.16 3.743 8.16 8.317L94 86.102 55.462 41.768zm18.035 1.538c3.236 0 5.859-2.66 5.859-5.94 0-3.281-2.623-5.94-5.859-5.94-3.235 0-5.858 2.659-5.858 5.94 0 3.28 2.623 5.94 5.858 5.94zm-43.938 0c3.235 0 5.858-2.66 5.858-5.94 0-3.281-2.623-5.94-5.858-5.94-3.236 0-5.859 2.659-5.859 5.94 0 3.28 2.623 5.94 5.859 5.94z"/>' +
+                                    ' </svg>' +
+                                    ' <p style="margin-top: 13px">暂无历史问答哦~</p>' +
+                                    '</div>' +
+                                    ' </div>'
+                            $('.methods-ask-question-con div[type="history"]').html(str)
+                            return
+                        }
+                        var list = data.data.questions_list, str = '';
+                        for (var i = 0; i < list.length; i++) {
+                            str += '<div class="ans-ques-list" id="' + list[i].question_id + '" link="/question_detail/' + list[i].question_id + '/0/1/1/">' +
+                                    '<div class="inline ans-ques-z ' + (list[i].answers_count ? 'bg-link' : 'bg-ori') + '">' +
+                                    '<span class="block line-height20 ">' + list[i].answers_count + '</span>' +
+                                    '<span class="block line-height20">回答</span>' +
+                                    '</div><div class="inline bor-bot1 ans-ques-list-right">' +
+                                    '<p class="ans-ques-list-title"><span>' + (list[i].recently_answer_username ? list[i].recently_answer_username : list[i].username) + '</span>&nbsp;&nbsp;<span>' + (list[i].recently_answer_time ? list[i].recently_answer_time : list[i].create_time) + '</span>' + (list[i].recently_answer_username ? "回复" : "发表") + '了这个问题</p>' +
+                                    '<p class="ans-ques-list-content"><span class="ques-tit-ak">' + list[i].content.replace(/(<[^>]+>)/g, '') + '</span>' +
+                                    '<a href="javascript:;" class="ques_tainal_link">' +
+                                    ' <span class="ans-ques-img-tag"></span><span class="color-link font-14">' + list[i].category + '</span>' +
+                                    ' </a>' +
+                                    '</p>' +
+                                    '</div>' +
+                                    '</div>'
+                        }
+                      var page=data.data.pages
+                        if(page&&page.length>1){
+                            str+='<ul class= "item_list mar-top23" id="article_ask_list_page">'
+                            if(data.data.current_page>5){
+                                str+='<li class= "prev" p_page="' + data.data.current_page - 1 + '"> <a  > & nbsp;</a></li>'
+                            }
+                            for(var j=0;j<page.length;j++){
+                                if(page[j]=== data.data.current_page){
+                                    str+='<li class="checked" p_page="' + page[j] + '">'
+                                }else{
+                                    str+='<li p_page="' + page[j] + '">'
+                                }
+                                str+='<a  >'+page[j]+'</a></li>'
+                            }
+                            if(data.data.page_count>5 && data.data.current_page < data.data.page_count){
+                                str+='<li class= "next" p_page= "' + data.data.current_page + 1 + '" > <a> & nbsp;</a></li>'
+                            }
+                            str+='</ul>'
+                        }
+                        $('.methods-ask-question-con div[type="history"]').html(str)
+                    }
+                })
+            }
+            $(document).on('click','#article_ask_list_page li',function(){
+                get_page_data($(this).attr('p_page'))
+            })
+            $(document).on('change','#yika_img_methods_1',function () {
+                var oMyForm;
+                var _self = this;
+                if (!this['value'].match(/.jpg|.gif|.png|.bmp|.JPEG|svg|/i)) {
+                    return
+                }
+                var oMyForm = new FormData();
+                oMyForm.append("imgFile", $('#yika_img_methods_1')[0].files[0]);
+                $.ajax({
+                    type: 'post',
+                    url: '/extends/image_storage/article_images/',
+                    data: oMyForm,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (e) {
+                        if (e.code !== 200) {
+                            alert(e.message);
+                            return
+                        }
+                        CKEDITOR.instances.methods_ask_1.insertHtml("<img src='http://www.mediecogroup.com/images/article_images/" + e.data + "'>")
+                    }
+
+                })
+            })
+            $(document).on('change','#yika_ask_methods',function () {
+                var oMyForm;
+                var _self = this;
+                if (!this['value'].match(/.jpg|.gif|.png|.bmp|.JPEG|svg|/i)) {
+                    return
+                }
+                var oMyForm = new FormData();
+                oMyForm.append("imgFile", $('#yika_ask_methods')[0].files[0]);
+                $.ajax({
+                    type: 'post',
+                    url: '/extends/image_storage/article_images/',
+                    data: oMyForm,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (e) {
+                        if (e.code !== 200) {
+                            alert(e.message);
+                            return
+                        }
+                        CKEDITOR.instances.ask_methods.insertHtml("<img src='http://www.mediecogroup.com/images/article_images/" + e.data + "'>")
+                    }
+
+                })
+            })
+            $.ajax({
+                url: '/front_question_category_list/',
+                type: "get",
+                success: function (data) {
+
+                    if (data.code !== 200) {
+                        return
+                    }
+                    var list = data.data.question_category_list;
+                    var str = '';
+                    for (var i = 0; i < list.length; i++) {
+                        str += '<li pid="' + list[i].id + '">' + list[i].category + '</li>';
+                    }
+                    $('.model_tag_list_1').html(str);
+                    $('.model_tag_list_2').html(str);
+                }
+            })
+            $(document).on('click','#article_ask_sub',function(){
+                if(isQuestionReleasing){return}
+                var con = CKEDITOR.instances.ask_methods.getData().replace('&quot;' + mouse_select_text + '&quot;&nbsp;&nbsp;&nbsp;', '')
+                if(con.toString().length > 0 && check_methods_tag){
+                    isQuestionReleasing = true;
+                    $("#article_ask_sub").css("background", "#E0E4E9").css("color", "#FFFFFF");
+                    $.ajax({
+                        url: '/front_release_question/',
+                        type: 'post',
+                        data: {
+                            content: "" + CKEDITOR.instances.ask_methods.getData(),
+                            question_category_id: check_methods_tag,
+                            relevance_method_article_id:{{ id }}
+                        },
+                        success: function (data) {
+                            isQuestionReleasing = false;
+                            $('#article_ask_sub').css('background-color', '#37aef2').css('cursor', 'pointer');
+                            if (data.code !== 200) {
+                                $().alert_box(data.message)
+                                return
+                            }
+                            CKEDITOR.instances.ask_methods.setData('')
+                            $('.flex-box .flex-close_btn').trigger('click')
+                        }
+                    })
+                }
+
+
+{#                    $().alert_box('请输入评论内容')#}
+
+                })
+            $(document).on('click','#article_ask_btn_sub',function(){
+                if(isQuestionReleasing){return}
+                if (CKEDITOR.instances.methods_ask_1.getData().length > 0 && check_methods_tag_2) {
+                    isQuestionReleasing = true;
+                    $("#article_ask_btn_sub").css("background", "#E0E4E9").css("color", "#FFFFFF");
+                    $.ajax({
+                        url: '/front_release_question/',
+                        type: 'post',
+                        data: {
+                            content: "" + CKEDITOR.instances.methods_ask_1.getData(),
+                            question_category_id: check_methods_tag_2,
+                            relevance_method_article_id:{{ id }}
+                        },
+                        success: function (data) {
+                            isQuestionReleasing = false;
+                            $('#article_ask_btn_sub').css('background-color', '#37aef2').css('cursor', 'pointer');
+                            if (data.code !== 200) {
+                                $().alert_box(data.message)
+                                return
+                            }
+                            $('.methods-ask-question-tag a[type="history"]').trigger('click')
+                        }
+                    })
+                }
+{#                                $().alert_box('请输入评论内容')#}
+
+                            })
+            $(document).on('click','.login_methods',function(){
+               // check_type(1)
+                window.location.href = '/login/?next=' + window.location.pathname+'#1'
+            })
+            $(document).on('click','.ans-ques-list',function () {
+                if($(this).attr('link')){
+                    window.open($(this).attr('link'))
+                }
+            })
+
+
+        })
+
+        function back_top_to(tar, rate) {
+            var scrollTop = $(document).scrollTop()
+            var top = function () {
+                scrollTop = scrollTop + (tar - scrollTop) / (rate || 2);
+                if (scrollTop == tar) {
+                    $(document).scrollTop(tar);
+                    return;
+                }
+                $(document).scrollTop(scrollTop);
+                window.requestAnimationFrame(top);
+            };
+            window.requestAnimationFrame(top)
+        }
+    </script>
+{% endblock bodyblock %}

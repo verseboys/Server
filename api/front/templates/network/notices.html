@@ -1,0 +1,86 @@
+{% extends './_base.html' %}
+{% load static %}
+
+{% block bodyblock %}
+<div id="container">
+    <div class="tab_content">
+        <div class="tab_introduct tab_four" id="notice">
+            <div class="filter" style="position:relative;">
+                <!-- 筛选 -->
+                <div class="filter_title">
+                    <span style="cursor:default;">筛选：</span>
+                    <a href="javascript:;" class='-1' @click="noticeAll('{{network.id}}')">全部</a>
+                    {% for tag in tags %}
+                    <a href="javascript:;" class={{tag.id}} @click="noticeTag('{{network.id}}','{{ tag.id }}')">{{tag.name}}</a>
+                    {% endfor %}
+                </div>
+                <div class="filter_content_course">
+                    {% for notice in notices %}
+                        <div class="filter_course_list">
+                        {% if notice.need_login == True %}
+                            <a href="{% url 'network_notice' network_id=network.id notice_id=notice.id %}" target="_blank" class="ques_tainal_link" >
+                        {% elif notice.need_login == False %}
+                            <a href="javascript:;" class="ques_tainal_link" @click="noticeDetail('{{network.id}}','{{ notice.id }}','{{notice.has_permission}}')" target="_blank">
+                        {% endif %}
+                                <time>{{notice.published_at|date:'Y年m月d日 H:i:s'}}</time>
+                                <div class="filter_course_list_content">
+                                    {% if notice.top == True %}
+                                        <span class="only_top">顶</span>
+                                    {% endif %}
+                                    <span>{{notice.title}}</span>
+                                    {% if notice.tags.all is not None or notice.tags.all|length > 0 %}
+                                        {% for tag in notice.tags.all %}
+                                            <span class="ans-ques-img-tag"></span>
+                                            <span class="color-link font-14">{{tag.name}}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </a>
+                            <div class="notice_tip">抱歉，此通知公告只有科研网络成员有权阅读！</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var Vue = new Vue({
+        el:"#notice",
+        methods: {
+            noticeDetail:function(network_id,notice_id,notice_has_permission){
+                if (notice_has_permission == "True"){
+                    window.location.href = `/networks/${network_id}/notices/${notice_id}/`
+                }else {
+                    $(".notice_tip").fadeIn()
+                    setTimeout(function(){
+                        $(".notice_tip").fadeOut()
+                    },2000)
+                }
+            },
+            noticeAll:function(network_id){ // 点击全部
+                window.location.href = `/networks/${network_id}/notices/#notice`
+                sessionStorage.setItem('key',-1) // 保存tag_id到sessionStorage  定义-1指：'全部'的tag_id
+            },
+            noticeTag:function(network_id,tag_id){
+                window.location.href = `/networks/${network_id}/notices/?tag_id=${tag_id}#notice`
+                sessionStorage.setItem('key',tag_id); // 保存tag_id到sessionStorage
+            }
+        }
+    })
+    $(function(){
+        let tagKey = sessionStorage.getItem('key'); // 从sessionStorage获取tag_id
+        if (!!tagKey){  // 解决：页面加载进来后样式及内容不显示问题，原因是把session存的值remove了
+            $('.' + tagKey).addClass('filter_bg'); // 点击tag添加类名
+        }
+        var url=location.search;
+        if(url.indexOf("tag_id")!=-1) { // 默认进来'全部'的样式
+            $('.filter_title .-1').removeClass('filter_bg');
+        }else{ 
+            $('.filter_title > a').removeClass('filter_bg'); // 再次点击时会余留上次点击的tag样式，所以removeClass
+            $('.filter_title .-1').addClass('filter_bg');
+            sessionStorage.setItem('key',''); // 先把进来余留的样式清空掉
+        }
+    })
+</script>
+{% endblock bodyblock %}

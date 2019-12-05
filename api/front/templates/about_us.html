@@ -1,0 +1,196 @@
+{% extends 'about_us_header.html' %}
+{% load static %}
+
+{% block titleblock %}医咖会-关于我们{% endblock titleblock %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+{% endblock headblock %}
+
+{% block bodyblock %}
+    <div id="container">
+        <div class="container_body">
+            <div class="source">
+                <div id="item_one"><img src="{% static 'images/about_us_1.svg' %}"></div>
+                <div class="item_text">
+                    <div class="text_title">我们是谁？</div>
+                    <div class="text_content">
+                        <p>创始团队毕业自北京大学医学部，因为共同的价值观、对中国医生临床研究需求的深刻感知和改变现状的强烈渴望，创办了“医咖会”。</p>
+                        <p>目前已有60多位临床研究方法学专业人士成为医咖会的合作伙伴，他们来自北医、协和、约翰霍普金斯大学、匹兹堡大学等国内外知名医学高校，以及北大医院、阜外心血管病医院、北京友谊医院等知名三甲医院和研究机构。80%的伙伴专业背景为流行病学或统计学。</p>
+                        <p>医咖会由北京医助科技有限公司运营。</p>
+                    </div>
+                </div>
+            </div>  
+        </div>
+        <div class="container_body doing">
+            <div class="source">
+                <div class="item_text" style="padding-left:0;width:400px;">
+                    <div class="text_title">我们要做什么？</div>
+                    <div class="text_content">我们想寻找一种新的方式，向中国临床研究工作者传递高质量的临床研究进展、规范的临床研究方法学知识，促进临床研究者的交流协作，助力中国临床医生提高临床研究水平，改善临床实践。</div>
+                </div>
+                <div id="item_two" style="margin-left:146px;"><img src="{% static 'images/about_us_2.svg' %}"></div>
+            </div>
+        </div>
+        <div class="container_body done">
+            <div class="text_list">
+                <div class="text_title">我们做了哪些事情？</div>
+                <div class="text_content">
+                    <div class="text_content_list">
+                        <h3><img src="{% static 'images/ycyj.svg' %}"></h3>
+                        <h2>原创研究方法学精品教程</h2>
+                        <div class="content_lists">
+                            <p>SPSS、R、Stata、样本量计算、Meta分析、临床研究设计...</p>
+                            <p>独具医咖会风格的手把手医学统计教程</p>
+                            <p>实例教学，覆盖临床研究全流程知识点</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text_content">
+                    <div class="text_content_list">
+                        <h3 style="width:87px;height:64px;margin: 10px 0;"><img src="{% static 'images/djys.svg' %}"></h3>
+                        <h2>搭建医生与方法学专家沟通桥梁</h2>
+                        <div class="content_lists">
+                            <p>研究问答版块：提出具体的临床研究问题，大咖来解答</p>
+                            <p>科研讨论群：汇聚活跃的临床研究者，即时交流临床研究难题</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text_content">
+                    <div class="text_content_list">
+                        <h3 style="width:85px;height:60px;"><img src="{% static 'images/cdgzl.svg' %}"></h3>
+                        <h2>传递高质量临床研究进展</h2>
+                        <div class="content_lists">
+                            <p>精选高影响因子的临床研究文章</p>
+                            <p>解读全球最新的重磅研究进展</p>
+                            <p>覆盖心脑血管、内分泌、呼吸、肿瘤等科室常见疾病</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container_body invite_join">
+            <div class="invite">
+                <h4>医咖会诚邀你的加入</h4>
+                <p>医咖会持续招聘临床研究专业人才，如果你对临床研究感兴趣，期望从事临床研究相关工作，欢迎加入医咖会，共同推动中国临床研究的发展！</p>
+                <div id="item_four">
+                    <div id="qr_box"><img src="{% static 'images/wechat.jpg' %}"></div>
+                    <div class="img_text">
+                        <p>联系方式：</p>
+                        <p>小咖微信：xys2019ykh</p>
+                        <p>邮箱：yaowen.zhang@mediecogroup.com</p>
+                        <p>地址：北京市朝阳区利泽中园106号楼3层313A、315A</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        siccess: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+    </script>
+
+{% endblock bodyblock %}

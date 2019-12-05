@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-编辑文章</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/research_detail.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="public/js/common.js"></script>
+    <script type="text/javascript" src="public/js/publish.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/adapters/jquery.js"></script>
+    <script type="text/javascript" src="public/js/plugins/jquery_formdata/jquery.formdata.js"></script>
+    <script type="text/javascript" src="public/js/ckeditor.pc_admin_publish_config.js"></script>
+
+    <style>
+        .box_content{
+            display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div id="left_box">
+            <div class="title_box">
+                <input placeholder="输入标题"/>
+            </div>
+            <div class="abstract_box">
+                <textarea placeholder="输入摘要"></textarea>
+            </div>
+            <div class="info_box">
+                <textarea id="info_area"></textarea>
+            </div>
+        </div>
+        <div id="right_box">
+            <div class="tip_nav">标签</div>
+            <div class="tag_box">
+                <div class="tag_add_btn page_1_add_btn"></div>
+            </div>
+            <div class="tip_nav">发布时间</div>
+            <input class="public_time_input" placeholder="点击选择时间"/>
+            <div class="tip_nav">发布状态</div>
+            <div class="public_box">
+                <div class="top_box">
+                    <div class="published" publish_type="1"></div>
+                    <div class="draft" publish_type="3"></div>
+                </div>
+                <div class="bottom_box">
+                    <div class="recommend" publish_type="2"></div>
+                </div>
+            </div>
+            <div class="tip_nav">选择缩略图</div>
+            <div class="thumbnail"></div>
+            <div class="publish_submit_btn">提交</div>
+        </div>
+    </div>
+    <input id="yika_img_upload" type="file" style="display:none;"/>
+    <input id="yika_thumbnail_upload" type="file" style="display:none;"/>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    function loca(href) {
+        var obj={}
+        href=encodeURI(href);
+        href=href.split('?')[1];
+        try{
+            href = href.split('&');
+            for (var i = 0; i < href.length; i++) {
+                var a = href[i].split('=')[0]
+                var b = href[i].split('=')[1]
+                obj[a] = b;
+            }
+            return obj
+        }catch (e){
+            console.log(e)
+        }
+
+    }
+var type_href=loca(window.location.href).from;
+    if(type_href=='method'){
+        $('#nav li li[data-url="research_method.html"]').addClass('checked')
+    }else if(type_href=='news'){
+        $('#nav li li[data-url="research_progress.html"]').addClass('checked')
+    }
+
+</script>
+</body>
+</html>

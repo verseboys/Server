@@ -1,0 +1,65 @@
+{% extends './_base.html' %}
+{% load static %}
+
+{% block bodyblock %}
+<div id="container">
+  <div class="tab_content">
+    <div class="tab_introduct" id="project" style="width:1200px;margin:8px auto;">
+        {% for study in studies %}
+            <div class = "study-card study">
+                <a href="{% url 'edc_study' study_id=study.study_id %}">
+                    {% if study.state_display == "新建立" %}
+                        <div class="init">
+                            {{study.state_display}}
+                        </div>
+                    {% elif study.state_display == "进行中" %}
+                        <div class="ongoing picture">
+                            {{study.state_display}}
+                        </div>
+                    {% elif study.state_display == "已锁定" %}
+                        <div class="locked">
+                            {{study.state_display}}
+                        </div>
+                    {% elif study.state_display == "已完成" %}
+                        <div class="completed">
+                            {{study.state_display}}
+                        </div>
+                    {% endif %}
+                    <h3 class ="title titles">
+                        {{ study.name}}
+                    </h3>
+                    <div class= "disease-label-box" style="padding-top:10px;">
+                        {% for illness in study.illnesses.all %}
+                            {% if illness.id == 1 %}
+                            <span class ="disease-label blue">
+                                {{illness.illness_name}}
+                            </span>
+                            {% elif illness.id == 2 %}
+                            <span class ="disease-label orange">
+                                {{illness.illness_name}}
+                            </span>
+                            {% else %}
+                            <span class ="disease-label purple">
+                                {{illness.illness_name}}
+                            </span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <ul class="list-unstyled content">
+                        <li>
+                            <span style="font-weight:bolder;">研究类型：</span>
+                            <span style="color: #403f40;font-size:12px;">{{ study.type}}</span>
+                        </li>
+                        <li>
+                            <span style="font-weight:bolder;">研究目的：</span>
+                            <span class="summary" style="line-height: 22px;color: #403f40;font-size:12px;font-weight:normal;">{{study.description}}</span>
+                        </li>
+                    </ul>
+                    <span class="button">查看详情</span>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock bodyblock %}

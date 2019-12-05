@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会--研究进展</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content{
+            display: block;
+        }
+        .progress-tag-list{
+            padding: 0 5px 5px;
+            background-color: #a4d9f6;
+            margin-top: 30px;
+        }
+        .progress-tag-list span{
+            display:inline-block;
+            min-width: 80px;
+            padding:7px 20px 7px;
+            margin-top: 5px;
+            margin-left: 5px;
+            line-height: 18px;
+            font-family: PingFangSC;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            color: #2d3c5b;
+            border-radius: 3px;
+            background-color: #a4d9f6;
+            transition: background .2s ease;
+            cursor: pointer;
+        }
+        .progress-tag-list span.checked{
+            background-color: #ffffff;
+        }
+        .progress-tag-list span:hover{
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <a href="progress_article.html?type=publish&from=news" style="text-decoration: none"><div class="publish_btn">发布新文章</div></a>
+            <div class="search_box right"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+        <div class="progress-tag-list">
+                <span class="checked" p_tag="0">全部</span><span>心脑血管</span><span>内分泌</span><span>肿瘤</span><span>呼吸</span><span>疾病数据报告</span><span>总结盘点</span>
+        </div>
+        <div class="panel_header" style="line-height: 30px;height: 30px;background-color: #d8d8d8;">
+            <div class="page_list">标题</div>
+            <div class="author">分类</div>
+            <div class="pub_time" style="width: 23.2%;">发布时间</div>
+            <div class="control">操作</div>
+        </div>
+        <div class="panel_body" style="margin-top: 0">
+            <div id="panel_content">
+
+            </div>
+            <div id="compents_paginator" style="padding-right: 22px">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div><div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var page = 1, page_num = 0,del_id;
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            get_methods()
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            get_methods()
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            get_methods()
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            get_methods()
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            get_methods()
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup','input',function (e) {
+        if(e.keyCode===13){
+            page=$(this).val();
+            get_methods();
+            $(this).val('').blur();
+        } else {
+            if($(this).val()>page_num){
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g,''))
+        }
+    })
+    var url='/news/',type='get',val='',tag_n='0/';
+    $.ajax({
+        url:u+'/supervisor/news_category_list/',
+        success:function (data) {
+            if(data.code!==200){
+                alert(data.message)
+                return
+            }
+            var str='<span class="checked" p_tag="0">全部</span>';
+            var list=data.data.news_category_list;
+            for(var i=0;i<list.length;i++){
+                str+='<span p_tag="'+list[i].id+'">'+list[i].category+'</span>'
+            }
+            $('.progress-tag-list').html(str);
+            get_methods()
+        }
+    })
+
+    function get_methods() {
+        AJAX({
+            type: type,
+            url: u+'/supervisor'+url + page + '/'+tag_n,
+            data: val,
+            fn: function (data) {
+                var str = '';
+                var content = data.data.news;
+                if(content){
+                    for (var i = 0; i < content.length; i++) {
+                        var da = content[i];
+                        str += '<div class="panel_item" pid="' + da.id + '" style="height: 50px;">';
+                        str += '<div class="page_list"><a href="progress_article.html?article='+da.id+'" title="' + da.title + '">' + da.title + '</a></div>';
+                        str += '<div class="author">' + da.category + '</div>';
+                        str += '<div class="pub_time" style="width: 23.2%;">' + new Date(da.create_time).format('yyyy年MM月dd日 hh:mm') + '</div>';
+                        str += '<div class="control"><a href="progress_article.html?article='+da.id+'">';
+                        str += '<div class="edit">编辑</div>';
+                        str += '</a>';
+                        str += '<div class="gang">/</div>';
+                        str += '<div class="del" pid="' + da.id + '">删除</div>';
+                        str += '</div>';
+                        str += '</div>';
+                    }
+                }else{
+                    str+='<div style="display: flex;align-items: center;justify-content: center;height: 100px">该分类暂无列表</div>'
+                }
+                $('#panel_content').html(str);
+                $('#content')[0].scrollTop=0;
+                if(!content){
+                    return
+                }
+                var str_li = '';
+                var ppp=parseFloat(page);
+                if (ppp !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                var pagecount = data.data.page_count, start, last;
+                if (data.data.page_count > 1) {
+                    if (pagecount - Number(ppp) > 2 && Number(ppp) > 2 && pagecount > 5) {
+                        start = Number(ppp) - 3;
+                        last = Number(ppp) + 2
+                    }
+                    else if (pagecount - Number(ppp) <= 2 && pagecount > 5) {
+                        start = pagecount - 6;
+                        last = pagecount;
+                    }
+                    else if (Number(ppp) <= 2 && pagecount > 5) {
+                        start = 0;
+                        last = 5
+                    }
+                    else if (pagecount <= 5) {
+                        start = 0;
+                        last = pagecount;
+                    }
+                    for (var p = start; p < last; p++) {
+                        if (Number(ppp) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.page_count !== 1 && ppp !== data.data.page_count) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+
+                page_num = data.data.page_count;
+                if (data.data.page_count != 1) {
+                    $('#compents_paginator').html('<ul class="compents_paginator paginator">\n' +str_li+
+                        '                </ul>\n' +
+                        '                <ul class="compents_paginator paginator_controller">\n' +
+                        '                    <li class="page_number">\n' +
+                        '                        <div id="page_number">'+data.data.page_count+'</div>\n' +
+                        '                    </li>\n' +
+                        '                    <li class="page_saver"><input id="page_saver"></li>\n' +
+                        '                    <li class="page_ender">页</li>\n' +
+                        '                </ul>\n')
+
+                }else {
+                    $('#compents_paginator').html('')
+                }
+
+
+
+            }
+
+        })
+    }
+    function del_method() {
+    }
+    $(document).on('click','.progress-tag-list span',function () {
+        url='/news/',type='get',val=''
+        tag_n=$(this).attr('p_tag')+'/';
+        page=1
+        $(this).addClass('checked').siblings().removeClass('checked');
+        get_methods()
+    })
+    $('#container').on('click','.del',function () {
+        del_id=Number($(this).attr('pid'))
+        $('#alert_area').removeClass('hide');
+    })
+    $('#alert_box .box_item .item_left').click(function () {
+        $('#alert_area').addClass('hide');
+    })
+    $(document.body).on('click','#alert_box .box_item .item_right',function () {
+
+        $.ajax({
+            url:u+'/supervisor/delete_news/'+del_id+'/',
+            type:'get',
+            success:function (data) {
+                if(data.code===200){
+                    $('#alert_area').addClass('hide');
+                    get_methods()
+//                    $('#panel_content .panel_item[pid="'+ del_id+'"]').remove();
+                }else {
+                    alert(data.message);
+                    $('#alert_area').addClass('hide');
+                }
+            }
+        })
+    })
+    //状态管理
+    function methods_status(num) {
+        switch (num){
+            case 0:
+                return "删除";
+            case 1:
+                return "发布";
+            case 2:
+                return "推荐";
+            case 3:
+                return "草稿";
+            default:
+                return "错误"
+        }
+
+    }
+    function search_list() {
+        url='/search_news/';
+        tag_n=''
+        type='post',val={'search_key_words':$('#container .search_box input').val()}
+        page = 1;
+        $('.progress-tag-list span').eq(0).addClass('checked').siblings().removeClass('checked');
+        get_methods()
+    }
+    $('#container .search_box .search_img').click(search_list)
+    $('#container .search_box input').keyup(function (e) {
+        if(e.keyCode===13){
+            search_list()
+        }
+    })
+</script>
+</body>
+</html>

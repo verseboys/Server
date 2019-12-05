@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>研究方法-推荐文章</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/methods.css">
+    <link rel="stylesheet" href="public/css/methods_recommend.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章管理</li>
+                <li data-url="custom_menu_tag.html">分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <div class="search_box" style="float: right;visibility:hidden;"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+        <div class="recomm_title" style=" margin-top: 20px;"></div>
+        <div class="panel_body" style=" padding-top:0;margin-top: 3px;">
+
+            <div id="compents_paginator" style="display: none">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div>
+            <div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+
+//    get_list()
+    got_data()
+function got_data(){
+        $.ajax({
+            url:u+'/supervisor/method_category_list/1/',
+            type:'get',
+            success:function(data){
+                if(data.code!==200){
+                   alert(data.message);
+                   return
+                }
+                var str='<span class="checked" p="RECOM">已推荐</span>',list=data.data.category_list;
+                for(var i=0;i<list.length;i++){
+                    str+='<span p="'+list[i].id+'">'+list[i].category+'</span>'
+                }
+                $('.recomm_title').html(str)
+            }
+        })
+}
+var page='', item='',url="/supervisor/method_article_recommend_list/",ttp="RECOM",page_num;
+var ttta='get',  ddddt='';
+got_list()
+function got_list() {
+    $.ajax({
+        url:u+url+page+item,
+        type:ttta,
+        data:ddddt,
+        success:function (data) {
+            var str = '<div class="tag-cla" style="background-color: #d8d8d8;margin-top: 0">\n' ;
+
+                  if(ttp==="RECOM") {
+                      str+='                    <div class="me-class-left" style="padding-left: 48px;">标题</div>\n' +
+                      '                    <div class="me-class-right">\n' +
+                      '                        <div class="me-class-5"  style="width: 34%;text-align: left">分类</div>\n' +
+                      '                        <div class="me-class-2" style="width: 20%;">上移</div>\n' +
+                      '                        <div class="me-class-3">下移</div>\n' +
+                      '                        <div class="me-class-6" style="width: 25%;">是否推荐</div>\n'
+                  }else {
+                      str+='                    <div class="me-class-left" style="padding-left: 48px;width: 44%;">标题</div>\n' +
+                      '                    <div class="me-class-right" style="width: 56%;">\n'+
+                      '                        <div class="me-class-5"  style="width: 60%;text-align: left">分类</div>\n' +
+                          '                        <div class="me-class-6" style="width: 39%;">是否推荐</div>\n'
+                  }
+                str+='                    </div>\n' +
+                '                </div><div id="panel_content">';
+            if (data.code !== 200) {
+                $('.panel_body').html(str+='<div class="tag-class-box" style="text-align: center; line-height: 100px;">暂无文章</div></div>')
+
+                return
+            }
+            var list = data.data.articles;
+
+            if (list) {
+
+                for(var i=0;i<list.length;i++){
+                    str +='<div class="tag-class-box" p_id="'+list[i].id+'" p_rank="'+list[i].arrange+'">\n' +
+                        '                    <div class="tag-cla par-tag">\n'
+                    if(ttp==="RECOM") {
+                       str+= '                        <div class="me-class-left">\n' +
+                        '                            <div class="me-class-left-body" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 1;">\n' +
+                        '                                <span class="meghods-list-type checked" style="border-color:transparent; width: 30px;height: 1px; "></span>' + list[i].title +
+                        '                            </div>\n' +
+                        '                        </div>\n' +
+                        '                        <div class="me-class-right">\n' +
+                        '                            <div class="me-class-5" style="width: 34%;text-align: left;font-family: PingFangSC;">' + list[i].category + '</div>\n' +
+                        '                            <div class="me-class-2" style="width: 20%;"><span class="tag-move-up" p_id="' + list[i].id + '" p_rank="' + list[i].arrange + '"></span></div>\n' +
+                        '                            <div class="me-class-3"><span class="tag-move-down"  p_id="' + list[i].id + '" p_rank="' + list[i].arrange + '"></span></div>\n';
+                        if(list[i].status===2){
+                            str+=  '                            <div class="me-class-6" style="width: 25%;"><span class="tag-if-show checked" p_id="' + list[i].id + '" stu="'+list[i].status+'"></span></div>\n' ;
+
+                        }else {
+                            str+=  '                            <div class="me-class-6" style="width: 25%;"><span class="tag-if-show" p_id="' + list[i].id + '" stu="'+list[i].status+'"></span></div>\n' ;
+
+                        }
+                    }else {
+                        str+= '                        <div class="me-class-left" style="width: 44%;">\n' +
+                        '                            <div class="me-class-left-body" style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box; -webkit-line-clamp: 1;">\n' +
+                        '                                <span class="meghods-list-type checked" style="border-color:transparent; width: 30px;height: 1px; "></span>' + list[i].title +
+                        '                            </div>\n' +
+                        '                        </div>\n' +
+                        '                        <div class="me-class-right" style="width: 56%;">\n' +
+                        '                            <div class="me-class-5" style="width: 60%;text-align: left;font-family: PingFangSC;">' + list[i].category + '</div>\n'
+                          if(list[i].status===2){
+                            str+=  '                            <div class="me-class-6" style="width: 39%;"><span class="tag-if-show checked" p_id="' + list[i].id + '" stu="'+list[i].status+'"></span></div>\n' ;
+
+                          }else {
+                            str+=  '                            <div class="me-class-6" style="width: 39%;"><span class="tag-if-show" p_id="' + list[i].id + '" stu="'+list[i].status+'"></span></div>\n' ;
+
+                          }
+                    }
+                        str+='                        </div>\n' +
+                        '                    </div>\n' +
+                        '                </div>'
+                }
+                if(ttp!=="RECOM") {
+                    var str_li = '';
+                    var ppp=parseFloat(page);
+                    if (ppp !== 1) {
+                        str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                        str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                    }
+                    var pagecount = data.data.page_count, start, last;
+                    if (data.data.page_count > 1) {
+                        if (pagecount - Number(ppp) > 2 && Number(ppp) > 2 && pagecount > 5) {
+                            start = Number(ppp) - 3;
+                            last = Number(ppp) + 2
+                        }
+                        else if (pagecount - Number(ppp) <= 2 && pagecount > 5) {
+                            start = pagecount - 6;
+                            last = pagecount;
+                        }
+                        else if (Number(ppp) <= 2 && pagecount > 5) {
+                            start = 0;
+                            last = 5
+                        }
+                        else if (pagecount <= 5) {
+                            start = 0;
+                            last = pagecount;
+                        }
+                        for (var p = start; p < last; p++) {
+                            if (Number(ppp) === (p + 1)) {
+                                str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                            } else {
+                                str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                            }
+                        }
+                    }
+                    if (data.data.page_count !== 1 && ppp !== data.data.page_count) {
+                        str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                        str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                    }
+
+                    page_num = data.data.page_count;
+                    if (data.data.page_count != 1) {
+                        str+='<div id="compents_paginator" style="padding-right: 22px">\n' +
+                            '                <ul class="compents_paginator paginator">\n' +str_li+
+                            '                </ul>\n' +
+                            '                <ul class="compents_paginator paginator_controller">\n' +
+                            '                    <li class="page_number">\n' +
+                            '                        <div id="page_number">'+data.data.page_count+'</div>\n' +
+                            '                    </li>\n' +
+                            '                    <li class="page_saver"><input id="page_saver"></li>\n' +
+                            '                    <li class="page_ender">页</li>\n' +
+                            '                </ul>\n' +
+                            '            </div>'
+
+                    }
+                }
+                $('#content')[0].scrollTop = 0
+
+            }else {
+                str+='<div></div>'
+            }
+            str+='</div>'
+//            $('#panel_content').html(str)
+            $('.panel_body').html(str)
+        }
+    })
+}
+    $(document).on('click','.recomm_title span',function () {
+    item=$(this).attr('p');
+    ttp=$(this).attr('p');
+        ttta='get';
+        ddddt='';
+    if(item==='RECOM'){
+        item='';
+        page=''
+            url="/supervisor/method_article_recommend_list/";
+        $('.search_box').css('visibility','hidden')
+    }else {
+        page=1+'/';
+        item+='/';
+        url="/supervisor/method_articles/"
+        $('.search_box').css('visibility','inherit')
+    }
+    $(this).addClass('checked').siblings().removeClass('checked');
+    got_list()
+})
+
+    $(document).on('click', '.tag-if-show', function () {
+        var type=$(this).attr('stu')
+        if(type==='3'){
+            alert('草稿状态的文章不能被推荐，请先更改文章状态')
+            return
+        }
+        if(type==='0'){
+            alert('删除状态的文章不能被推荐，请先更改文章状态')
+            return
+        }
+        var p = $(this).attr('p_id');
+
+        var self = this
+            $.ajax({
+                url: u + '/supervisor/cancel_method_article_recommend/'+p+'/',
+                type: 'get',
+                success: function (data) {
+                    got_list()
+                }
+            })
+
+    })
+    $(document).on('click', '.tag-move-down', function () {
+        var t_p = $(this).attr('p_id'), t_n = $(this).attr('p_rank'), p_n, p_p;
+            p_p = $(this).parents('.tag-class-box').next().attr('p_id');
+            p_n = $(this).parents('.tag-class-box').next().attr('p_rank');
+
+        var obj = {}
+//        var ary=[];
+//        ary.push()
+        obj[t_p] = p_n;
+        obj[p_p] = t_n;
+        $.ajax({
+            url: u + '/supervisor/method_article_recommend_arrange/',
+            type: 'post',
+            data: obj,
+            success: function (data) {
+                if (data.code !== 200) {
+                    alert(data.message)
+                    return
+                }
+                got_list()
+            }
+        })
+    })
+    $(document).on('click', '.tag-move-up', function () {
+        var t_p = $(this).attr('p_id'), t_n = $(this).attr('p_rank'), p_n, p_p;
+            p_p = $(this).parents('.tag-class-box').prev().attr('p_id');
+            p_n = $(this).parents('.tag-class-box').prev().attr('p_rank');
+
+        var obj = {}
+        obj[t_p] = p_n;
+        obj[p_p] = t_n;
+        $.ajax({
+            url: u + '/supervisor/method_article_recommend_arrange/',
+            type: 'post',
+            data: obj,
+            success: function (data) {
+                if (data.code !== 200) {
+                    alert(data.message)
+                    return
+                }
+                got_list()
+            }
+        })
+    })
+    $(document).on('click', '#compents_paginator li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'))+'/';
+
+        }
+        if ($(this).hasClass('prev')) {
+           page= parseFloat(page);
+           page--
+
+        }
+        if ($(this).hasClass('next')) {
+            page= parseFloat(page);
+            page++;
+
+        }
+        if ($(this).hasClass('first')) {
+            page = 1+'/';
+
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num+'/';
+
+        }
+        got_list()
+    })
+    $(document).on('keyup', '#compents_paginator input', function (e) {
+        if (e.keyCode === 13) {
+            page = $(this).val()+'/';
+            got_list();
+            $(this).val('').blur();
+        } else {
+            if ($(this).val() > page_num) {
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g, ''))
+        }
+    })
+    function search_data() {
+        if($('.search_box input').val()) {
+            url='/supervisor/search_method_article/';
+            ttta='post'
+            ddddt={
+                search_word: $('.search_box input').val()
+            }
+            got_list()
+
+        }
+    }
+    $(document).on('click','.search_box .search_img',function () {
+        page='1/'
+        search_data()
+    })
+    $(document).on('keyup', '.search_box input',function (e) {
+        if (e.keyCode === 13) {
+            page='1/'
+                    search_data()
+            }
+    })
+        function bond_select(num) {
+        num ? num : 1
+        var str = '';
+        for (var i = 1; i <= 4; i++) {
+            if (i === Number(num)) {
+                str += ' <option value="' + i + '" selected>' + i + '</option>'
+            } else {
+                str += ' <option value="' + i + '">' + i + '</option>'
+            }
+        }
+        return str
+    }
+</script>
+</body>
+</html>

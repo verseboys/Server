@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no,minimal-ui">
+  <title>医咖会</title>
+  <link rel="shortcut icon" href="{% static 'images/20171213113454.png' %}">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+  <style>
+    /* pc */
+    @media only screen
+    and (min-device-width : 768px) {
+      body {
+        padding: 0;
+        margin: 0;
+        background: url({% static 'images/yika_bg.jpg' %}) no-repeat top;
+        background-size: cover;
+      }
+      #root {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 440px;
+        min-width: 500px;
+      }
+      #root .activate-email {
+        text-align: center;
+        margin:200px auto;
+        width: 456px;
+        height: 442px;
+        border-radius: 4px;
+        box-shadow: 0 2px 13px 5px rgba(69, 160, 234, 0.17);
+        background-color: #fff;
+      }
+      #root .activate-email .message {
+        text-align: center;
+        font-size: 18px;
+        line-height: 28px;
+        color: #4a4a4a;
+        padding-top: 12px;
+      }
+      #root .activate-email .return_home {
+        width: 379px;
+        height: 46px;
+        border-radius: 2px;
+        background-color: #03a675;
+        line-height:46px;
+        color: white;
+        font-size: 18px;
+        text-decoration:none;
+        text-align: center;
+        display: inline-block;
+        margin-top:54px;
+      }
+    }
+    /* 移动端 */
+    @media only screen
+    and (max-device-width : 768px) {
+      body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+      }
+      #root {
+        width: 100%;
+        margin-top: 30%;
+      }
+      #root .activate-email {
+        text-align: center;
+      }
+      #root .activate-email .message {
+        font-size: 18px;
+        line-height: 28px;
+        color: #4a4a4a;
+        padding-top: 12px;
+      }
+      #root .activate-email .return_home {
+        width: 84%;
+        height: 40px;
+        border-radius: 2px;
+        background-color: #03a675;
+        line-height:40px;
+        color: white;
+        font-size: 18px;
+        text-decoration:none;
+        text-align: center;
+        display: inline-block;
+        margin-top: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+{% verbatim %}
+<div id="root">
+  <div class="activate-email">
+    <div v-show="status" style="padding-top: 95px;">
+      <svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="登录注册页面手机注册改版" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="邮箱注册3-成功" transform="translate(-656.000000, -315.000000)">
+                <g id="成功" transform="translate(656.000000, 315.000000)">
+                    <path d="M0,32 C0,49.7 14.3,64 32,64 C49.7,64 64,49.7 64,32 C64,14.3 49.7,0 32,0 C14.3,0 0,14.3 0,32 Z" id="路径" fill="#46B229"></path>
+                    <path d="M50.1745633,19.4318156 C49.2696245,18.7738109 47.8619419,18.8678115 47.1581006,19.7138176 L29.8637146,39.735962 L19.6077414,29.9598915 C18.8033514,29.2078861 17.4962176,29.2078861 16.6918275,29.9598915 C15.7868887,30.711897 15.7868887,31.9339058 16.5912788,32.7799119 L27.5510932,43.3079878 C27.5510932,43.3079878 28.5565807,44.3419953 28.7576782,44.5299966 C29.1598733,44.8119986 29.5620683,45 30.0648121,45 L30.2659096,45 C30.7686534,45 31.2713972,44.8119986 31.5730434,44.4359959 C31.7741409,44.2479946 32.7796285,42.9319851 32.7796285,42.9319851 L50.5767583,22.3458366 C51.2805996,21.3118292 51.0795021,20.0898204 50.1745633,19.4318156 Z" id="路径" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+      </svg>
+    </div>
+    <div v-show="!status" style="padding-top: 95px;">
+      <svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="登录注册页面手机注册改版" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="邮箱注册4-失败" transform="translate(-666.000000, -311.000000)">
+                <g id="失败" transform="translate(666.000000, 311.000000)">
+                    <path d="M0,32 C6.97413142e-15,49.673112 14.326888,64 32,64 C49.673112,64 64,49.673112 64,32 C64,14.326888 49.673112,0 32,0 C14.326888,-2.32471047e-15 6.97413142e-15,14.326888 0,32 Z" id="路径" fill="#FF5700"></path>
+                    <path d="M30.353769,48.1247591 C30.353769,49.0550086 30.6628836,49.9849684 31.1991791,50.6474057 C31.7354745,51.3098429 32.4778463,51.6923077 33.2413223,51.6923077 C33.9942463,51.6923077 34.7471702,51.3101324 35.2834655,50.6474057 C35.819761,49.9849684 36.1288756,49.0677477 36.1288756,48.1247591 C36.1288756,47.1947991 35.819761,46.2645497 35.2834655,45.6021125 C34.7471701,44.9396753 34.0047983,44.5575 33.2413223,44.5575 C32.4883983,44.5575 31.7354744,44.9396753 31.1991791,45.6021125 C30.6628836,46.2772889 30.353769,47.1947991 30.353769,48.1247591 Z M36.9230769,15.7519046 C36.9230769,13.8468186 35.2729134,12.3076944 33.2307702,12.3076944 C32.2512351,12.3066943 31.3115065,12.669235 30.618841,13.3153583 C29.9261756,13.9614816 29.5374737,14.8381103 29.5384634,15.7519046 C29.5384634,15.8193643 29.5384634,15.8865345 29.5490156,15.9539943 L30.3534586,37.8998324 C30.3534586,39.3813408 31.6426779,40.5837454 33.2304598,40.5837454 C34.8188624,40.5837454 36.1080817,39.3813408 36.1080818,37.8998324 L36.9125248,15.9539943 C36.9125248,15.8865346 36.9230769,15.8193644 36.9230769,15.7519046 Z" id="形状" fill="#FFFFFF" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+      </svg>
+    </div>
+    <div class="message">
+      <div style="padding: 0 75px;">{{message}}</div>
+      <a href="/login/?next=/#1" v-show="status" style="text-decoration: none"></a>
+    </div>
+    <a class="return_home" v-show="status"  href="/login/?next=/#3">继续</a>
+    <a class="return_home" v-show="!status"  href="/">返回首页</a>
+  </div>
+</div>
+{% endverbatim %}
+<script>
+new Vue({
+  el: '#root',
+  data: {
+    message: '验证中...',
+    status: false,
+  },
+  methods: {
+    verifyUser() {
+      var vm = this
+      axios.post('/users', {action: 'activate-email', code: vm.code}).then(function (response) {
+        vm.message = '账号激活成功，正在跳转，如未跳转，请点击下方按钮'
+        vm.status = true
+        setTimeout(()=>{
+          window.location.href = '/login/#3'
+        },2000)
+      }).catch(function (e) {
+        if (e.response) {
+          vm.message = e.response.data.message || '服务器开小差了'
+        } else if (e.request) {
+          vm.message = '服务器开小差了'
+        } else {
+          vm.message = '网络不太稳定'
+        }
+      })
+    },
+    getQueryVariable(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+          return pair[1];
+        }
+      }
+      return false;
+    },
+    initialize() {
+      this.verifyUser()
+    },
+  },
+  created() {
+    var vm = this
+    vm.code = vm.getQueryVariable('code')
+    vm.initialize()
+  },
+})
+</script>
+</body>

@@ -1,0 +1,205 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block titleblock %}医咖会-用户信息{% endblock titleblock %}
+
+{% block headblock %}
+    <script src="{% static 'js/javaScripts/user_model.js' %}"></script>
+    <style>
+        #container {
+            padding-left: 33px;
+            padding-right: 21px;
+            width: 1158px;
+            margin: 93px auto 0;
+        }
+
+        #sidebar {
+            margin-left: 27px
+        }
+
+        #info_box {
+            margin-left: 20px;
+        }
+
+        .pc2_collect input {
+            box-sizing: border-box !important;
+        }
+    </style>
+{% endblock headblock %}
+
+{% block bodyblock %}
+    <div class="confirm_background hide">
+        <div class="confirm_container">
+            <div class="confirm_cancel">
+                <img src="{% static 'images/cancel.png' %}">
+            </div>
+            <div class="confirm_title">
+                    您确认要删除订单吗？删除订单后不能恢复。
+            </div>
+            <div class="button_container">
+                <div class="confirm_button">
+                    确认
+                </div>
+                <div class="cancel_button">
+                    取消
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="toTop" style="height: 71px;margin-bottom: -71px"></div>
+    <div id="container">
+
+        <input class="header_upload" type="file" style="display:none;" id="up_file" accept="image/*">
+
+        <div class="user-bar inline"></div>
+        <div class="inline user-menu hide">
+        </div>
+
+    </div>
+
+
+    <!--弹框-->
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <div class="neko_shadow_box" v-if="check_type===21">
+                <div class="pc2_collect pc2_watch_collect">
+                    <div class="font-18 line-height25 pad-bot20 color-liter-grey f-200">收藏夹</div>
+                    <div class="">
+                        <ul class="collect_list">
+                            <li v-for="(collect_list,item) in collect_lists"><span class="collect_text" v-html="collect_list.collect_category"></span><span class="right collect_del" @click="del_collect_list(collect_list,item)" v-bind:i="collect_list.collect_category">删除</span><span
+                                    class="right collect_change" @click="change_collect_list(collect_list,item)">编辑</span></li>
+                        </ul>
+                        <div class="push-coll mar-top10 line-height36 color-link font-18 text-left"><span class="pointer" @click="check_old(21)">+创建收藏夹</span></div>
+                    </div>
+{#                    <div class="text-cen">#}
+{#                        <div class="btn-collect-close inline align-cen">取消</div>#}
+{#                        <div class="mar-left20 btn-collect inline align-cen">提交</div>#}
+{#                    </div>#}
+                </div>
+            </div>
+            <!--删除收藏夹-->
+            <div class="neko_shadow_box" v-show="check_type===22">
+                <div class="pc2_colect_del">
+                    <p>删除收藏夹，其包含的问题都将被删除，确定执行此操作吗？</p>
+                    <div class="text-cen">
+                        <div class="btn-collect-close inline align-cen" @click="cancel_collect_list()">取消</div>
+                        <div class="mar-left20 btn-collect inline align-cen" @click="push_del_collect()">提交</div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <script type="application/javascript">
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: '',
+                    fn:function () {
+                        window.location.search='?t=collect'
+                    }
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    switch (this.check_type){
+                        case 21||22||23:
+                            window.location.search = '?t=collect'
+                            break
+                    }
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    this.old_check=this.check_type
+                    var self = this;
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        success: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            }
+        });
+
+    </script>
+{% endblock bodyblock %}

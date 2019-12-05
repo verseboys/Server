@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>医咖会-登录</title>
+    <link rel="shortcut icon" href="{% static 'images/20171213113454.png' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}?t=1561514674">
+    <script type="application/javascript" src="https://lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script type="application/javascript" src="https://lib.baomitu.com/vue/2.1.6/vue.min.js"></script>
+    <script type="application/javascript" src="{% static 'js/utils.js' %}?t=1558667234"></script>
+    <script type="application/javascript" src="{% static 'js/javaScripts/main.js' %}?t=1561514674"></script>
+    <style>
+        html,body{
+            height: 100%;
+        }
+        .close_btn{
+            display: none;
+        }
+        #pc-state-box{
+            height: 100%;
+        }
+        /* pc */
+        @media only screen
+        and (min-device-width : 768px){
+            #neko_shadow_box {
+                display: flex;
+                position: static;
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+                z-index: 9999;
+                align-items: center;
+                justify-content: center;
+                background: url({% static 'images/yika_bg.jpg' %}) no-repeat top;
+                background-size: cover;
+            }
+            #neko_shadow_box .neko_shadow_box{
+                top:0;
+                left:0;
+                position: static;
+                transform:translate(0);
+                width: 376px;
+                height: 347px;
+                border-radius: 4px;
+                box-shadow: 0 2px 13px 5px rgba(69, 160, 234, 0.17);
+                background-color: #fff;
+                padding: 40px;
+            }
+            #neko_shadow_box .neko_shadow_box .logo_box .logo_text{
+                color: #403f40;
+                font-weight: 400;
+            }
+            #neko_shadow_box .neko_shadow_box .input_box .input_item{
+                background-color: #ffffff;
+            }
+            #neko_shadow_box .neko_shadow_box .input_box .neko_input{
+                color:#333;
+                background-color: #F5F9FF;
+            }
+            #neko_shadow_box .neko_shadow_box .tool_box .neko_btn .neko_regist{
+                color: #403f40;
+            }
+            #neko_shadow_box .neko_shadow_box .neko_box .vc_box{
+                border: 8px solid #fff;
+            }
+            #neko_shadow_box .neko_shadow_box .tool_box .tip_msg_box .msg{
+                color: #403f40;
+            }
+            #yika_agreement{
+                position: static;
+                transform: translate(0);
+                background-color: #fff;
+                border-radius: 2px;
+                border: solid 1px #d8d8d8;
+            }
+            #yika_agreement .agreement_info{
+                border-bottom:solid 1px #d8d8d8
+            }
+            #neko_shadow_box .neko_shadow_box .input_box .input_item .cancel_input{
+                display: none;
+            }
+            #neko_shadow_box .neko_shadow_box .neko_box .vc_input_box .vc_input {
+                width: 259px;
+                height: 50px;
+            }
+            #neko_shadow_box .neko_shadow_box .input_box .email{
+                width: 379px;
+            }
+            #neko_shadow_box .neko_shadow_box .addition_input .neko_input{
+                font-size: 14px;
+                padding-left: 20px;
+            }
+            #neko_shadow_box .neko_shadow_box .tool_box {
+                margin-top: 16px;
+            }
+            #neko_shadow_box .neko_shadow_box .tool_box .neko_btn .forget {
+                color: #45a0ea;
+                font-size: 14px;
+                cursor: pointer;
+            }
+            #neko_shadow_box .neko_shadow_box .logo_box .error_tip {
+                width: 377px;
+                height: 26px;
+            } 
+            #neko_shadow_box .neko_shadow_box .logo_box .error_tip .error-tip {
+                line-height: 26px;
+                background-color: #e46d7c;
+                text-align: center;
+                color: #fff;
+                font-size: 14px;
+            }
+        }
+        #neko_shadow_box .addition .chooser_box .chooser_item{
+            background-color: #F5F9FF;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #neko_shadow_box .addition .chooser_box .chooser_item .chooser_text{
+            width: 350px;
+        }
+        #neko_shadow_box .addition .chooser_box .chooser_item .chooser_list{
+            position: absolute;
+            top: 60px;
+            left: -1px;
+            width: 100%;
+            max-height: 239px;
+            background-color: #fff;
+            z-index: 9999;
+            cursor: auto;
+            overflow-y: auto;
+            border: solid 1px #eaeaf0;
+        }
+        #neko_shadow_box .addition .chooser_box .chooser_item .chooser_list .list_item:hover{
+            background-color: #eaeaf0;
+        }
+        #neko_shadow_box .addition .chooser_box .chooser_item .chooser_list .list_item .list_name{
+            color: #403f40;
+        }
+        #neko_shadow_box .addition .chooser_box .chooser_item .chooser_img{
+            transition: .2s ease;
+            transform: rotate(0deg);
+        }
+        #neko_shadow_box .addition .chooser_box .chooser_item .deg-180{
+            transform: rotate(-180deg);
+        }
+
+
+        /* 移动端 */
+        @media only screen
+        and (max-device-width : 768px) {
+            #neko_shadow_box {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+            }
+            #neko_shadow_box .neko_shadow_box {
+                width: 82%;
+            }
+            #neko_shadow_box .neko_shadow_box .tool_box {
+                margin-top: 20px;
+            }
+            #neko_shadow_box .neko_shadow_box .logo_box .logo_text {
+                color: #403f40;
+                font-size: 28px;
+            }
+            #neko_shadow_box .neko_shadow_box .input_box .input_item {
+                background: #F5F9FF;
+                margin-top: 15px;
+                height: 45px;
+            }
+            #neko_shadow_box .neko_shadow_box .input_box .input_item .neko_input {
+                width: 100%;
+                background: #F5F9FF;
+                font-size: 14px;
+                color:#333;
+                line-height: 30px;
+                padding-top: 8px;
+                padding-left: 20px;
+                overflow: hidden;
+            }
+            #neko_shadow_box .neko_shadow_box>.submit_login{
+                width: 100%;
+                height: 40px;
+                line-height: 40px;
+                font-size: 16px;
+            }
+            #neko_shadow_box .neko_shadow_box .neko_btn .neko_regist, 
+            #neko_shadow_box .neko_shadow_box .neko_btn .forget {
+                color: #45a0ea;
+                font-size: 14px;
+                cursor: pointer;
+            }
+            #neko_shadow_box .neko_shadow_box .logo_box .error_tip {
+                width: 100%;
+                height: 26px;
+            } 
+            #neko_shadow_box .neko_shadow_box .logo_box .error_tip .error-tip {
+                line-height: 26px;
+                font-size: 14px;
+            }
+            #neko_shadow_box .addition .chooser_box {
+                width: 100%;
+            }
+            #neko_shadow_box .addition .chooser_box .chooser_item .chooser_text{
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="pc-state-box" class="hide">
+    <div class="hide"></div>
+    <div id="neko_shadow_box" v-show="check_type">
+        <div class="close_btn" @click="close()" style="display: none"></div>
+        <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+        <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+        <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+        <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+        <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+            <div id="model_ask_ques">
+                <div class="ask-title">描述问题</div>
+                <div class="ask-text">
+                    <div id="box_content" style="padding: 0">
+                        <div id="common_content">
+                            <textarea id="ask_area" name="editor"></textarea>
+                            <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                <div>
+                    <ul class="model_tag_list"></ul>
+                </div>
+                <div>
+                    <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    var box = new Vue({
+        el: '#pc-state-box',
+        data: {
+            check_type: 0,
+            fix_wat: {
+                show: 'show neko_shadow_box',
+                hide: 'neko_shadow_box hide'
+            },
+            old_check: 0,
+            collect_lists: [],
+            user: {
+                ques_id: '1',
+                ans_id: '2',
+                tar: ''
+            },
+            item: 0,
+            del_item: '',
+            change_collect_val: {}
+        },
+        methods: {
+            close: function () {
+                this.check_type = 0
+            },
+            check_old: function (num) {
+                this.old_check = num;
+                this.check_type = 6
+            },
+            del_collect_list: function (list, num) {
+                this.del_item = list.id
+                this.item = num
+                this.check_type = 22;
+            },
+            cancel_collect_list: function () {
+                this.check_type = 21
+            },
+            push_del_collect: function () {
+                $.ajax({
+                    url: '/delete_collect_category/' + this.del_item + '/',
+                    type: 'get',
+                    success: function (data) {
+                        console.log(data,'data')
+                        $.ajax({
+                            url: '/user_collect_category_list/',
+                            type: 'get',
+                            success: function (data) {
+                                if (data.code == 200) {
+                                    var list = data.data.user_collect_category_list
+                                    box.collect_lists = list;
+                                }
+                            }
+                        })
+                    }
+                })
+
+                this.check_type = 21;
+            },
+            change_collect_list: function (list, item) {
+                var self = this
+                $.ajax({
+                    url: '/alter_collect_category/' + list.id + '/',
+                    type: 'get',
+                    siccess: function (data) {
+                        self.change_collect_val = data.data;
+                        check_type(23)
+                    }
+                })
+            }
+        },
+        computed: {
+            check_typ: function () {
+                this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+            }
+        }
+    });
+  var item=window.location.hash.replace('#','');
+//  console.log(item)
+    check_type(parseFloat(item))
+
+    if ("onhashchange" in window) {
+        window.onhashchange = function () {
+            var item=window.location.hash.replace('#','');
+            check_type(parseFloat(item))
+        }
+    }else {
+        var n=window.location.hash.replace('#','')
+        window.setInterval(function () {
+            var item=window.location.hash.replace('#','');
+            if(n!==item){
+                n=item;
+                check_type(parseFloat(item))
+            }
+        },100)
+    }
+
+
+
+</script>
+</body>
+</html>

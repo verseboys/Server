@@ -1,0 +1,291 @@
+{% extends 'news_header_base.html' %}
+{% load static %}
+
+{% block bodyblock %}
+
+    <div>
+        <div id="details_top_item" class="min_width_container">
+            <div class="item_inner">
+                <div class="text">
+                    <h2>{{ title }}</h2>
+                    <div><span class="data">{{ create_time }}</span></div>
+                </div>
+            </div>
+        </div>
+        <div id="container" class="min_width_container" style="padding-left:0;padding-right:0">
+            <div class="container_vision">
+                <div id="container_body" style="display: block">
+                    <div class="body_detail">
+                        {{ content|safe }}
+                    </div>
+                </div>
+                <div id="container_reply">
+                    <div class="reply_banner" id="commit_box">评论区
+                        <div class="reply_num">{{ comment_count }}</div>
+                    </div>
+                    {% if comments %}
+                        <!--有评论-->
+                        <div>
+                            <ul class="comment-list">
+                                {% for c in comments %}
+                                    <li>
+                                        <div class="comment">
+                                            <div class="avatar" style="background: url('/images/avatar/{{ c.avatar }}') no-repeat;"></div>
+                                            <div class="name"><span>{{ c.author }}</span></div>
+                                            <div class="comm-text">{{ c.comment }}</div>
+                                        </div>
+                                        <div class="data"><span>{{ c.create_time }}</span></div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        {% if pages and pages|length > 1 %}
+                            <div class="text-cen">
+                                <ul class="pagination—list">
+                                    {% if page_count < 5 %}
+                                        {% for page in pages %}
+                                            {% if page == current_page %}
+                                                <li class="active">{% else %}
+                                                <li>
+                                            {% endif %}
+                                        <a href="{% url 'front_news_detail'  news_id=id  page=page %}">{{ page }}</a></li>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% if current_page > 1 %}
+                                            <li class="prev"><a rel="prev" href="{% url 'front_news_detail'  news_id=id  page=current_page|add:-1 %}">上一页</a></li>
+                                        {% endif %}
+
+                                        {% if current_page > 4 %}
+                                            <li><a href="{% url 'front_news_detail'  news_id=id  page=1 %}">1</a></li>
+                                            <li class="disabled"><span>…</span></li>
+                                        {% endif %}
+
+                                        {% for page in pages %}
+                                            {% if page == current_page %}
+                                                <li class="active">{% else %}
+                                                <li>
+                                            {% endif %}
+                                        <a href="{% url 'front_news_detail'  news_id=id  page=page %}">{{ page }}</a></li>
+                                        {% endfor %}
+
+                                        {% if page_count > 6 and current_page|add:2 < page_count %}
+                                            <li class="disabled"><span>…</span></li>
+                                        {% endif %}
+                                        {% if current_page > 0 and current_page < page_count %}
+                                            <li class="next"><a rel="next" href="{% url 'front_news_detail'  news_id=id  page=current_page|add:1 %}">下一页</a></li>
+                                        {% endif %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <!--没有评论-->
+                        <div class="comment_box">
+                            <div class="no_comment">
+                                <div class="no_comment_img"></div>
+                                <div class="no_comment_text">目前暂无评论！</div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if front_user %}
+                        <!--已登录-->
+                        <div class="ans-ques-ans inline" id="commit_link">
+                            <div class="ans-text-area">
+                                <textarea></textarea>
+                            </div>
+                            <div class=" row text-rig">
+                                <span class="inline text-cen ans-ques-btn ">提交</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <!--未登录-->
+                        <div class="no_login_box" id="commit_link">
+                            <div class="no_login_img"></div>
+                            <div class="text">您尚未登录，请</div>
+                            <a class="login_log">登录</a>
+                            <div class="text">后评论</div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div id="container_sidebar" >
+            {% if front_user %}
+                {% if file_name %}
+                    <a data-href="{% url 'front_download_news' news_id=id %}"  class="user_download">
+                        <div class="down_load_button_flag" style="width: 260px;height: 54px;background-color: #2b8ad7;text-align: center;line-height: 54px;font-weight: 400;color: #ffffff;margin-bottom: 18px;border-radius: 2px; cursor: pointer;">下载资料</div>
+                    </a>
+                {% endif %}
+            {% else %}
+
+                    <div class="login_log" style="width: 260px;height: 54px;background-color: #2b8ad7;text-align: center;line-height: 54px;font-weight: 400;color: #ffffff;margin-bottom: 18px;border-radius: 2px; cursor: pointer;">下载资料</div>
+
+            {% endif %}
+
+                <div id="sidebar_paper_box" class="hide">
+                    <div class="paper_title">更多阅读</div>
+                    <div class="paper_content">
+
+                    </div>
+                </div>
+                <div id="sidebar_qr_code">
+                    <div class="qr_code"></div>
+                    <div class="qr_text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pc-state-box" class="hide">
+        <div class="hide"></div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script type="text/javascript" src="{% static 'js/user_download.js' %}"></script>
+    <script>
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        success: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+
+        $.ajax({
+            url: '/news_related_reading_list/'+{{ id }}+'/',
+            type: 'get',
+            success: function (data) {
+                if (data.code == 200) {
+                    var list = data.data, str = '';
+                    if (list.length) {
+                        for (var i = 0; i < list.length; i++) {
+                            var link = ''
+                            if (list[i].type == 1) {
+                                link = '/method_article_detail/' + list[i].id + '/'
+                            } else {
+                                link = '/news_detail/' + list[i].id + '/1/'
+                            }
+                            str += '<a href="' + link + '" target="_blank"><div class="paper_item"><div class="item_info">' + list[i].title + '</div><div class="item_date">' + list[i].create_time + '</div></div></a>'
+                        }
+                        $('.paper_content').html(str)
+                        $('#sidebar_paper_box').removeClass('hide')
+                    }
+
+                }
+            }
+        })
+        $('#commit_link .ans-ques-btn').click(function () {
+            if ($('#commit_link textarea').val()) {
+                $.ajax({
+                    url: '/add_news_comment/'+{{ id }}+'/',
+                    type: 'post',
+                    data: {
+                        'comment': $('#commit_link textarea').val()
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            window.location.reload()
+                        }
+                    }
+                })
+            }
+
+        })
+
+
+    </script>
+{% endblock bodyblock %}

@@ -1,0 +1,392 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block titleblock %}
+    {{ title }}-医咖会
+{% endblock titleblock %}
+{% block head_description %}{{ summary }}{% endblock head_description %}
+
+{% block headblock %}
+    <style>
+        #header-pc2 {
+            /*position: absolute;*/
+        }
+
+        .methods-others-list {
+            border-left: none;
+            border-right: none;
+        }
+
+        #container_body {
+            background: #fff;
+            padding-left: 21px;
+            padding-right: 21px;
+            padding-top: 16px;
+            padding-bottom: 40px;
+        }
+
+        .methods-content-head {
+            margin: 0 auto;
+            width: 1158px;
+            padding-left: 21px;
+            padding-right: 21px;
+        }
+
+        .con_flex {
+            display: flex;
+        }
+
+        .special_tit_img {
+            margin-right: 35px;
+        }
+
+        .special_tit_img img {
+            width: 174px;
+            height: 200px;
+            border-radius: 5px;
+        }
+
+        h4 {
+            font-size: 28px;
+            font-weight: 400;
+            text-align: left;
+            color: #465a79;
+            line-height: 36px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        h4 span {
+            display: inline-block;
+            border-radius: 2px;
+            background-color: #f5a623;
+            line-height: 30px;
+            font-family: PingFangSC;
+            font-size: 18px;
+            font-weight: 400;
+            text-align: center;
+            color: #ffffff;
+            padding: 1px 8px;
+            margin-right: 15px;
+            position: relative;
+            top: -3px;
+        }
+
+        .special_tit_con {
+            flex: 1;
+        }
+
+        .special_tit_con div {
+            font-family: PingFangSC;
+            font-size: 18px;
+            text-align: left;
+            color: #727a89;
+            line-height: 30px;
+        }
+
+        .methods_list_box_index_left {
+            margin-right: 49px;
+        }
+
+        .methods_list_box_index_left img {
+            width: 305px;
+            border-radius: 5px;
+        }
+
+        h5 {
+            font-family: HelveticaNeue;
+            font-size: 24px;
+            text-align: left;
+            color: #222222;
+            margin-bottom: 21px;
+            font-weight: 400;
+            transition: color .3s ease;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        .methods_list_box_index_right {
+            width: 566px;
+            font-family: HelveticaNeue;
+            font-size: 18px;
+            line-height: 1.7;
+            text-align: left;
+            color: #b4b3b3;
+            flex: 1;
+        }
+
+        .wi-920 {
+            width: 920px;
+            margin: 42px auto 0;
+            background: #fff;
+
+            padding-bottom: 20px;
+        }
+
+        #container {
+            background:#fff;
+        }
+
+        #container_body {
+
+            margin-top:15px;
+        }
+
+        .methods-content-head {
+            padding-bottom: 40px;
+        }
+
+        .special_tit_img {
+            height: 150px;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+
+        h4  {
+            font-size: 23px;
+            font-weight: 500;
+            text-align: left;
+            color: #465a79;
+            line-height: 36px;
+            margin-bottom: 12px;
+        }
+
+        h4 span  {
+            display: inline-block;
+            border-radius: 2px;
+            background-color: #f5a623;
+            line-height: 30px;
+            font-family: PingFangSC;
+            font-size: 17px;
+            font-weight: 500;
+            text-align: center;
+            color:#ffffff;
+            padding: 0px 11px;
+            margin-right: 15px;
+            position: relative;
+            top: -3px;
+        }
+    .methods-more-list-content{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp:3;
+        -webkit-box-orient: vertical;
+    }
+
+        .methods-others-list{
+            padding-top: 20px;
+        }
+         .methods-others-list li{
+            text-align: center;
+        }
+
+        .methods-others-list li .wi-920{
+            border-bottom: 1px solid #eaeaf1;
+        }
+        .methods-others-list li a{
+            display: inline-block;
+        }
+
+        .methods-others-list li:last-child .wi-920 {
+            border-bottom: none;
+        }
+    </style>
+{% endblock headblock %}
+
+{% block bodyblock %}
+<div id="container" class="min_width_container">
+        <div style="background-color: #edf6fb;">
+            <div class="methods-content-head" style="margin: 0 auto ; padding-top: 100px;	background-color: #edf6fb;">
+                <div class="con_flex">
+                    <div class="special_tit_img">
+                        <img src="/images/topic/{{ thumbnail }}" alt="{{ title }}">
+                    </div>
+                    <div class="special_tit_con">
+                        <h4><span>专题</span>{{ title }}</h4>
+                        <div>{{summary }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="container_body">
+            <div class="methods-content-box">
+                <ul class="methods-more-list methods-others-list">
+                    {% if topic_article_list %}
+                        {% for t in topic_article_list %}
+                            <li>
+                                <a href="{% if not t.category_id == 13 %}{% url 'front_method_article_detail' article_id=t.id %}{% else %}{% url 'front_method_topic_article_detail' article_id=t.id %}{% endif %}" target="_blank">
+                                    <div class="con_flex wi-920">
+                                      {% if t.thumbnail %}
+                                          <div class="methods_list_box_index_left">
+                                              <img src="/images/article_images/{{ t.thumbnail }}" alt="{{ t.title }}">
+                                          </div>
+                                      {% endif %}
+                                        <div class="methods_list_box_index_right">
+                                            <h5>{{ t.title }}</h5>
+                                            <div class="methods-more-list-content">
+                                                <span>{{ t.summary }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+                {% if pages and pages|length > 1 %}
+                    <div class="text-cen">
+                        <ul class="pagination—list">
+                            {% if page_count < 5 %}
+                                {% for page in pages %}
+                                    {% if page == current_page %}
+                                        <li class="active">{% else %}
+                                        <li>
+                                    {% endif %}
+                                <a href="{% url 'front_method_topic_detail' topic_id=id page=page %}">{{ page }}</a></li>
+                                {% endfor %}
+                            {% else %}
+                                {% if current_page > 1 %}
+                                    <li class="prev"><a rel="prev" href="{% url 'front_method_topic_detail' topic_id=id page=current_page|add:-1 %}">上一页</a></li>
+                                {% endif %}
+
+                                {% if current_page > 4 %}
+                                    <li><a href="{% url 'front_method_topic_detail' topic_id=id page=1 %}">1</a></li>
+                                    <li class="disabled"><span>…</span></li>
+                                {% endif %}
+
+                                {% for page in pages %}
+                                    {% if page == current_page %}
+                                        <li class="active">{% else %}
+                                        <li>
+                                    {% endif %}
+                                <a href="{% url 'front_method_topic_detail' topic_id=id page=page %}">{{ page }}</a></li>
+                                {% endfor %}
+
+                                {% if page_count > 6 and current_page|add:2 < page_count %}
+                                    <li class="disabled"><span>…</span></li>
+                                {% endif %}
+                                {% if current_page > 0 and current_page < page_count %}
+                                    <li class="next"><a rel="next" href="{% url 'front_method_topic_detail' topic_id=id page=current_page|add:1 %}">下一页</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        siccess: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+    </script>
+{% endblock bodyblock %}
+
+

@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-研究方法</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content{
+            display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <a href="research_detail.html?type=publish&from=method" style="text-decoration: none"><div class="publish_btn">发布新文章</div></a>
+            <div class="search_box"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+        <div class="panel_header">
+            <div class="page_list">文章列表</div>
+            <div class="author">作者</div>
+            <div class="pub_time">发布时间</div>
+            <div class="stat">当前状态</div>
+            <div class="control">操作</div>
+        </div>
+        <div class="panel_body">
+            <div id="panel_content">
+            </div>
+            <div id="compents_paginator">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div><div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var page = 1, page_num = 0,del_id;
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            get_methods()
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            get_methods()
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            get_methods()
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            get_methods()
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            get_methods()
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup','input',function (e) {
+        if(e.keyCode===13){
+            page=$(this).val();
+            get_methods();
+            $(this).val('').blur();
+        } else {
+            if($(this).val()>page_num){
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g,''))
+        }
+    })
+    var url='/article_list/',type='get',val='';
+    get_methods()
+    function get_methods() {
+        AJAX({
+            type: type,
+            url: '/supervisor'+url+'1/' + page + '/',
+            data: val,
+            fn: function (data) {
+                if(data.code!==200){
+                    return
+                }
+                var str = '';
+                var content = data.data.articles
+                for (var i = 0; i < content.length; i++) {
+                    var da = content[i];
+                    str += '<div class="panel_item" pid="' + da.id + '">';
+                    str += '<div class="page_list"><a >' + da.title + '</a></div>';
+                    str += '<div class="author">' + da.author__username + '</div>';
+                    str += '<div class="pub_time">' + new Date(da.publish_time).format('yyyy年MM月dd日 hh:mm') + '</div>';
+                    str += '<div class="stat">' + methods_status(da.status) + '</div>';
+                    str += '<div class="control"><a href="research_detail.html?type=edit&from=method&p='+da.id+'" title="' + da.title + '">';
+                    str += '<div class="edit">编辑</div>';
+                    str += '</a>';
+                    str += '<div class="gang">/</div>';
+                    str += '<div class="del" pid="' + da.id + '">删除</div>';
+                    str += '</div>';
+                    str += '</div>';
+                }
+                $('#panel_content').html(str);
+                var str_li = '';
+                if (page !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                var pagecount=data.data.pageCount,start,last;
+                if (data.data.pageCount > 1) {
+                    if (pagecount - Number(page) > 2 && Number(page) > 2 && pagecount > 5) {
+                        start = Number(page) - 3;
+                        last = Number(page) + 2
+                    }
+                    else if (pagecount - Number(page) <= 2 && pagecount > 5) {
+                        start = pagecount - 6;
+                        last = pagecount;
+                    }
+                    else if (Number(page) <= 2 && pagecount > 5) {
+                        start = 0;
+                        last = 5
+                    }
+                    else if (pagecount <= 5) {
+                        start = 0;
+                        last = pagecount;
+                    }
+                    for (var p = start; p < last; p++) {
+                        if (Number(page) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.pageCount !== 1 && page !== data.data.pageCount) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+                $('#compents_paginator .paginator').html(str_li);
+                $('#page_number').html(data.data.pageCount);
+                page_num = data.data.pageCount;
+                if (data.data.pageCount === 1) {
+                    $('#compents_paginator .paginator_controller').hide()
+                } else {
+                    $('#compents_paginator .paginator_controller').show()
+                }
+                $('#content')[0].scrollTop=0
+            }
+
+        })
+    }
+    function del_method() {
+    }
+    $('#container').on('click','.del',function () {
+
+        del_id=Number($(this).attr('pid'))
+        $('#alert_area').removeClass('hide');
+    })
+    $('#alert_box .box_item .item_left').click(function () {
+        $('#alert_area').hide();
+    })
+    $(document.body).on('click','#alert_box .box_item .item_right',function () {
+
+        $.ajax({
+            url:'/supervisor/delete_article/',
+            type:'post',
+            data:{article_id:del_id},
+            success:function (data) {
+                if(data.code===200){
+                    $('#alert_area').addClass('hide');
+                    $('#panel_content .panel_item[pid="'+ del_id+'"]').remove();
+                }else {
+                    alert(data.message);
+                    $('#alert_area').addClass('hide');
+                }
+            }
+        })
+    })
+    //状态管理
+    function methods_status(num) {
+        switch (num){
+            case 0:
+                return "删除";
+            case 1:
+                return "发布";
+            case 2:
+                return "推荐";
+            case 3:
+                return "草稿";
+            default:
+                return "错误"
+        }
+
+    }
+    function search_list() {
+        url='/search_article/';
+        type='post',val={'search_keyword':$('#container .search_box input').val()}
+        page = 1;
+        get_methods()
+
+    }
+    $('#container .search_box .search_img').click(search_list)
+    $('#container .search_box input').keyup(function (e) {
+        if(e.keyCode===13){
+            search_list()
+        }
+    })
+</script>
+</body>
+</html>

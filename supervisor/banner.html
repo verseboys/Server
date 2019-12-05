@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>研究方法文章管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/methods.css">
+    <link rel="stylesheet" href="public/css/methods_recommend.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+        #up_banner_link:focus{
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章管理</li>
+                <li data-url="custom_menu_tag.html">分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <div class="publish_btn" style="width: 146px">上传新banner</div>
+        </div>
+
+        <div class="panel_body" style=" padding-top:0;margin-top: 3px;">
+            <div class="tag-cla" style="background-color: #d8d8d8;">
+                <div class="me-class-left" style="padding-left: 20px;width: 15%;">缩略图</div>
+                <div class="me-class-right" style="width: 85%;">
+                    <div class="me-class-5"  style="width: 55%;text-align: center"><span style="display: inline-block;margin-right: 90px;width: 54%;padding: 0 11px;">链接</span><span style="width: 64px;display: inline-block;">顺序</span></div>
+                    <div class="me-class-2" style="width: 15%;">是否显示</div>
+                    <div style="width: 13%;text-align: center;">用户端</div>
+                    <div class="me-class-6" style="width: 15%;">操作</div>
+                </div>
+            </div>
+            <div id="panel_content">
+
+
+            </div>
+            <div id="compents_paginator" style="display: none">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div>
+            <div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<div class="flex-outer hide">
+    <div class="flex-box banner_box" style="height: 334px">
+        <div style="padding: 43px 30px 23px;font-size: 16px">
+            <div style="display: flex;margin-bottom: 33px">
+                <div style="width: 49.6px;line-height: 34px;">链接</div>
+                <div><input type="text" style="padding:0 10px;width: 447px;height: 34px;background-color: #eaeaf0;border: solid 1px #eaeaf1;" id="up_banner_link"></div>
+            </div>
+            <div style="line-height: 22px">文件上传</div>
+            <div class="banner_file_box" >
+                <label for="up_banner">
+                    <div class="up_banner_1 "><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="12" viewBox="0 0 15 12">
+                        <defs>
+                            <path id="b" d="M-1-14h1447v920H-1z"/>
+                            <path id="d" d="M220 70h1227v661H220z"/>
+                            <filter id="c" width="101.1%" height="102.1%" x="-.6%" y="-.8%" filterUnits="objectBoundingBox">
+                                <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+                                <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="2"/>
+                                <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.847 0 0 0 0 0.847 0 0 0 0 0.847 0 0 0 1 0"/>
+                            </filter>
+                            <path id="e" d="M216 70h1224v803H216z"/>
+                            <path id="g" d="M2 54h579a2 2 0 0 1 2 2v255a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V56a2 2 0 0 1 2-2z"/>
+                            <filter id="f" width="101.2%" height="102.7%" x="-.6%" y="-1%" filterUnits="objectBoundingBox">
+                                <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+                                <feGaussianBlur in="shadowOffsetOuter1" result="shadowBlurOuter1" stdDeviation="1"/>
+                                <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0.547928143 0 0 0 0 0.586816749 0 0 0 0 0.664593963 0 0 0 0.350486866 0"/>
+                            </filter>
+                            <path id="a" d="M73.63 133.54h464.064a4 4 0 0 1 4 4v68.743a4 4 0 0 1-4 4H73.63a4 4 0 0 1-4-4v-68.742a4 4 0 0 1 4-4z"/>
+                            <mask id="h" width="472.065" height="76.743" x="0" y="0" fill="#fff">
+                                <use xlink:href="#a"/>
+                            </mask>
+                        </defs>
+                        <g fill="none" fill-rule="evenodd" transform="translate(-787 -451)">
+                            <g transform="translate(541 284)">
+                                <use fill="#FDFDFD" xlink:href="#g"/>
+                                <path fill="#BCC1CC" fill-rule="nonzero" d="M251.398 169.94c-.58-.57-1.411-.638-2.056-.174-.617.444-.958 1.264-.872 2.1 0 0-2.343.519-2.343 3.239.052 2.717 2.547 2.741 2.547 2.741h3.935v-2.841h-1.237l2.083-2.543 2.083 2.543H254.3v2.841h3.568s2.331 0 2.659-2.58c.079-1.623-.881-3.067-2.252-3.384 0 0 .275-4.184-3.104-4.66-1.65-.215-3.208.908-3.774 2.719z"/>
+                            </g>
+                        </g>
+                    </svg>选择文件</div>
+                    <div class="up_banner_2 hide">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10" height="13" viewBox="0 0 10 13">
+                            <g fill="none" fill-rule="evenodd" transform="translate(-637 -450)">
+                                <g transform="translate(541 284)">
+                                    <use fill="#000" filter="url(#f)" xlink:href="#g"/>
+                                    <use fill="#FDFDFD" xlink:href="#g"/>
+                                    <use stroke="#465A79" stroke-dasharray="6" stroke-width="2" mask="url(#h)" xlink:href="#a"/>
+                                    <path fill="#BCC1CC" fill-rule="nonzero" d="M100.885 169.666V166h-3.203a.681.681 0 0 0-.682.68v10.64c0 .376.305.68.682.68h7.636a.683.683 0 0 0 .682-.68v-6.52l-3.733-.019c-1.42 0-1.382-1.115-1.382-1.115z"/>
+                                    <path fill="#BCC1CC" fill-rule="nonzero" d="M96.614 177.907l.056-10.87c-.37 0-.67.303-.67.677v10.608c0 .374.3.678.67.678h7.505a.672.672 0 0 0 .637-.464h-7.704s-.54.002-.494-.63zm6.109-7.717H106l-4.47-4.19v3.052s-.185 1.138 1.193 1.138z"/>
+                                </g>
+                            </g>
+                        </svg>
+                        <span>1234604-5</span>
+                    </div>
+                </label>
+                <input type="file" id="up_banner" class="hide" accept="image/*">
+            </div>
+
+            <div class="banner_btn" >
+                <div class="banner_btn_left">取消</div>
+                <div class="banner_btn_right">确定</div>
+            </div>
+        </div>
+    </div>
+    <div class="flex-box up_n_box hide">
+        上传中，请稍候…
+    </div>
+    <div class="flex-box up_true_box hide">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="81" height="81" viewBox="0 0 109 109">
+                               <g fill="none" fill-rule="evenodd">
+                                        <path fill="#1cba84" fill-rule="nonzero" d="M31.654 53.855a5.113 5.113 0 0 0-7.231 7.23l21.032 21.031a5.095 5.095 0 0 0 3.619 1.5 5.103 5.103 0 0 0 3.612-1.498l48.117-48.116a5.114 5.114 0 0 0-7.233-7.232L49.072 71.275l-17.418-17.42zm77.054-5.023a3.893 3.893 0 0 0-7.746.8c.168 1.602.251 3.24.251 4.866 0 25.759-20.956 46.715-46.715 46.715-25.76 0-46.715-20.956-46.715-46.715 0-25.759 20.956-46.715 46.717-46.715 9.187 0 18.079 2.666 25.71 7.708a3.893 3.893 0 0 0 4.293-6.496A54.269 54.269 0 0 0 54.5 0C24.449 0 0 24.45 0 54.5S24.449 109 54.5 109 109 84.551 109 54.5c0-1.892-.098-3.798-.29-5.666l-.002-.002z"></path>
+                </g>
+            </svg>
+            <div>上传成功</div>
+        </div>
+
+    </div>
+    <div class="flex-box up_false_box hide">
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="109" height="109" viewBox="0 0 109 109">
+                   <g fill="none" fill-rule="evenodd">
+                          <g fill="#F00" fill-rule="nonzero">
+                             <path d="M108.708 48.832a3.893 3.893 0 0 0-7.746.8c.168 1.602.251 3.24.251 4.866 0 25.759-20.956 46.715-46.715 46.715-25.76 0-46.715-20.956-46.715-46.715 0-25.759 20.956-46.715 46.717-46.715 9.187 0 18.079 2.666 25.71 7.708a3.893 3.893 0 0 0 4.293-6.496A54.269 54.269 0 0 0 54.5 0C24.449 0 0 24.45 0 54.5S24.449 109 54.5 109 109 84.551 109 54.5c0-1.892-.098-3.798-.29-5.666l-.002-.002z"/>
+                                  <path d="M61.197 55.938l19.914-19.244a4.428 4.428 0 0 0 1.368-3.17 4.427 4.427 0 0 0-1.328-3.186 4.684 4.684 0 0 0-6.514-.04L54.69 49.566 35.05 30.322a4.684 4.684 0 0 0-6.514-.008 4.427 4.427 0 0 0-1.351 3.176 4.427 4.427 0 0 0 1.343 3.18l19.615 19.212-19.776 19.116A4.428 4.428 0 0 0 27 78.168a4.427 4.427 0 0 0 1.328 3.186 4.7 4.7 0 0 0 6.514.04l19.8-19.132L74.605 81.82a4.651 4.651 0 0 0 6.515.008 4.427 4.427 0 0 0 1.351-3.177 4.427 4.427 0 0 0-1.343-3.18l-19.93-19.532z"/>
+                           </g>
+                        </g>
+                </svg>
+            <div>上传失败</div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+
+
+    var page='', item='',url="/supervisor/method_article_recommend_list/",ttp="RECOM",page_num;
+   var  file_name='',code
+    got_list()
+    function got_list() {
+        $.ajax({
+            url:u+'/supervisor/method_banner_list/',
+            type:'get',
+            success:function (data) {
+                if(data.code===200){
+                    var list=data.data.banners,str=''
+                    for (var i=0;i<list.length;i++){
+                        str+='<div class="tag-class-box">\n' +
+                            '                    <div class="tag-cla" style="padding: 3px 0;height: 48px;">\n' +
+                            '                        <div class="me-class-left" style="padding-left: 0;width: 15%;"><div class="me-class-left-body"><img\n' +
+                            '                                src="'+u+'/images/banner/'+list[i].name+'" alt="" style="width: 95px;height: 26px;vertical-align: middle;margin-left: 8px"></div></div>\n' +
+                            '                        <div class="me-class-right panel_item" style="height: 43px;    width: 85%;">\n' +
+                            '                            <div class="me-class-5"  style="width: 55%;text-align: center">\n' +
+                                '<input style="margin-right: 90px;" value="'+(list[i].link?list[i].link:'')+'" readonly>\n'+
+                            '                                <select p_id="'+list[i].id+'">\n' ;
+
+                        for(var j=0;j<list.length;j++){
+                            if(list[i].rank===(j+1)){
+                                str+='                                    <option value="'+list[i].rank+'" selected>'+list[i].rank+'</option>\n' ;
+                            }else {
+                                str+='                                    <option value="'+(j+1)+'">'+(j+1)+'</option>\n' ;
+                            }
+                        }
+                        str+=  '                                </select>\n' +
+                            '                            </div>\n' +
+                            '                            <div class="me-class-2" style="width: 15%;">\n' ;
+                        if(list[i].is_active===0){
+                            str+=   '                                <span class="tag-if-show"  p_id="'+list[i].id+'" style="margin-right: 0"></span>\n'
+                        }else{
+                            str+= '                                <span class="tag-if-show checked"  p_id="'+list[i].id+'" style="margin-right: 0"></span>\n'
+                        }
+
+
+                        str+='                            </div>\n' ;
+                        if(list[i].type===1){
+                            str+='<div style="width: 13%;text-align: center;" class="pc_mobile"><select style=" width: 80px;" p_id="'+list[i].id+'"><option value="1" selected>PC端</option><option value="2">移动端</option></select></div>'
+                        }else{
+                            str+='<div style="width: 13%;text-align: center;" class="pc_mobile"><select p_id="'+list[i].id+'" style="width: 80px;"><option value="1">PC端</option><option value="2" selected>移动端</option></select></div>'
+                        }
+
+                            str+='                            <div class="me-class-6 control" style="width: 15%;margin-left: 0;"><div class="del" p_id="'+list[i].id+'">删除</div></div>\n' +
+                            '                        </div>\n' +
+                            '                    </div>\n' +
+                            '                </div>'
+                    }
+                    $('#panel_content').html(str)
+                }
+            }
+        })
+    }
+
+    $(document).on('change','#up_banner',function () {
+        var reader = new FileReader();
+        var oMyForm;
+        var _self = this;
+        reader.readAsDataURL(this.files[0]);
+        reader.onload = function(e){
+            var oMyForm = new FormData();
+            oMyForm.append("imgFile", $('#up_banner')[0].files[0]);
+            $.ajax({
+                type: 'post',
+                url: u+'/extends/image_storage/banner/',
+                data: oMyForm,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function(e) {
+                    if(e.code===200){
+                        file_name=e.data;
+                        $('.banner_box .up_banner_1').addClass('hide')
+                        $('.banner_box .up_banner_2').removeClass('hide').find('span').html($('#up_banner')[0].files[0].name)
+                    }else {
+                        alert(e.message)
+                    }
+                }
+
+            })
+
+        }
+    })
+    $(document).on('click','.banner_btn .banner_btn_left',function () {
+        $('.banner_box .up_banner_1').removeClass('hide');
+        $('.banner_box .up_banner_2').addClass('hide').find('span').html('')
+        file_name=''
+        $('.flex-outer').addClass('hide')
+    })
+    $(document).on('click','.banner_btn .banner_btn_right',function () {
+        if(file_name){
+            $('.banner_box').addClass('hide')
+            $('.up_n_box').removeClass('hide');
+            var box_type=false,tt=false;
+          var timert =  window.setTimeout(function () {
+                tt=true;
+                if(box_type){
+                    $('.up_n_box').addClass('hide');
+                    if(code===200){
+                            $('.up_true_box').removeClass('hide');
+                     }else{
+                     $('.up_false_box').removeClass('hide');
+                    }
+
+
+                }
+              var ttt=window.setTimeout(function () {
+                  $('.flex-outer').addClass('hide');
+                  $('.up_true_box').addClass('hide');
+                  $('.up_false_box').addClass('hide');
+                  $('.banner_box').removeClass('hide');
+                  got_list()
+                  window.clearTimeout(ttt)
+                  window.clearTimeout(timert)
+              },1000)
+
+            },500)
+            $.ajax({
+                url:u+'/supervisor/upload_method_banner/',
+                type:"post",
+                data:{
+                    'name':file_name,
+                    'link':$('#up_banner_link').val()
+                },
+                success:function (data) {
+                    file_name='';
+                    $('#up_banner_link').val('')
+                    box_type=true;
+                    code=data.code;
+                     if(data.code===200){
+                         if(tt){
+                            $('.up_n_box').addClass('hide');
+                            $('.up_true_box').removeClass('hide')
+
+                             var ttt=window.setTimeout(function () {
+                                 $('.flex-outer').addClass('hide');
+                                 $('.up_true_box').addClass('hide');
+                                 $('.up_false_box').addClass('hide');
+                                 $('.banner_box').removeClass('hide');
+                                 got_list()
+                                 window.clearTimeout(ttt)
+                             },500)
+                         }
+
+                         $('.banner_box .up_banner_1').removeClass('hide');
+                         $('.banner_box .up_banner_2').addClass('hide').find('span').html('');
+
+                     }else {
+                         if(tt){
+                             $('.up_n_box').addClass('hide');
+
+                             $('.up_false_box').removeClass('hide');
+
+                             var ttt=window.setTimeout(function () {
+                                 $('.flex-outer').addClass('hide');
+                                 $('.up_true_box').addClass('hide');
+                                 $('.banner_box').removeClass('hide');
+                                 got_list()
+                                 window.clearTimeout(ttt)
+                             },500)
+                         }
+                     }
+
+                }
+            })
+        }
+
+    })
+    $(document).on('click','.publish_btn',function(){
+        $('.flex-outer').removeClass('hide')
+    })
+    $(document).on('click','#panel_content .tag-if-show',function(){
+        var p=$(this).attr('p_id');
+        var self=this
+        if($(this).hasClass('checked')){
+            $.ajax({
+                url:u+'/supervisor/is_active_method_banner/',
+                type:'post',
+                data:{
+                    banner_id:p,
+                    is_active:0
+                },
+                success:function (data) {
+                    if(data.code===200){
+                        $(self).removeClass('checked')
+                    }
+                }
+            })
+        }else{
+            $.ajax({
+                url:u+'/supervisor/is_active_method_banner/',
+                type:'post',
+                data:{
+                    banner_id:p,
+                    is_active:1
+                },
+                success:function (data) {
+                    if(data.code===200){
+                        $(self).addClass('checked')
+                    }
+                }
+            })
+        }
+
+    })
+    $(document).on('change','#panel_content .me-class-5 select',function(){
+        var p=$(this).attr('p_id');
+        var v=$(this).val();
+        $.ajax({
+            url:u+'/supervisor/alter_method_banner_rank/',
+            type:'post',
+            data:{
+                banner_id:p,
+                rank:v
+            },
+            success:function (data) {
+            }
+        })
+    })
+    $(document).on('click','#panel_content .del',function(){
+        var p=$(this).attr('p_id');
+        $.ajax({
+            url:u+'/supervisor/delete_method_banner/',
+            type:'post',
+            data:{
+                banner_id:p
+            },
+            success:function (data) {
+                if(data.code===200){
+                    got_list();
+                }else {
+                    alert(data.message)
+                }
+            }
+        })
+    })
+//    $(document).on('click', '#compents_paginator li', function (e) {
+//        if ($(this).hasClass('page')) {
+//            page = Number($(this).attr('jp-data'))+'/';
+//
+//        }
+//        if ($(this).hasClass('prev')) {
+//            page= parseFloat(page);
+//            page--
+//
+//        }
+//        if ($(this).hasClass('next')) {
+//            page= parseFloat(page);
+//            page++;
+//
+//        }
+//        if ($(this).hasClass('first')) {
+//            page = 1+'/';
+//
+//        }
+//        if ($(this).hasClass('last')) {
+//            page = page_num+'/';
+//
+//        }
+//        got_list()
+//    })
+//    $(document).on('keyup', '#compents_paginator input', function (e) {
+//        if (e.keyCode === 13) {
+//            page = $(this).val()+'/';
+//            got_list();
+//            $(this).val('').blur();
+//        } else {
+//            if ($(this).val() > page_num) {
+//                $(this).val(page_num);
+//            }
+//            $(this).val($(this).val().replace(/[^0-9]/g, ''))
+//        }
+//    })
+//    function search_data() {
+//        if($('.search_box input').val()) {
+//            page=1;
+//            $.ajax({
+//                url: u + '/supervisor/search_method_article/1/' + item,
+//                type: 'post',
+//                data: {
+//                    search_word: $('.search_box input').val()
+//                },
+//                success:function(data){
+//                    console.log(data)
+//                }
+//            })
+//        }
+//    }
+//    $(document).on('click','.search_box .search_img',function () {
+//        search_data()
+//    })
+//    $(document).on('keyup', '.search_box input',function (e) {
+//        if (e.keyCode === 13) {
+//            search_data()
+//        }
+//    })
+    function bond_select(num) {
+        num ? num : 1
+        var str = '';
+        for (var i = 1; i <= 4; i++) {
+            if (i === Number(num)) {
+                str += ' <option value="' + i + '" selected>' + i + '</option>'
+            } else {
+                str += ' <option value="' + i + '">' + i + '</option>'
+            }
+        }
+        return str
+    }
+
+    $(document).on('change','.pc_mobile select',function () {
+console.log()
+        $.ajax({
+            url:u+'/supervisor/method_banner_type/'+$(this).attr('p_id')+'/',
+            type:'post',
+            data:{
+                type_id:$(this).val()
+            },
+            success:function (data) {
+                got_list()
+            }
+        })
+    })
+</script>
+</body>
+</html>

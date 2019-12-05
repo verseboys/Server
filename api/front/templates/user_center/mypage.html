@@ -1,0 +1,18 @@
+<div class="compents_paginator_list mar-top38 text-rig"  v-if="pages>1"> 
+  <ul class="compents_paginator paginator"> 
+    <li class="first disabled" v-show="current_page>1" @click="jumpPage(1)"><a href="javascript:void(0);">首页</a></li> 
+    <li class="prev disabled" v-show="current_page>1" @click="jumpPage(current_page,'prev')"><a href="javascript:void(0);">上一页</a></li> 
+    <li class="page" v-show="current_page>5" @click="jumpPage(1)"><a href="javascript:void(0);">1</a></li> 
+    <li class="page"  v-show="efont">...</li> 
+    <li class="page" v-for="num in indexs" :class="{active:current_page==num}" @click="jumpPage(num)"><a href="javascript:void(0);" v-text='num'></a></li> 
+    <li class="page"  v-show="efont&&current_page<pages-4">...</li> 
+
+    <li class="next" v-show="current_page<pages" @click="jumpPage(current_page,'next')"><a href="javascript:void(0);">下一页</a></li> 
+    <li class="last" v-show="current_page<pages" @click="jumpPage(pages)"><a href="javascript:void(0);">尾页</a></li> 
+  </ul> 
+  <ul class="compents_paginator paginator_controller">
+    <li class="page_number" v-text='pages'></li>
+    <li class="page_saver"><input type="text" v-model="changePage"><span class="jump gobtn" @click="jumpPage(changePage)">GO</span></li>
+    <li class="page_ender">页</li>
+  </ul>
+</div>

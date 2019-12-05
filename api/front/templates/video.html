@@ -1,0 +1,1000 @@
+{% extends 'header_base.html' %}
+{% load static %}
+
+{% block titleblock %}医咖会-关于我们{% endblock titleblock %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/video.css' %}">
+{% endblock headblock %}
+
+{% block bodyblock %}
+    <div style="background-color:#595959">
+        <div class="button_container">
+            <div class="button_center_container">
+                <div class="video_group_title">
+                    课程名称
+                </div>
+                <div class="collect_button" @click="open_collection">
+                    <!-- class="hide" 判定是否已收藏渲染 -->
+                <img src="http://localhost:8000/static/images/star_gray.png" class="star_gray "  >
+                <img src="http://localhost:8000/static/images/star_yellow.png" class="star_light hide" >
+                </div>
+                <!-- 收费 -->
+                <div class="pay_button">
+                    购买
+                </div>
+                <!-- 免费时渲染 -->
+                <!-- <div class="free_button" >
+                    免费
+                </div> -->
+            </div>
+        </div>
+        <div class="video_container">
+            <div class="video_center_container">
+                <div class="video_list_container" >
+                    <div id="player" class="video_player"></div>
+                        <div class="video_list_button" >
+                            <span class="video_list_button_menu">
+                                目录<<
+                            </span>
+                        </div>
+                    <div id="video_list_container" class="video_list">
+                        <div id="div1">
+                            <div class="study_list"><span class="study_list_content">课程目录</span></div>
+                            <div class="study_list_line"></div>
+                            <!-- 循环渲染 -->
+                            <div >
+                                <div class="video_list_item">
+                                    <div class="video_list_item_title"> 
+                                        <!-- class="video_group_negative" 不是当前课程渲染-->
+                                        <img width="19" height="21" src="http://localhost:8000/static/images/group_negative.png" style="margin-right:10px;margin-top:5px" class="video_group_negative"> 
+                                        <span>课程名称</span>
+                                    </div>
+                                </div>
+                                <!-- class="video_list_active" 当前课时渲染 -->
+                                <a href="">
+                                    <div  class="video_list_item_content" class="video_list_active" >
+                                            课时名称
+                                    </div>
+                                </a>
+                                <a href="">
+                                    <div  class="video_list_item_content" class="video_list_active" >
+                                            课时名称
+                                    </div>
+                                </a>
+                                <a href="">
+                                    <div  class="video_list_item_content" class="video_list_active" >
+                                            课时名称
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="div2">
+                            <div id="div3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="collection_container" style="display:none">
+            <div class="collection_cancel" @click="close_collection">
+
+            </div>
+            <pc-collect-list :check_type="7"></pc-collect-list>
+        </div> -->
+
+        <div id="pc-state-box" class="collection_container" style="display:none">
+            <!-- <div >{{ check_typ }}</div> -->
+            <div id="neko_shadow_box" v-show="check_type">
+                <div class="close_btn" @click="close()"></div>
+                <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+                <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+                <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+                <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            </div>
+        </div>
+    </div>
+    <!-- 服务器渲染部分 -->
+    <div style="width:100%;background-color: #f9f9f9;margin-bottom:-15px">
+            <div class="items_container">
+                    <div class="main_container">
+                        <div class="title_container">
+                            <div class="point_title title_active">
+                                本期要点
+                            </div>
+                            <div class="study_list_title">
+                                课程目录
+                            </div>
+                            <div class="introduce_title">
+                                讲者介绍
+                            </div>
+                            <div class="comment_title">
+                                评论
+                            </div>
+                            <div class="download_title">
+                                资料下载
+                            </div>
+                        </div>
+                        <div class="point_container">
+                            <!-- 本期要点 -->
+                            <div class="point_container_for_target_video" data-vid="123" >
+                                <div class="point_list_title">一、本节要点</div>
+                                <!-- 复文本编辑内容 -->
+                                <div class="point_list">
+                                        • 	Stata入门 (什么是Stata、do file、获取帮助、安装包)<br>
+                                        • 	创建数据集 (数据导入、保存、合并、修改、筛选、清理、标签等)<br>
+                                        • 	基本统计方法 (描述性统计方法、简易表格、t检验、相关、非参数检验等)<br>
+                                        • 	基本图形方法 (条形图、直方图、箱线图、散点图、LOWESS图、饼图等等)<br>
+                                        • 	回归分析 (简单/多元线性回归、有交互项的回归、异常值观测)<br>
+                                        • 	高级回归分析 (广义线性回归、GEE、mixed models)<br>
+                                        • 	生存分析 (K-M曲线、cox回归、PH假定、参数/半参数生存分析)<br>
+                                </div>
+                                <div class="point_code_title">二、本节代码</div>
+                                <!-- 复文本编辑内容 -->
+                                <div class="point_code">
+                                        • 	Stata入门 (什么是Stata、do file、获取帮助、安装包)<br>
+                                        • 	创建数据集 (数据导入、保存、合并、修改、筛选、清理、标签等)<br>
+                                        • 	基本统计方法 (描述性统计方法、简易表格、t检验、相关、非参数检验等)<br>
+                                        • 	基本图形方法 (条形图、直方图、箱线图、散点图、LOWESS图、饼图等等)<br>
+                                        • 	回归分析 (简单/多元线性回归、有交互项的回归、异常值观测)<br>
+                                        • 	高级回归分析 (广义线性回归、GEE、mixed models)<br>
+                                        • 	生存分析 (K-M曲线、cox回归、PH假定、参数/半参数生存分析)<br>
+                                        • 	Stata入门 (什么是Stata、do file、获取帮助、安装包)<br>
+                                        • 	创建数据集 (数据导入、保存、合并、修改、筛选、清理、标签等)<br>
+                                        • 	基本统计方法 (描述性统计方法、简易表格、t检验、相关、非参数检验等)<br>
+                                        • 	基本图形方法 (条形图、直方图、箱线图、散点图、LOWESS图、饼图等等)<br>
+                                        • 	回归分析 (简单/多元线性回归、有交互项的回归、异常值观测)<br>
+                                        • 	高级回归分析 (广义线性回归、GEE、mixed models)<br>
+                                        • 	生存分析 (K-M曲线、cox回归、PH假定、参数/半参数生存分析)<br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="study_list_container" style="display:none">
+                            <!-- 课程目录 -->
+                            <div class="video_group_block">
+                                <div class="video_group_block_title"> <div style="display:inline-block;width:28px;height:18px"><img  height="18" src="{% static 'images/group_active.png'%}"></div>Stata入门</div>
+                                <div class="video_block">
+                                    <!-- 课程名称 -->
+                                    <div class="video_title">
+                                            1. 课程介绍
+                                    </div>
+                                    <!-- 课程时长 -->
+                                    <div class="video_time">
+                                            <img width="17" height="17" style="position:absolute;top:5px;left:0px" src="{% static 'images/video_time.png' %}">  <span style="position:relative;left:5px">5:00</span>
+                                    </div>
+                                    <!-- 课程状态 付费-->
+                                    <div class="video_state video_ready" style="display:none">
+                                        付费课程
+                                    </div>
+                                </div>
+                                <div class="video_block">
+                                    <div class="video_title">
+                                            1. 课程介绍
+                                    </div>
+                                    <div class="video_time">
+                                       <img width="17" height="17" style="position:absolute;top:5px;left:0px" src="{% static 'images/video_time.png' %}">  <span style="position:relative;left:5px">15:00</span>
+                                    </div>
+                                    <!-- 课程状态 更新中-->
+                                    <div class="video_state video_comming" style="display:none">
+                                        更新中
+                                    </div>
+                                </div>
+                                <div class="video_block">
+                                    <div class="video_title">
+                                            1. 课程介绍
+                                    </div>
+                                    <div class="video_time">
+                                            <img width="17" height="17" style="position:absolute;top:5px;left:0px" src="{% static 'images/video_time.png' %}">  <span style="position:relative;left:5px">25:00</span>
+                                    </div>
+                                    <!-- 课程状态 免费-->
+                                    <div class="video_free">
+                                            免费
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 这里在每个视频组后面多渲染个高度10px的div不然间距不好调 -->
+                            <div style="height:10px;"></div>
+                            <div class="video_group_block">
+                                    <div class="video_group_block_title"> <div style="display:inline-block;width:28px;height:18px"><img  height="18" src="{% static 'images/group_active.png'%}"></div>Stata入门</div>
+                                    <div class="video_block">
+                                        <div class="video_title">
+                                                1. 课程介绍
+                                        </div>
+                                        <div class="video_time">
+                                                <img width="17" height="17" style="position:absolute;top:5px;left:0px" src="{% static 'images/video_time.png' %}">  <span style="position:relative;left:5px">5:00</span>
+                                        </div>
+                                        <div class="video_state video_ready" style="display:none">
+                                            付费课程
+                                        </div>
+                                    </div>
+                                    <div class="video_block">
+                                        <div class="video_title">
+                                                1. 课程介绍
+                                        </div>
+                                        <div class="video_time">
+                                           <img width="17" height="17" style="position:absolute;top:5px;left:0px" src="{% static 'images/video_time.png' %}">  <span style="position:relative;left:5px">15:00</span>
+                                        </div>
+                                        <div class="video_state video_comming" style="display:none">
+                                            更新中
+                                        </div>
+                                    </div>
+                                    <div class="video_block">
+                                        <div class="video_title">
+                                                1. 课程介绍
+                                        </div>
+                                        <div class="video_time">
+                                                <img width="17" height="17" style="position:absolute;top:5px;left:0px" src="{% static 'images/video_time.png' %}">  <span style="position:relative;left:5px">25:00</span>
+                                        </div>
+                                        <div class="video_state video_comming" style="display:none">
+                                                更新中
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="introduce_container" style="display:none">
+                            <!-- 复文本编辑 -->
+                            <div class="introduce_content">
+                                • 	Stata入门 (什么是Stata、do file、获取帮助、安装包)<br>
+                                • 	创建数据集 (数据导入、保存、合并、修改、筛选、清理、标签等)<br>
+                                • 	基本统计方法 (描述性统计方法、简易表格、t检验、相关、非参数检验等)<br>
+                                • 	基本图形方法 (条形图、直方图、箱线图、散点图、LOWESS图、饼图等等)<br>
+                                • 	回归分析 (简单/多元线性回归、有交互项的回归、异常值观测)<br>
+                                • 	高级回归分析 (广义线性回归、GEE、mixed models)<br>
+                                • 	生存分析 (K-M曲线、cox回归、PH假定、参数/半参数生存分析)<br>
+                                • 	Stata入门 (什么是Stata、do file、获取帮助、安装包)<br>
+                                • 	创建数据集 (数据导入、保存、合并、修改、筛选、清理、标签等)<br>
+                                • 	基本统计方法 (描述性统计方法、简易表格、t检验、相关、非参数检验等)<br>
+                                • 	基本图形方法 (条形图、直方图、箱线图、散点图、LOWESS图、饼图等等)<br>
+                                • 	回归分析 (简单/多元线性回归、有交互项的回归、异常值观测)<br>
+                                • 	高级回归分析 (广义线性回归、GEE、mixed models)<br>
+                                • 	生存分析 (K-M曲线、cox回归、PH假定、参数/半参数生存分析)<br>
+                            </div>
+                        </div>
+                        <div class="comment_container" style="display:none">
+                            <!-- 没登录渲染 -->
+            
+                            <!-- <div class="new_comment_container_disable" >
+                                <div class="fake_input_place">
+                                  　输入评论...
+                                </div>
+                                
+                                <div class="login_place">
+                                    <img src="{% static 'images/warning.png'%}" width="16px" style="position: relative;top:2px;">
+                                    你尚未登录，请 <a href="" style="color:#3d83df;;text-decoration:underline">登录</a> 后评论
+                                </div>
+                            </div> -->
+            
+                            <!-- 登录了渲染 -->
+            
+                            <!-- <div class="new_comment_container">
+                                <textarea id="user_input" cols="30" rows="10" class="real_input_place" placeholder="&nbsp输入评论..."></textarea>
+                                <div class="login_button">
+                                    发表评论
+                                </div>
+                            </div> -->
+                            
+                            <!-- 评论区为空时渲染 -->
+            
+                            <!-- <div class="empty_comment">
+                                <div class="empty_img">
+                                    <img width="49" style="margin-left:19px;margin-bottom:15px" src="{% static 'images/empty_comment.png'%}"><br>
+                                    目前暂无评论！
+                                </div>
+                            </div> -->
+            
+                            <!-- 有评论时渲染 -
+                            <div class="comment_content">
+                                <div class="comment_content_title">
+                                     评论者头像 
+                                    <div class="comment_avatar">
+                                        <img  src="{% static 'images/yikacode_v2.png'%}" style="width: 45px;height: 45px;border-radius: 50%; ">
+                                    </div>
+                                    <span class="comment_name">评论者姓名</span>
+                                    <span class="comment_time">360天前</span>
+                                </div>
+                                <div class="comment_body">
+                                    从题材上讲，这部《天空之眼》不可避免地会让人们联想到《猎杀本拉登》，但当电影进入题，就会发现，都是搞笑从题材上讲，这部《天空之眼》不可避免地会让人们联想到《猎杀本拉登》，但当电影进入题，就会发现，都是搞笑
+                                </div>
+                                    有回复渲染 
+                                <div class="response_container">
+                                     一条回复 
+                                    <div class="comment_response">
+                                       <span class="response_name">
+                                           在风中
+                                       </span>
+                                       <span class="response_response">&nbsp; 回复：&nbsp;</span>
+                                       <span class="response_words">回复的内容</span>
+                                    </div>
+                                </div>
+                                 回复按钮 与点赞 
+                                 如果用户已经点赞需要渲染不同图片：是否有接口？
+                                <div class="response_like">
+                                    <div class="response_response_inner">
+                                            <span class="response_trigger" style="cursor: pointer;" >回复 </span>
+                                    </div>
+                                    <div class="response_like_inner">
+                                        <img class="like_img"  style="position:relative;top:2px;" src="{% static 'images/like_negative.png'%}"><span class="response_like_number">1</span>
+                                    </div>
+                                </div>
+                                <div class="response_tool tool_hide">
+                                    <input type="text" class="response_input" placeholder="输入回复...">
+                                      data-response-id 为唯一标识 
+                                    <div class="response_button" data-response-id="456">回复</div>
+                                </div>  
+                            </div>-->
+            
+            
+                            <!-- 分页 -->
+            
+                            <!-- <div class="text-cen">
+                                <ul class="pagination—list">
+                                    <li class="active"><li>
+                                    <a href="">1</a></li>
+                                        <li class="prev"><a rel="prev" href="">上一页</a></li>
+                                        <li><a href="">1</a></li>
+                                        <li class="disabled"><span>…</span></li>
+                                            <li class="active"><li>
+            
+                                    <a href="">3</a></li>
+                                        <li class="disabled"><span>…</span></li>
+                                        <li class="next"><a rel="next" href="">下一页</a></li>
+                                </ul>
+                            </div> -->
+            
+                        </div>
+                        <div class="download_container" style="display:none">
+                               <div class="file_container">
+                                    <span class="file_name">
+                                            医咖会教程第二期Stata界面介绍.PDF
+                                    </span>
+                                    <span class="download_button">
+                                        <a href="" download="文件名" style="color:#fff">
+                                            下载
+                                        </a>
+                                    </span>                            
+                               </div>
+                               <div class="file_container">
+                                    <span class="file_name">
+                                            医咖会教程第二期Stata界面介绍.PDF
+                                    </span>
+                                    <span class="download_button">
+                                        <a href="" download="文件名" style="color:#fff">
+                                            下载
+                                        </a>
+                                    </span>                            
+                               </div>
+                        </div>
+            
+                    </div>
+                    <div class="two_d_code_container">
+                        <img src="{% static 'images/erweima1.png' %}" width="105" height="105" class="two_d_code">
+                        <div class="two_d_code_message">
+                            <img src="{% static 'images/bitmap-copy-2@3x.png' %}">
+                        </div>
+                    </div>
+                </div>
+    </div>
+
+    <script src="//player.polyv.net/script/player.js"></script>
+    <script>
+            var box = new Vue({
+                el: '#pc-state-box',
+                data: {
+                    check_type: 7,
+                    fix_wat: {
+                        show: 'show neko_shadow_box',
+                        hide: 'neko_shadow_box hide'
+                    },
+                    old_check: 0,
+                    collect_lists: [],
+                    user: {
+                        ques_id: '1',
+                        ans_id: '2',
+                        tar: ''
+                    },
+                    item: 0,
+                    del_item: '',
+                    change_collect_val: {}
+                },
+                methods: {
+                    close: function () {
+                        $("#pc-state-box").hide()
+                    },
+                    check_old: function (num) {
+                        this.old_check = num;
+                        this.check_type = 6
+                    },
+                    del_collect_list: function (list, num) {
+                        this.del_item = list.id
+                        this.item = num
+                        this.check_type = 22;
+                    },
+                    cancel_collect_list: function () {
+                        this.check_type = 21
+                    },
+                    push_del_collect: function () {
+                        $.ajax({
+                            url: '/delete_collect_category/' + this.del_item + '/',
+                            type: 'get',
+                            success: function (data) {
+    
+                                $.ajax({
+                                    url: '/user_collect_category_list/',
+                                    type: 'get',
+                                    success: function (data) {
+                                        if (data.code == 200) {
+                                            var list = data.data.user_collect_category_list
+                                            box.collect_lists = list;
+                                        }
+                                    }
+                                })
+                            }
+                        })
+    
+                        this.check_type = 21;
+                    },
+                    change_collect_list: function (list, item) {
+                        var self = this
+                        $.ajax({
+                            url: '/alter_collect_category/' + list.id + '/',
+                            type: 'get',
+                            siccess: function (data) {
+                                self.change_collect_val = data.data;
+                                check_type(23)
+                            }
+                        })
+                    }
+                },
+                computed: {
+                    check_typ: function () {
+                        this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                    }
+                }
+            });
+    </script>
+    
+
+    <!-- 评论渲染逻辑 -->
+    <script>
+        //预加载已点赞图片
+        let like_active_promise=new Promise(function(resolve){
+            let like_active=new Image(13,17)
+            like_active.src="http://localhost:8000/static/images/like_active.png"
+            like_active.onload=function(){
+                resolve(like_active)
+            }
+        })
+        //预加载未点赞图片
+        let like_negative_promise=new Promise(function(resolve){
+            let like_negative=new Image(13,17)
+            like_negative.src="http://localhost:8000/static/images/like_negative.png"
+            like_negative.onload=function(){
+                resolve(like_negative)
+            }
+        })
+        //获取当前页面的video_id
+        let video_id=20
+        let commentContainer=$(".comment_container")
+        let unloginContent=`
+            <div class="new_comment_container_disable" >
+                <div class="fake_input_place">
+                    　输入评论...
+                </div>
+                
+                <div class="login_place">
+                    <img src="{% static 'images/warning.png'%}" width="16px" style="position: relative;top:2px;">
+                    你尚未登录，请 <a href="/login/?next=/#1" style="color:#3d83df;;text-decoration:underline">登录</a> 后评论
+                </div>
+            </div> `
+        //需要模板渲染
+        let loginContent=`
+            <div class="new_comment_container">
+                <textarea id="user_input" cols="30" rows="10" class="real_input_place" placeholder="&nbsp输入评论..."></textarea>
+                <div class="login_button" data-video-id="{{20}}">
+                    发表评论
+                </div>
+            </div>`
+
+        let commentContent=function(user_avatar,user_name,comment_content,comment_time,response_list,like_number,comment_id,is_active){
+            /*
+                user_avatar  用户头像路径
+                user_name    用户名称
+                comment_content 评论内容
+                comment_time    评论时间
+                response_list   回复列表
+                like_number     点赞数
+                comment_id      评论id
+            */
+            //    头像路径需要更改
+            let head=`
+                    <div class="comment_content_title">
+                        <!-- 评论者头像 -->
+                        <div class="comment_avatar">
+                            <img  src="${user_avatar}" style="width: 45px;height: 45px;border-radius: 50%; ">
+                        </div>
+                        <span class="comment_name">${user_name}</span>
+                        <span class="comment_time">${comment_time}</span>
+                    </div>
+                    <div class="comment_body">
+                        ${comment_content}
+                    </div>`
+            let body=""
+            if(response_list.length!=0){
+                let response=``
+                for(var a in response_list){
+                    //回复内容
+                    response+=`
+                        <div class="comment_response">
+                            <span class="response_name">
+                                ${response_list[a].username}
+                            </span>
+                            <span class="response_response">&nbsp; 回复：&nbsp;</span>
+                            <span class="response_words">${response_list[a].comment}</span>
+                        </div>`
+                }
+                body=`
+                    <div class="response_container">
+                        ${response}
+                    </div>
+                `
+            }
+
+            let foot=`            
+                <div class="response_like">
+                    <div class="response_response_inner">
+                            <span class="response_trigger" style="cursor: pointer;" >回复 </span>
+                    </div>
+                    <div class="response_like_inner" data-response-id="${comment_id}">
+                        <img class="like_img" data-active="false" style="position:relative;top:2px;display:${is_active==0?"inline-block":"none"}" src="{% static 'images/like_negative.png'%}">
+                        <img class="like_img" data-active="true" style="position:relative;top:2px;display:${is_active==0?"none":"inline-block"}" src="{% static 'images/like_active.png'%}"><span class="response_like_number">${like_number}</span>
+                    </div>
+                </div>
+                <div class="response_tool tool_hide">
+                    <input type="text" class="response_input" placeholder="输入回复...">
+                    <!--  data-response-id 为唯一标识 -->
+                    <div class="response_button" data-response-id="${comment_id}">回复</div>
+                </div> `
+            return `<div class="comment_content">
+                    ${head}${body}${foot}
+                    </div>`
+        }
+        let noComment=`
+            <div class="empty_comment">
+                <div class="empty_img">
+                    <img width="49" style="margin-left:19px;margin-bottom:15px" src="{% static 'images/empty_comment.png'%}"><br>
+                    目前暂无评论！
+                </div>
+            </div>`
+        // 分页状态根据请求返回值动态生成
+                /*
+                user_avatar  用户头像路径
+                user_name    用户名称
+                comment_content 评论内容
+                comment_time    评论时间
+                response_list   回复列表
+                like_number     点赞数
+                comment_id      评论id
+            */
+        //加载中状态
+        commentContainer.html(unloginContent+commentContent('',"哈哈","321213123","5分钟前",[],100,123,0)+commentContent('',"哈哈","3213213123","1天前",[],100,123,1))
+        //判定是否登录
+        //TODO:后台模板修改
+        commonContent=loginContent;
+        let page_local=1
+        let compileComment=function(page){
+            $.ajax({
+                url:"http://10.10.1.117:8000/video_comment/"+video_id+"/"+page+"/",
+                type:"get",
+                success:function(data){
+                    //判定是否登录
+                    //TODO:后台模板修改
+                    commonContent=loginContent;
+                    page_local=data.data.current_page
+                    if(data.code!=200){
+                        commentContainer.html(commonContent+noComment) 
+                    }else{
+                        for(var a of data.data.comment_list){
+                            commonContent+=commentContent(a.avatar,a.username,a.comment,a.create_time,a.relevance_comment,a.praise_count,a.id,a.is_praise)
+                        }
+                    let page_count=data.data.page_count
+                    let pageManager=null
+                    console.log(8888,page,page_count)
+                    if(page_count<5){
+                        pageManager=`
+                        <div class="text-cen">
+                            <ul class="pagination—list">
+                                    <li class="prev" style="display:${page>1?"default":"none"}"><a rel="prev" href="">上一页</a></li>
+                                    <li class="${page==1?"active":""}"><a href="">1</a></li>
+                                    <li class="${page==2?"active":""}"><a href="" style="display:${page_count>=2?"default":"none"}">2</a></li>
+                                    <li class="${page==3?"active":""}"><a href=""  style="display:${page_count>=3?"default":"none"}">3</a></li>
+                                    <li class="${page==4?"active":""}"><a href=""  style="display:${page_count>=4?"default":"none"}">4</a></li>
+                                    <li class="next"><a rel="next" href="" style="display:${page<page_count?"default":"none"}">下一页</a></li>
+                            </ul>
+                        </div>
+                        `
+                    }else{
+                        pageManager=`
+                        <div class="text-cen">
+                            <ul class="pagination—list">
+                                    <li class="prev" style="display:${page>1?"default":"none"}"><a rel="prev" href="">上一页</a></li>
+                                    <li class="${page==1?"active":""}"><a href="">1</a></li>
+                                    <li class="disabled" style="display:${page>3?"default":"none"}"><span>…</span></li>
+                                    <li class="${(page<4&&page==2)?"active":""}"><a href="">${page<4?2:page>=page_count-1?page_count-3:page-1}</a></li>
+                                    <li class="${(page<4&&page==3)||(page>=4&&page!=1&&page!=page_count&&page!=page_count-1)?"active":""}"><a href="">${page<4?3:page>=page_count-1?page_count-2:page}</a></li>
+                                    <li class="${(page>=page_count-1)&&(page==page_count-1)?"active":""}"><a href="">${page<4?4:page>=page_count-1?page_count-1:page+1}</a></li>
+                                    <li class="disabled"  style="display:${page_count-page>2?"default":"none"}"><span>…</span></li>
+                                    <li class="${page==page_count?"active":""}"><a href="">${page_count}</a></li>
+                                    <li class="next" ><a rel="next" href="" style="display:${page<page_count?"default":"none"}">下一页</a></li>
+                            </ul>
+                        </div>
+                        `
+                    }
+                        commentContainer.html(commonContent+pageManager)
+                        //分页逻辑
+                        let button_list=$('.pagination—list').find("a")
+                        button_list.click(function(e){
+                            button_list.unbind("click")
+                            e.preventDefault()
+                            let t=$(e.target)
+                            if(t.html()=="下一页"){
+                                compileComment(++page_local)
+                            }else if(t.html()=="上一页"){
+                                compileComment(--page_local)
+                            }else{
+                                compileComment(+t.html())
+                            }
+                        })
+                        //绑定回复开关事件
+                        $(".response_trigger").click(function(){
+                            $(this).parent().parent().siblings(".response_tool").removeClass("tool_hide")
+                        })
+                        //回复事件
+                        $(".response_button").click(function(){
+                            let t =$(this)
+                            let inputValue=t.siblings("input").val()
+                            if(inputValue.trim()==""){
+                                t.siblings("input").attr({"placeholder":"回复内容不能为空哦"})
+                            }else{
+                                let response=new FormData()
+                                t.html("回复中···").attr("disabled")
+                                response.append("relevance_comment_id",t.data().responseId)
+                                response.append("comment",inputValue)
+                                //带上video_id
+                                response.append("video_id",video_id)
+                                $.ajax({
+                                    url:"http://10.10.1.117:8000/add_video_comment/",
+                                    type:"POST",
+                                    data:response,
+                                    contentType:false,
+                                    processData:false,
+                                    success:function(data){
+                                        if(data.code==302){
+                                            //跳转登录页面
+                                            location.replace('/login/?next=/#1')
+                                        }else if(data.code==200){
+                                            t.html("回复")
+                                            t.siblings("input").val("")
+                                            compileComment(page)
+                                        }else{
+                                            //网络链接失败
+                                        }
+                                    },
+                                    error:function(){
+                                        t.html("回复失败")
+                                    }
+                                })
+                            }
+                        })
+                        //点赞逻辑
+                        $(".response_like_inner").click(function(e){
+                            let t=$(e.target)
+                            if(t.hasClass("like_img")){
+                                let comment_id=$(this).data().responseId
+                                //登录状态验证
+                                //是否已经点过赞验证
+                                if(t.data().active){
+                                    //已经点过赞了
+                                    //变为取消点赞
+                                    like_negative_promise.then((img)=>{
+                                        $.ajax({
+                                            url:"http://10.10.1.117:8000/praise/"+comment_id+"/6/",
+                                            type:"get",
+                                            success:function(data){
+                                                if(data.code==302){
+                                                    //跳转至登录页
+                                                    location.replace('/login/?next=/#1')
+                                                }else if(data.code==200){
+                                                    t.next().html(+t.next().html()-1)
+                                                    let newImg=img.cloneNode(true)
+                                                    $(newImg).addClass("like_img").data({active:false})
+                                                    t.replaceWith(newImg)
+                                                }else{
+                                                    //其他错误
+                                                    return
+                                                }
+                                            },
+                                            error:function(e){
+                                                //网络错误
+                                                console.log(e)
+                                            }
+                                        })
+                                    })
+                                }else{
+                                    //更换点赞图片点赞数加1
+                                    like_active_promise.then((img)=>{
+                                        $.ajax({
+                                            url:"http://10.10.1.117:8000/praise/"+comment_id+"/6/",
+                                            type:"get",
+                                            success:function(data){
+                                                if(data.code==302){
+                                                    //跳转至登录页
+                                                    location.replace('/login/?next=/#1')
+                                                }else if(data.code==200){
+                                                    t.next().html(+t.next().html()+1)
+                                                    let newImg=img.cloneNode(true)
+                                                    $(newImg).addClass("like_img").data({active:true})
+                                                    t.replaceWith(newImg)
+                                                }else{
+                                                    //其他错误
+                                                    return
+                                                }
+                                            },
+                                            error:function(e){
+                                                //网络错误
+                                                console.log(e)
+                                            }
+                                        })
+                                    })
+                                }
+                            }else{
+                                return
+                            }
+                        })
+                    }
+                    //绑定发表评论事件
+                    //limit
+                    $(".login_button").click(function(){
+                        let t=$(this)
+                        let response=new FormData()
+                        let comment_place=t.siblings("textarea")
+                        let comment_content=t.siblings("textarea").val()
+                        if(comment_content.trim()===""){
+                            comment_place.val("")
+                            comment_place.attr({"placeholder":"评论内容不能为空哦"})
+                        }else{
+                            t.html("发表中···")
+                            response.append("comment",t.siblings("textarea").val())
+                            response.append("video_id",t.data().videoId)
+                            $.ajax({
+                                url:"http://10.10.1.117:8000/add_video_comment/",
+                                type:"POST",
+                                data:response,
+                                contentType:false,
+                                processData:false,
+                                success:function(data){
+                                    if(data.code==200){
+                                        //发表成功
+                                        page=1
+                                        compileComment(page)
+                                    }else if(data.code==302){
+                                         //跳转登录页面
+                                         location.replace('/login/?next=/#1')
+                                    }else{
+                                        //未处理状态
+                                        return
+                                    }
+                                },
+                                error:function(){
+                                    //网络错误
+                                    return
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+        compileComment(page_local)
+    </script>
+
+    <!-- 自定义滚动条脚本 -->
+    <script>
+        var oContainer = document.getElementById("video_list_container"),
+            oDiv1 = document.getElementById("div1"),
+            oDiv2 = document.getElementById("div2"),
+            oDiv3 = document.getElementById("div3");
+    
+            oDiv3.onmousedown = function(e) {
+                e = e || event;
+    
+                var disY = e.clientY - this.offsetTop;
+    
+                if (oDiv3.setCapture) {
+                    oDiv3.onmousemove = fnMove;
+                    oDiv3.onmouseup = fnUp;
+                    oDiv3.setCapture();
+                } else {
+                    document.onmousemove = fnMove;
+                    document.onmouseup = fnUp;
+                }
+    
+                function fnMove(ev) {
+                    ev = ev || event;
+    
+                    var t = ev.clientY - disY;
+                    setTop(t);
+                };
+    
+                function fnUp() {
+                    this.onmousemove = null;
+                    this.onmouseup = null;
+    
+                    if (this.releaseCapture) {
+                    this.releaseCapture();
+                    }
+                };
+    
+                return false;
+            };
+    
+            function setTop(t) {
+                var down = oDiv2.offsetHeight - oDiv3.offsetHeight;
+    
+                if (t < 0) {
+                    t = 0;
+                } else if (t > down) {
+                    t = down
+                }
+    
+                oDiv3.style.top = t + 'px';
+    
+                var scale = t / down;
+                oDiv1.style.top = -(oDiv1.offsetHeight - oContainer.offsetHeight) * scale + 'px';
+            }
+    
+            addEvent(oDiv1, 'mousewheel', mousewheel);
+            addEvent(oDiv1, 'DOMMouseScroll', mousewheel);
+            addEvent(oDiv2, 'mousewheel', mousewheel);
+            addEvent(oDiv2, 'DOMMouseScroll', mousewheel);
+    
+            function addEvent(obj, oEvent, fn) {
+                if (obj.attachEvent) {
+                    obj.attachEvent('on' + oEvent, fn);
+                } else {
+                    obj.addEventListener(oEvent, fn, false);
+                }
+            }
+    
+            function mousewheel(e) {
+                var ev = e || event,
+                    bDown = false;
+    
+                bDown = ev.wheelDelta ? ev.wheelDelta < 0 : ev.detail > 0;
+    
+                if (bDown) {
+                    setTop(oDiv3.offsetTop + oDiv2.clientHeight/oDiv1.clientHeight*80);
+                } else {
+                    setTop(oDiv3.offsetTop - oDiv2.clientHeight/oDiv1.clientHeight*80);
+                }
+    
+                //FF,绑定事件，阻止默认事件
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+    
+                return false;
+            }
+            if(oDiv1.clientHeight<512){
+                $(oDiv2).hide()
+            }
+
+
+
+
+
+            //底部菜单切换逻辑
+            $('.title_container').click(function(e){
+                let t =$(e.target)
+                let toggleClass=function(){
+                    if(t.hasClass('title_active')){
+                        return
+                    }else{
+                        $(".title_active").removeClass('title_active')
+                        t.addClass('title_active')
+                    }
+                }
+                let toggleContainer=function(selector){
+                    //css("display","none")
+                    $(selector).show("slow").siblings().not(".title_container").hide("slow")
+                }
+                switch(t.text().trim()){
+                    case "本期要点":
+                    toggleClass()
+                    toggleContainer('.point_container')
+                    break;
+                    case "课程目录":
+                    toggleClass()
+                    toggleContainer('.study_list_container')
+                    ;break;
+                    case "讲者介绍":
+                    toggleClass()
+                    toggleContainer('.introduce_container')
+                    break;
+                    case "评论":
+                    toggleClass()
+                    toggleContainer('.comment_container')
+                    break;
+                    case "资料下载":
+                    toggleClass()
+                    toggleContainer('.download_container')
+                    break;
+                }
+            })
+            //视频列表的视频时间与视频状态切换逻辑
+            $(".video_block").mouseenter(function(e){
+                let t=$(this)
+                t.siblings().find(".video_state").hide()
+                t.find(".video_state").show()
+            }).mouseleave(function(e){
+                $(this).find(".video_state").hide()
+            })
+
+
+
+
+            //回复逻辑
+            //展示回复输入区
+            // $(".response_trigger").click(function(e){
+            //     //$(".response_tool").removeClass("tool_hide").addClass("tool_show")
+            //     //$(this).parent().next().removeClass("tool_hide").addClass("tool_show")
+            //     $(this).parent().parent().next().removeClass("tool_hide").addClass("tool_show")
+            // })  
+            // //回复按钮渲染时需要带上唯一标识    
+            // $(".response_button").click(function(e){
+            //     //拿到回复id ：string
+            //     let responseId=this.dataset.responseId
+            //     //拿到输入区内容
+            //     let user_response=$(this).prev().val()
+            //     //服务器响应完毕后前段重新渲染回复区或不刷新直接插入新行
+
+            // })
+    </script>
+    <script>
+        //播放页面逻辑
+        //播放器
+        polyvPlayer({
+        wrap: '#player',
+        width: 1155,
+        height:512,
+        vid:"b1e37a1f1a254b0efa57521495ec8e52_b",
+        speed:false,
+        hideSwitchPlayer:true,
+        // logo: {
+        //     // 宽  默认 'auto'
+        //     logo_width: 200,
+        //     // 高  默认 'auto'
+        //     logo_height: 'auto',
+        //     // logo地址
+        //     logo_url: "/static/images/20171213113454.png",
+        //     // 位置 0,1,2,3,4 (隐藏、左上、右上、左下、右下)
+        //     logo_pos: 4,
+        //     // 跳转链接 (选填)
+        //     logo_link: 'http://www.polyv.net/',
+        //     // 透明度 (0~100)
+        //     logo_alpha: 50,
+        //     //logo偏移（根据左上角为原点的坐标，单位 % ，只在位置1，2生效）
+        //     logoOffset: '40,50'
+        //   }
+        });
+        $('.video_list_button').click(function(){
+            $(this).toggleClass("video_list_button_open")
+            $("#video_list_container").toggleClass("video_list_open")
+        })
+        //开关收藏栏
+        $(".collect_button").click(function(){
+            $(".collection_container").show()
+        })
+        // $(".collection_cancel").click(function(){
+        //     $(".collection_container").removeClass("collection_container").hide()
+        // })
+    </script>
+    {% endblock bodyblock %}

@@ -1,0 +1,414 @@
+{% extends './_base.html' %}
+{% load static %}
+{% block headblock %}
+  <link rel="stylesheet" href="{% static 'css/method.css' %}">
+  <link rel="stylesheet" href="{% static 'css/front_study.css' %}">
+  <style>
+    .min_width_container{
+      color:#333333;
+    }
+    .summary {
+      padding-top: 23px;
+    }
+    .summary .title {
+      margin-bottom: 15px;
+      color:#333333;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 28px;
+    }
+    .summary .title span{
+      color:#666666;
+      font-size: 16px;
+      font-weight: normal;
+    }
+    .summary_main{
+      width:100%;
+    }
+    .summary_main dl{
+      float: left;
+      margin-right: 23px;
+      width: 247px;
+      height: 216px;
+      color:#B2B2B2;
+      font-size: 20px;
+      text-align: center;
+      background-color: #F7FCFF;
+      border-radius:2px;
+      box-shadow:0px 2px 13px 0px rgba(215,233,242,1);
+    }
+    .summary_main dl dt {
+      margin-bottom:15px;
+    }
+    .summary_main dl dd.num {
+      margin-top: 14px;
+      color:#E23E47;
+      font-size: 30px;
+    }
+    .summary .notice{
+      box-sizing: border-box;
+      float: right;
+      padding:24px 40px;
+      width:378px;
+      height:216px;
+      background:rgba(255,255,255,1);
+      border-radius:2px;
+      box-shadow:0px 2px 13px 0px rgba(215,233,242,1);
+    }
+    .summary .notice h3{
+      margin-bottom: 8px;
+      font-size:19px;
+      font-weight:500;
+      text-align: center;
+      line-height: 26px;
+    }
+    .summary .notice ul {
+      padding-left:15px;
+    }
+    .summary .notice li {
+      position: relative;
+      list-style-type : disc;
+      height: 44px;
+      line-height:44px;
+      color:#D8D8D8;
+    }
+    .summary .notice li a{
+      display: block;
+      width:100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow:ellipsis;
+    }
+    .summary .notice li a:hover{
+      color:#1874B4
+    }
+    .summary .notice li .notice_tip{
+      display: none;
+      position: absolute;
+      top:-8px;
+      padding-left:3px;
+      height: 20px;
+      line-height: 20px;
+      color:#fff;
+      font-size: 12px;
+      background:rgba(0,0,0,0.7);
+    }
+    .chart-box{
+      box-sizing: border-box;
+      margin-bottom: 19px;
+      padding:30px;
+      height:588px;
+      background:rgba(255,255,255,1);
+      border-radius:2px;
+      box-shadow:0px 2px 13px 0px rgba(215,233,242,1);
+    }
+    .chart-box .title{
+      margin-bottom: 25px;
+      font-size:22px;
+      font-weight:500;
+      line-height: 30px;
+    }
+    .chart-box .chart div{
+      margin-top:100px;
+      text-align:center;
+    }
+  </style>
+  <script type="text/javascript" src="{% static 'js/javaScripts/echarts.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/javaScripts/countUp.min.js' %}"></script>
+{% endblock headblock %}
+
+{% block bodyblock %}
+  <div id="container">
+    <div class="min_width_container " style="width: 1200px;margin: 0 auto;">
+      <div class="summary">
+        <h2 class="title">总体概况<span>（截止至昨日的关键指标）</span></h2>
+        <div class="summary_main clearfix">
+          <dl>
+            <dt style="margin-top:40px;"><img src="{% static 'images/icon_institutions.png' %}" alt="科研单位" width="60" height="50"></dt>
+            <dd>科研单位</dd>
+            <dd class="num" id="orgsNum">0</dd>
+          </dl>
+          <dl>
+            <dt style="margin-top:45px;"><img src="{% static 'images/icon_resercher.png' %}" alt="科研成员" width="67" height="48"></dt>
+            <dd>科研成员</dd>
+            <dd class="num" id="accountsNum">0</dd>
+          </dl>
+          <dl>
+            <dt style="margin-top:38px;"><img src="{% static 'images/icon_effectiveCases.png' %}" alt="有效病例数" width="46" height="56"></dt>
+            <dd>有效病例</dd>
+            <dd class="num" id="casesNum">0</dd>
+          </dl>
+          <div class="notice" id="notice">
+            <h3>通知公告</h3>
+            <ul>
+              {% for notice in notices %}
+                <li>
+                  {% if notice.need_login == True %}
+                    <a href="{% url 'network_notice' network_id=network.id notice_id=notice.id %}" target="_blank">
+                  {% elif notice.need_login == False %}
+                    <a href="javascript:void(0);" onclick="noticeDetail(event,'{{network.id}}','{{ notice.id }}','{{notice.has_permission}}')" target="_blank">
+                  {% endif %}
+                      {{notice.title}}
+                    </a>
+                    <div class="notice_tip">抱歉，此通知公告只有科研网络成员有权阅读！</div>
+                </li>
+              {% endfor %}  
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="chart-box">
+        <h2 class="title">有效病例数排行榜TOP20</h2>
+        <div class="chart" id="chart1" style="width: 1133px;height:460px;"></div>
+      </div>
+      <div class="chart-box">
+        <h2 class="title">提交阶段数排行榜TOP20</h2>
+        <div class="chart" id="chart2" style="width: 1133px;height:460px;"></div>
+      </div>
+      <div class="chart-box">
+        <h2 class="title">质疑修复率排行榜TOP20</h2>
+        <div class="chart" id="chart3" style="width: 1133px;height:460px;"></div>
+      </div>
+    </div>
+    
+  </div>
+
+  <script>
+    $(function(){
+      getOverviewData();
+      createCasesChart();
+      createEventsChart();
+      createAuditsChart();
+    })
+
+    //根据权限判断是否可以访问公共详情页
+    function noticeDetail(event,network_id,notice_id,notice_has_permission){
+      if (notice_has_permission == "True"){
+        window.location.href = '/networks/'+ network_id +'/notices/'+ notice_id +'/';
+      }else {
+        var current = $(event.currentTarget);
+        current.next(".notice_tip").fadeIn()
+        setTimeout(function(){
+          current.next(".notice_tip").fadeOut()
+        },2000)
+      }
+    }
+
+    //获取总体概括
+    function getOverviewData(){
+      $.get('/api/network/networks/1/overview',function(res){
+        if(res.code === 0){
+          (new CountUp('orgsNum', res.data.org_count)).start();
+          (new CountUp('accountsNum', res.data.account_count)).start();
+          (new CountUp('casesNum', res.data.case_count)).start();
+        }else{
+          alert('网络异常，请稍候重试');
+        }
+      }).fail(function () {
+        console.log('网络异常，请稍候重试');
+      });
+    }
+    //获取有效病例数据并创建图表
+    function createCasesChart(){
+      var _url ='/api/network/networks/1/rank/cases';
+      getChartData('#chart1', _url, function(res,myChart){
+        var yAxisData=[],seriesData=[],ongoingArr=[],completedArr=[];
+        $.each(res.data,function(index,item){
+          yAxisData.push(item.name);
+          ongoingArr.push(item.ongoing);
+          completedArr.push(item.completed);
+        })
+        seriesData.push(ongoingArr.reverse())
+        seriesData.push(completedArr.reverse())
+        createChart(myChart,{
+          legendData:['进行中', '已完成'],
+          yAxisData:yAxisData.reverse(),
+          seriesData:seriesData,
+          seriesColor:['#2EC7C9','#B6A2DE']
+        })
+      })
+    }
+
+    //获取提交阶段数据并创建图表
+    function createEventsChart(){
+      var _url ='/api/network/networks/1/rank/events';
+      getChartData('#chart2', _url, function(res, myChart){
+        var yAxisData=[],seriesData=[],submittedArr=[],auditingArr=[],signoffArr=[];
+        $.each(res.data,function(index,item){
+          yAxisData.push(item.name);
+          submittedArr.push(item.submitted);
+          auditingArr.push(item.auditing);
+          signoffArr.push(item.signoff);
+        })
+        seriesData.push(submittedArr.reverse())
+        seriesData.push(auditingArr.reverse())
+        seriesData.push(signoffArr.reverse())
+        createChart(myChart,{
+          legendData:['已提交', '监查中', '已通过'],
+          yAxisData:yAxisData.reverse(),
+          seriesData:seriesData,
+          seriesColor:['#2EC7C9','#B6A2DE','#5AB1EF']
+        })
+      })
+    }
+
+    //获取质疑修复率数据并创建图表
+    function createAuditsChart(){
+      var _url ='/api/network/networks/1/rank/audits';
+      getChartData('#chart3', _url, function(res, myChart){
+        var yAxisData=[],seriesData=[];
+        $.each(res.data,function(index,item){
+          yAxisData.push(item.name);
+          seriesData.push(item.repair_ratio.replace('%',''));
+        })
+        createChart(myChart,{
+          yAxisData:yAxisData.reverse(),
+          seriesData:seriesData.reverse(),
+        },'audits')
+      })
+    }
+
+    //获取图表数据
+    function getChartData(id, url, callback){
+      var $chart = $(id);
+      var myChart = echarts.init($chart[0]);
+      var _failTxt = '<div>图表数据加载失败，请稍候重试<div>';
+      myChart.showLoading();
+      $.get(url, function(res){
+        if(res.code === 0){
+          (callback && typeof(callback) === "function") && callback(res, myChart);  
+        }else{
+          myChart.hideLoading();
+          $chart.html(_failTxt);
+        }
+      }).fail(function () {
+        myChart.hideLoading();
+        $chart.html(_failTxt);
+      });
+    }
+
+    //创建图表
+    /**
+    * @param {object} myChart - echarts初始化对象
+    * @param {object} data - 图表option需要的部分数据
+        {
+          legendData - 图例数据
+          yAxisData - y轴值
+          seriesData - 系列列表数据
+          seriesColor - 系列列表数据的颜色
+        }
+    * @param {string} chartName - 可选,根据其值判断生成不同表形式
+    */
+    function createChart(myChart,data,chartName){
+      // 指定图表的配置项和数据
+      var option = {
+        tooltip : {
+          trigger: 'axis',
+          axisPointer : {
+            type : 'shadow'
+          }
+        },
+        grid: {
+          top:0,
+          left: '2%',
+          right: '2%',
+          bottom: '6%',
+          containLabel: true
+        },
+        xAxis:  {
+          type: 'value',
+          axisLine:{
+            lineStyle:{
+              color:'#5A949A'
+            }
+          },
+          axisLabel:{
+            color:'#000'
+          },
+          splitLine: {
+            lineStyle:{
+              color:'#5A949A'
+            }
+          },
+        },
+        yAxis: {
+          type: 'category',
+          axisLine:{
+            lineStyle:{
+              color:'#5A949A'
+            }
+          },
+          axisLabel: {
+            color:'#000'
+          },
+          data: data.yAxisData,
+        },
+        series: []
+      };
+
+      if(chartName === 'audits'){
+        option.tooltip.formatter=function(params){
+          var str ='';
+          for(var i=0;i<params.length;i++){
+              str += params[i].name+'<br/>'+params[i].marker+' 质疑修复率:'+params[i].data+'%';
+          }
+          return str;
+        }
+        option.xAxis.axisLabel.formatter=function(val){
+          return val+'%';
+        }
+        option.series.push({
+          type: 'bar',
+          data: data.seriesData,
+          stack: '总量',
+          label: {
+            color:'#000',
+            show: true,
+            position: 'insideRight',
+            distance:0,
+            formatter: '{c}%'
+          },
+          itemStyle: {
+            color:function(d){
+              return "#"+Math.floor(Math.random()*(256*256*256-1)).toString(16);
+            },
+            barBorderRadius: [10, 10, 10, 10]
+          }
+        })
+      }else{
+        option.legend={
+          data: data.legendData,
+          bottom: 0
+        };
+        for(var i = 0; i<data.seriesData.length; i++){
+          option.series.push({
+            name: data.legendData[i],
+            type: 'bar',
+            data: data.seriesData[i],
+            stack: '总量',
+            label: {
+              color:'#000',
+              show: true,
+              position: 'insideRight',
+              distance:0,
+              formatter: function (params) {
+                if (params.value > 0) {
+                  return params.value;
+                } else {
+                  return '';
+                }
+              },
+            },
+            itemStyle: {
+              color: data.seriesColor[i],
+              barBorderRadius: [10, 10, 10, 10]
+            }
+          })
+        }
+      }
+      myChart.hideLoading();
+      // 使用指定的配置项和数据显示图表。
+      myChart.setOption(option);
+    }
+  </script>
+{% endblock bodyblock %}

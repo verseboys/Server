@@ -1,0 +1,131 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/ask_question.css' %}">
+{% endblock headblock %}
+
+{% block bodyblock %}
+    <div id="ask_questions" style="min-width:1200px">
+        <div class="ask_questions">
+            <div class="question-left">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-error"></div>
+                    <div id="ask-key-box" class="hide">
+                        <div class="head">在以下教程可能找到你问题的答案，快去点击查看吧：</div>
+                        <ul></ul>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list">
+                            <li pid="1">研究设计</li>
+                            <li pid="2">统计方法</li>
+                            <li pid="3">样本量计算</li>
+                            <li pid="4">Meta分析</li>
+                            <li pid="5">统计图表</li>
+                            <li pid="6">其他</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="model_btn" style="width: 132px">提交问题</div>
+                    </div>
+                </div>
+            </div>
+            <div class="question-right">
+                <div class="ask-question-title">提问注意事项</div>
+                <div>1. 问题请尽量具体化，研究背景交代清楚，包括但不限于：</div>
+                <ul>
+                    <li>研究问题或假设，例如想探讨肺癌的危险因素；</li>
+                    <li>研究设计和数据来源，如既往病例还是计划招募受试者；</li>
+                    <li>研究的结局指标是什么？</li>
+                    <li>都涉及哪些变量？有没有拟采取的统计分析方法？</li>
+                </ul>
+                <div>2. 避免出现：</div>
+                <ul>
+                    <li>与问题无关的寒暄性词语，例如，各位老师好。</li>
+                    <li>问题不明确，例如，有大神用过xxx统计方法吗？有问题请教。</li>
+                    <li>问题太过宽泛，例如，xxx统计方法是什么，在SPSS里怎么做。</li>
+                </ul>
+                <div>3. 规范提问示例：</div>
+                <ul>
+                    <li>我现在收集了一些肿瘤病例数据，想看看两种药物对于肿瘤患者的预后有没有影响？但是用K-M法绘制的生存曲线存在交叉，这种情况下，用log-rank检验是否还合适？是不是需要换其他方法？</li>
+                    <li>这是关于回顾性队列研究的问题，300例间质性肺疾病的队列，死亡为终点事件。随访时间不足3年也没有达到终点事件的患者，计算总体3年生存率，这部分患者是否应该剔除？</li>
+                </ul>
+                <div>4. 不规范提问示例：</div>
+                <ul>
+                    <li>标准化死亡比加权法怎么用，有没有相关例子？</li>
+                    <li>什么叫固定增量法，应该如何实现？</li>
+                    <li>如何计算相关系数的差异检验？</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+//        if (!$('.login-on')[0]) {
+//            window.location.href = '/login/?next=' + window.location.pathname+'#1'
+//            return
+//        }
+            AJAX({
+                url: '/front_question_category_list/',
+                type: "get",
+                fn: function (data) {
+                    if (data.code !== 200) {
+                        return
+                    }
+                    var list = data.data.question_category_list;
+                    var str = '';
+                    for (var i = 0; i < list.length; i++) {
+                        str += '<li pid="' + list[i].id + '">' + list[i].category + '</li>';
+                    }
+                    $('#model_ask_ques .model_tag_list').html(str);
+                }
+            })
+
+            var post_tag = null
+            $(document).on('click', '.model_tag_list li', function () {
+                $(this).addClass('ask_check_bg').siblings().removeClass('ask_check_bg')
+                post_tag = $(this).attr('pid');
+            })
+            $(document).on('click', '#model_ask_ques .model_btn', function () {
+                if (CKEDITOR.instances.ask_area.getData().replace('<div style="color: #C3C3C3">请仔细阅读右方提问注意事项后再提问</div>', '').replace(new RegExp(' ', 'g'), '').replace(new RegExp('(<[^>]+>)', 'g'), '').replace(new RegExp('\n', 'g'), '').replace(new RegExp('&nbsp;', 'g'), '').length <= 10) {
+                    $('.ask-error').html('请输入问题描述，不少于10个字')
+                } else if (post_tag === null) {
+                    $('.ask-error').html('请选择一个与您问题最相符的标签')
+                } else {
+                  $(".model_btn").css("pointer-events", "none") // 防止重复提交禁止点击
+                  $(".model_btn").css("background", "#E0E4E9") // 置灰
+                  $(".model_btn").css("color", "#FFFFFF")
+                  AJAX({
+                      url: '/front_release_question/',
+                      type: 'post',
+                      data: {
+                          content: "" + CKEDITOR.instances.ask_area.getData(),
+                          question_category_id: post_tag
+                      },
+                      fn: function (data) {
+                        if(data.code ==401 ){
+                            $().user_info_alert_box() 
+                        }else if(data.code ==200 ){
+                                window.location.href = "/recently_questions/0/1/"
+                        }else{
+                            return
+                        }
+                      }
+                  })
+                }
+
+                //  $().alert_box('请输入评论内容')
+            })
+        })
+    </script>
+
+{% endblock bodyblock %}

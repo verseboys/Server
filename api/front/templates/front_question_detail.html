@@ -1,0 +1,699 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block titleblock %}
+   {{ content|safe|striptags}}-医咖会
+{% endblock titleblock %}
+
+{% block head_description %}
+    {{ content|safe|striptags }}
+{% endblock head_description %}
+
+{% block bodyblock %}
+    <div class="bg-write bor-bot-litGrey mar-bot40 min_width_container" xmlns="http://www.w3.org/1999/html" style="padding-top: 106px;">
+        <div class="ans-ques-detil-title large-box">
+            <div class="align-top pad-left10 width-60">
+                {% if question_author_avatar %}
+                    <span class="user-box inline align-top" style="background:url('/images/avatar/{{ question_author_avatar }}')  no-repeat;"></span>
+                {% else %}
+                    <span class="user-box inline align-top"></span>
+                {% endif %}
+            </div>
+            <div class="width-690 pad-right35 mar-Top10 " id="change_title_font" style="margin-top: -5px;">
+                <h2 class="line-height36"></h2>
+                <div class="ans-img-top mar-top23 mar-bot15" id="ans-img-top-click"><img src="" alt=""></div>
+                <div style="display:none" id="content">{{ content|safe }}</div>
+                {% if article %}
+                    <p class='text-rig font-15'>——来自文章: <a href='{{ article_url }}' class='color-link' target='_blank'>{{ article.title }}</a></p>
+                {% endif %}
+                <p class="font-14 line-height30"><span class="ans-ques-img-tag mar-left0"></span><span class="color-link font-14">{{ question_category }}</span><span class="color-link mar-left20 ">{{ question_author }}</span> <span
+                        class="mar-left25 color-better-grey">{{ question_create_time }}</span><span class="right ans-top-img-hide pointer icon_top">收起</span></p>
+            </div>
+            <div class="font-16 align-top">
+                <a href="#span10298"><span class="block width-75 btn-short-blue">评论</span></a>
+                {% if is_attention %}
+                    <span class="inline width-75 btn-short-lig mar-top14 ques_atten_btn pointer" question_id={{ question_id }}>已关注</span>
+                {% else %}
+                    <span class="inline width-75 btn-short-light mar-top14  ques_atten_btn pointer" question_id={{ question_id }} >关注</span>
+                {% endif %}
+                <span class="inline color-liter-grey mar-left20">&nbsp;&nbsp;<i class="color-black" style="font-style: inherit;" id="atten_num_change">{{ attention_count }}</i> &nbsp;关注</span>
+            </div>
+        </div>
+    </div>
+    <div id="questions-pc2" style="   padding-top: 0">
+        <div>
+            <div class="inline ans-ques-left" style="width: 822px">
+                <!--列表-->
+
+                    {% if answers %}
+                        <div class="ans-bot-list mar-bot25">
+                        <ul class="bg-write bor-no-bot">
+                            {% for a in answers %}
+                                <li class="pad-top28" id="{{ a.answer_id }}">
+                                    <div class="inline align-top width-100 text-cen">
+                                        <span class="block text-left pad-left35">
+                                            <span class="user-box inline align-top" style="background: url('/images/avatar/{{ a.answer_user_avatar }}')"></span>
+                                        </span>
+{#                                        <span class="block text-cen pad-left10 mar-top10"><i class="icon-true"></i></span>#}
+{#                                        <span class="block color-green font-13 text-cen pad-left10">已采纳</span>#}
+                                    </div>
+                                    <div class="inline align-top bor-bot1 width-709 " >
+                                        <div class="color-link font-16 line-height20">{{ a.answer_username }}</div>
+                                        <div class="color-title font-15 line-height25 mar-bot15 mar-top10" style="word-break: break-all">{{ a.comment|safe }}</div>
+                                        <div class="color-better-grey align-cen mar-bot25 font-13">
+                                            <span class="inline ">{{ a.create_time }}</span>
+                                            {% if a.child_answers %}
+                                                <span class="inline text-cen mar-left35 pointer relative sico    teal_us" answer_id="{{ a.answer_id }}" answer_name="{{ a.answer_username }}"><i class="icon-rev"></i>{{ a.child_answers_count }}</span>
+                                            {% else %}
+                                                <span class="inline text-cen mar-left35 pointer  teal_us" answer_id="{{ a.answer_id }}" answer_name="{{ a.answer_username }}"><i class="icon-rev"></i>0</span>
+                                            {% endif %}
+                                           {% if a.is_praise %}
+                                               <span class="user-fig mar-left35 pointer" ques_id="{{ a.answer_id }}">已赞 {{ a.praise_answer_count }}</span>
+
+                                           {% else %}
+                                               <span class="user-fig mar-left35 pointer" ques_id="{{ a.answer_id }}"> {{ a.praise_answer_count }}</span>
+
+                                           {% endif %}
+
+                                            {% if a.is_collect %}
+                                            <span class=" inline mar-left35 text-cen pointer collect" ans_id="{{ a.answer_id }}"><i class="icon-star-grey"></i>取消收藏</span>
+                                            {% else %}
+                                                <span class=" inline mar-left35 text-cen pointer collect" ans_id="{{ a.answer_id }}"><i class="icon-star-grey"></i>收藏</span>
+                                            {% endif %}
+{#                                            <span class="inline pointer align-t-b width-75 text-cen"><i class="icon-short-write"></i>修改</span>#}
+                                        </div>
+
+                                        {% if a.child_answers %}
+                                            <div class="width-639 bor-rad2 bg-f9 sicoUl mar-bot25 ">
+                                        {% else %}
+                                            <div class="width-639 bor-rad2 bg-f9 hide sicoUl mar-bot25 ">
+                                        {% endif %}
+
+                                        {% if a.child_answers %}
+                                            <ul>
+                                                {% for c in a.child_answers %}
+
+                                                      <li class="pad-1520 bor-bot1">
+                                                          <p class="font-15 line-height25 color-title">{{ c.comment}}</p>
+                                                          <p class="color-better-grey align-cen mar-top10 font-13">
+                                                              <span class="color-link">{{ c.answer_username }}</span>
+                                                              {% if c.relay_to %}
+                                                                回复 <span class="color-link">{{ c.relay_to }}</span>
+                                                              {% endif %}
+                                                              <span class="mar-left35">{{ c.create_time }}</span>
+                                                              <span class="inline width-60 text-cen pointer" answer_id="{{ a.answer_id }}" answer_user_id ="{{ c.user_id }} "answer_name="{{c.answer_username }}"><i class=" icon-tran"></i></span>
+                                                          </p>
+                                                      </li>
+                                                {% endfor %}
+                                            </ul>
+
+                                            {% if a.pages and a.pages|length > 1 %}
+                                                <ul class="item_list mar-top23">
+                                                    {% if a.answer_id == a.current_answer_id %}
+                                                      {% if a.child_page_count > 5 %}
+                                                          <li class="prev"><a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=a.current_child_page|add:-1 %}#{{ a.answer_id }} ">&nbsp;</a>
+                                                          </li>
+                                                      {% endif %}
+                                                      {% for page in a.pages %}
+                                                        {% if page == a.current_child_page %}
+                                                           <li class="checked">{% else %}<li>
+                                                        {% endif %}
+                                                        {% if a.child_page_count > 1 %}
+                                                          <a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=page %}#{{ a.answer_id }}">{{ page }}</a></li>
+                                                        {% endif %}
+                                                        {% if a.child_page_count > 6 %}
+                                                            <li class="item">...</li>
+                                                            <li><a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=a.child_page_count %}#{{ a.answer_id }}">{{ a.child_page_count }}</a></li>
+                                                        {% endif %}
+                                                      {% endfor %}
+                                                      {% if a.child_page_count > 5 %}
+                                                          <li class="next"><a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=a.current_child_page|add:1 %}#{{ a.answer_id }}">&nbsp;</a>
+                                                          </li>
+                                                      {% endif %}
+                                                    {% else %}
+                                                      {% if a.child_page_count > 5 %}
+                                                          <li class="prev"><a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=a.current_child_page|add:-1 %}#{{ a.answer_id }}">&nbsp;</a>
+                                                          </li>
+                                                      {% endif %}
+                                                      {% for page in a.pages %}
+                                                          {% if page == 1 %}
+                                                             <li class="checked">{% else %}<li>
+                                                          {% endif %}
+                                                          {% if a.child_page_count > 1 %}
+                                                             <a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=page %}#{{ a.answer_id }}">{{ page }}</a></li>
+                                                          {% endif %}
+                                                          {% if a.child_page_count > 6 %}
+                                                              <li class="item">...</li>
+                                                              <li><a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=a.child_page_count %}#{{ a.answer_id }}">{{ a.child_page_count }}</a></li>
+                                                          {% endif %}
+                                                      {% endfor %}
+                                                      {% if a.child_page_count > 5 %}
+                                                          <li class="next"><a href="{% url 'front_question_detail' question_id=question_id answer_id=a.answer_id parent_page=current_parent_page  child_page=a.current_child_page|add:1 %}#{{ a.answer_id }}">&nbsp;</a>
+                                                          </li>
+                                                      {% endif %}
+                                                    {% endif %}
+                                                </ul>
+                                            {% endif %}
+                                        {% endif %}
+                                        <div class="mar-top20 pad-bot22-left18"><div class=" "><textarea  placeholder="请输入评论" class="align-top ask-textarea"></textarea><span class="inline align-bot ask-btn pointer" answer_id="{{ a.answer_id }}" answer_name="{{ a.user_id }}"
+               answer_user_id=0>提交评论</span></div></div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                            {% if parent_pages and parent_pages|length > 1 %}
+                                <div class="text-cen">
+                                    <ul class="pagination—list">
+                                        {% if parent_page_count < 5 %}
+                                            {% for page in parent_pages %}
+                                                {% if page == current_parent_page %}
+                                                    <li class="active">{% else %}
+                                                    <li>
+                                                {% endif %}
+                                            <a href="{% url 'front_question_detail' question_id=question_id answer_id=0 parent_page=page child_page=1 %}">{{ page }}</a></li>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% if current_parent_page > 1 %}
+                                                <li class="prev"><a rel="prev" href="{% url 'front_question_detail' question_id=question_id answer_id=0 parent_page=current_parent_page|add:-1 child_page=1 %}">上一页</a></li>
+                                            {% endif %}
+
+                                            {% if current_parent_page > 4 %}
+                                                <li><a href="{% url 'front_question_detail' question_id=question_id answer_id=0 parent_page=1 child_page=1 %}">1</a></li>
+                                                <li class="disabled"><span>…</span></li>
+                                            {% endif %}
+
+                                            {% for page in parent_pages %}
+                                                {% if page == current_parent_page %}
+                                                    <li class="active">{% else %}
+                                                    <li>
+                                                {% endif %}
+                                            <a href="{% url 'front_question_detail' question_id=question_id answer_id=0 parent_page=page child_page=1 %}">{{ page }}</a></li>
+                                            {% endfor %}
+
+                                            {% if parent_page_count > 6 and current_parent_page|add:2 < parent_page_count %}
+                                                <li class="disabled"><span>…</span></li>
+                                            {% endif %}
+                                            {% if current_parent_page > 0 and current_parent_page < parent_page_count %}
+                                                <li class="next"><a rel="next" href="{% url 'front_question_detail' question_id=question_id answer_id=0 parent_page=current_parent_page|add:1 child_page=1 %}">下一页</a></li>
+                                            {% endif %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+            <!--写答案-->
+            <div class="ans-ques-ans inline" id="span10298">
+                {% if front_user %}
+                    <p>写答案</p>
+                    <div class="ans-text-area">
+                        <div id="common_content">
+                            <textarea id="ask_ar_2" name="editor"></textarea>
+                            <input id="yika_img_up_2" type="file" style="display:none;" accept="image/*"/>
+                        </div>
+                    </div>
+                    <div class=" row text-rig">
+                        <span class="inline text-cen ans-ques-btn pointer">提交</span>
+                    </div>
+
+                {% else %}
+                    <div class="no_login_box" id="commit_link">
+                        <div class="no_login_img"></div>
+                        <div class="text">您尚未登录，请</div>
+                        <a class="login_log">登录</a>
+                        <div class="text">后评论</div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            </div>
+            <div class="inline ans_ques_right">
+                <div class="ans-ques-user-top bg-write bor-ques-right">相关问题 </div>
+                <ul class="ans-ques-detile-list">
+                </ul>
+                <div class="share-code">
+                    <img src="{% static 'images/yikacode_v2.png' %}" alt="医咖会"><img src="{% static 'images/yikacode2_v2.png' %}" alt="扫码关注医咖会">
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        siccess: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+
+        var post_tag = null
+        tag_class([
+            {
+                el: '.head-nav .header-bot li',
+                cl: 'color-nav'
+            },
+            {
+                el: ".ans-top-list li",
+                cl: 'checked'
+            },
+            {
+                el: '#model_ask_ques .model_tag_list li',
+                cl: 'ask_check_bg',
+                fn: function (e) {
+                    post_tag = $(e.target).attr('pid');
+                    (CKEDITOR.instances.ask_area.getData().length > 0 && post_tag !== null) ?
+                            $('#model_ask_ques .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('#model_ask_ques .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                }
+            },
+            {
+                el: '.masg_list_top div',
+                cl: "checked"
+            },
+            {
+                el: '.ans_ques_right .ans-ques-user-top .right span',
+                cl: 'color-ori',
+                fn: function (e) {
+                    time_id = $(e.target).attr('type')
+                    active_users_ranking()
+                }
+            }
+        ])
+
+
+        var change_title_font = $('#change_title_font');
+        var str = $('#content').html();
+        var sliceStr = '', afterStr = '';
+        var imgurl = ''
+        $('#ans-img-top-click img').attr('src', imgurl);
+        if (new RegExp('(<[^>]+>)', 'g').test(str)) {
+            if (new RegExp('(<img[^>]+>)', 'g').test(str)) {
+                sliceStr = str.replace(/(<[^>]+>)/g, '');
+                afterStr = '<span class="inline color-link ans-img-top-click pointer">&nbsp;&nbsp;显示全部</span>';
+            } else if(new RegExp('(<a[^>]+>)', 'g').test(str)){
+                sliceStr = str.replace(/(<[^>]+>)/g, '');
+                afterStr = '<span class="inline color-link ans-img-top-click pointer">&nbsp;&nbsp;显示全部</span>';
+            }else{
+
+                sliceStr = str.replace(/(<[^>]+>)/g, '');
+                if (getBt(str) > 150) {
+                    afterStr = '<span class="inline color-link ans-img-top-click pointer">&nbsp;&nbsp;显示全部</span>';
+                } else {
+                    afterStr = '';
+                }
+
+            }
+        }else if ( getBt(str) > 150) {
+            sliceStr=str;
+            afterStr = '<span class="inline color-link ans-img-top-click pointer">&nbsp;&nbsp;显示全部</span>';
+        } else {
+            sliceStr = str;
+            afterStr = '';
+        }
+        if (getBt(sliceStr) > 150) {
+            sliceStr = autoAddEllipsis(sliceStr, 150)
+            change_title_font.find('h2').html('<span class="ans-title-left">' + sliceStr + '</span>' + afterStr)
+        } else if(getBt(sliceStr) <= 86){
+            if (new RegExp('(<a[^>]+>)', 'g').test(str)) {
+                change_title_font.find('h2').html('<span class="ans-title-left" style="font-size:20px">' + str + '</span>' )
+            }else{
+                change_title_font.find('h2').html('<span class="ans-title-left" style="font-size:20px">' + sliceStr + '</span>' + afterStr)
+            }
+        } else {
+            change_title_font.find('h2').html('<span class="ans-title-left">' + sliceStr + '</span>' + afterStr)
+        }
+
+        $(document).ready(function () {
+            AJAX({
+                url: '/hold_questions/0/1/',
+                type: "get",
+                fn: function (data) {
+                    if (data.code !== 200) {
+                        return
+                    }
+
+                    var list = data.data.questions_list;
+                    var str = '';
+                    for (var i = 0; i < 6&&i<list.length; i++) {
+                        str+='<li><a href="/question_detail/'+ list[i].question_id+'/1/1/1/" class="color-link">'+autoAddEllipsis(list[i].content.replace(/(<[^>]+>)/g, ''), 60) +'<span class="align-cen color-liter-grey  mar-left10">&nbsp;'+list[i].answers_count+'个回答</span></a></li>'
+                    }
+                    $('.ans_ques_right .ans-ques-detile-list').html(str)
+
+                }
+            })
+            $(document.body).on('click', '.ans-img-top-click', function () {
+                change_title_font.find('.ans-title-left').html(str);
+                if (!!imgurl) {
+                    $('#ans-img-top-click').css('display', 'block')
+                    var height = $('#ans-img-top-click img').height();
+                    $('#ans-img-top-click').css(
+                            {
+                                'height': height + 15 + 'px',
+                                'marginTop': '23px',
+                                'marginBottom': '15px'
+                            });
+                }
+                $(this).remove();
+                $('.ans-top-img-hide').show()
+                return false
+            });
+            $(document.body).on('click', '.ans-top-img-hide', function () {
+                if (!!imgurl) {
+                    $('#ans-img-top-click').css({
+                        'height': '0px',
+                        'marginTop': '0',
+                        'marginBottom': '0'
+                    });
+                }
+                change_title_font.find('.ans-title-left').html(sliceStr).after(afterStr);
+                $(this).hide();
+                $('.ans-img-top-click').show();
+                return false
+            });
+        })
+        var answer, relay;
+        var ajax_data={}
+
+        $(document.body).on('click', '.teal_us', function () {
+
+            $(this).parents('li').find('textarea').attr('placeholder','请输入评论')
+            $(this).parents('li').find('textarea').val('')
+            $(this).parents('li').find('.ask-btn').attr('answer_id', $(this).attr('answer_id'))
+            $(this).parents('li').find('.ask-btn').attr('answer_name', relay)
+            $(this).parents('li').find('.ask-btn').attr('answer_user_id', null)
+            var str='';
+            $(this).html().replace(/[0-9]/g,function (item) {
+                str+=item;
+                return item
+            })
+            if (!$(this).hasClass('sico')) {
+                $(this).addClass('relative sico');
+                $(this).parent().next('.sicoUl').removeClass('hide')
+            } else if(parseFloat(str)<=0) {
+                $(this).removeClass('relative sico');
+                $(this).parent().next('.sicoUl').addClass('hide')
+            }
+            $(this).addClass('');
+            return false
+        })
+        $(document.body).on('click', '.sicoUl .color-better-grey span.pointer', function () {
+            answer = $(this).attr('answer_id')
+            relay = $(this).attr('answer_name');
+            $(this).parents('li').find('textarea').attr('placeholder', '回复'+ relay)
+            $(this).parents('li').find('textarea').val('')
+            $(this).parents('li').find('.ask-btn').attr('answer_id', answer)
+            $(this).parents('li').find('.ask-btn').attr('answer_name', relay)
+            $(this).parents('li').find('.ask-btn').attr('answer_user_id', $(this).attr('answer_user_id'))
+return false
+        })
+
+
+        let noImgReg = /<img[^>]*>/g
+
+        let noOtherLabel = /<strong>|<\/strong>|<em>|<\/em>|<u>|<\/u>|<i>|<\/i>|<p>|<\/p>|<a[^>]*>|<\/a>/g
+
+        let getCommentLength = function(str){
+            str = str.replace(/\s+|&nbsp;/g,'')
+            str = str.replace(noImgReg,'')
+            str = str.replace(noOtherLabel,'')
+            return str.length
+        }
+        var isAnswerReleasing = false;
+        $(document).on('click','.ans-ques-btn',function () {
+            if(isAnswerReleasing){return}
+            if (!$('.login-on')[0]) {
+                //check_type(1)
+                window.location.href = '/login/?next=' + window.location.pathname+'#1'
+                return
+            }
+            let commentLength = getCommentLength(CKEDITOR.instances.ask_ar_2.getData())
+            if (commentLength > 0) {
+                isAnswerReleasing = true;
+                $(".ans-ques-btn").css("background", "#E0E4E9").css("color", "#FFFFFF");
+                /*暂时不限制答复的字符数
+                if(commentLength < 11){
+                    $().alert_box(`请输入10字以上回答，<div style="height:10px"></div>以便大家更好理解和解答~`)
+                    return
+                }*/
+
+                AJAX({
+                    url: '/front_add_answer/',
+                    type: 'post',
+                    data: {
+                        comment: "" + CKEDITOR.instances.ask_ar_2.getData(),
+                        question_id: {{ question_id }}
+                    },
+                    fn: function (data) {
+                        if (data.code !== 200) {
+                            if(data.message=='请先到个人中心补充完善个人资料信息!'){
+                                //定制化模态框
+                                $().user_info_alert_box() 
+                            }else{
+                                $().alert_box(data.message)
+                            }
+                            return
+                        }
+                        window.location.reload()
+                    }
+                })
+            }else {
+                $().alert_box('请输入评论内容')
+            }
+            return false
+        })
+        $(document).on('click','.ask-btn',function () {
+            if (!$('.login-on')[0]) {
+              //  check_type(1)
+                window.location.href = '/login/?next=' + window.location.pathname+'#1'
+                return
+            }
+            var _self=$(this);
+            ajax_data.comment= _self.prev().val();
+            ajax_data.question_id={{ question_id }};
+            ajax_data.relevance_answer = $(this).attr('answer_id');
+            ajax_data.relay_to = $(this).attr('answer_user_id')
+            if (_self.prev().val()) {
+                AJAX({
+                    url: '/front_add_answer/',
+                    type: 'post',
+                    data: ajax_data,
+                    fn: function (data) {
+                        if (data.code !== 200) {
+                            $().alert_box(data.message)
+                            return
+                        }
+                        window.location.reload()
+                    }
+                })
+            }else{
+                $().alert_box('请输入评论内容')
+            }
+        })
+        $(document).on('click','.ques_atten_btn',function () {
+            if (!$('.login-on')[0]) {
+              //  check_type(1)
+                window.location.href = '/login/?next=' + window.location.pathname+'#1'
+                return
+            }
+            var _self=$(this);
+            var n=$(this).attr('question_id')
+
+                AJAX({
+                    url: '/attention_question/'+n+'/',
+                    type: 'get',
+                    data: '',
+                    fn: function (data) {
+
+                        if (data.code !== 200) {
+                            $().alert_box(data.message)
+                            return
+                        }else{
+                            var mes=data.data.is_attention;
+                            if(mes===1){
+                                _self.removeClass('btn-short-light').addClass('btn-short-lig').html('已关注')
+                            }else {
+                                _self.addClass('btn-short-light').removeClass('btn-short-lig').html('关注');
+                            }
+                            $('#atten_num_change').html(data.data.attention_count)
+                        }
+                    }
+                })
+
+        })
+        $(document).on('click', '.ask_open', function (e) {
+
+            if (!$('.login-on')[0]) {
+              //  check_type(1)
+                window.location.href = '/login/?next=' + window.location.pathname+'#1'
+                return
+            }
+            AJAX({
+                url: '/front_question_category_list/',
+                type: "get",
+                fn: function (data) {
+                    if (data.code !== 200) {
+                        return
+                    }
+                    var list = data.data.question_category_list;
+                    var str = '';
+                    for (var i = 0; i < list.length; i++) {
+                        str += '<li pid="' + list[i].id + '">' + list[i].category + '</li>';
+                    }
+                    $('#model_ask_ques .model_tag_list').html(str);
+                    check_type(10)
+                }
+            })
+
+
+        })
+
+        $(document.body).on('click', '.collect', function () {
+            if (!$('.login-on')[0]) {
+                //check_type(1)
+                window.location.href = '/login/?next=' + window.location.pathname+'#1'
+                return
+            }
+            var self = $(this)
+            var s = $(this).html();
+            var st = s.replace(new RegExp('(<[^>]+>)', 'g'), '');
+            var ans = $(this).attr('ans_id');
+            var tag = $(this).attr('ans_tag');
+            if (st === '收藏') {
+                box.user.tar = self
+                $.ajax({
+                    url: '/user_collect_category_list/',
+                    type: 'get',
+                    success: function (data) {
+                        box.collect_lists = data.data.user_collect_category_list;
+                        box.user.ans_id = ans
+                        check_type(7);
+
+                        if (data.code === 200) {
+
+                        }
+                    }
+                })
+            } else {
+                AJAX({
+                    url: '/collect_answer/' + ans + '/0/' ,
+                    type: 'get',
+                    data: {},
+                    fn: function () {
+                        self.html(s.replace('取消收藏', '收藏'));
+                    }
+                })
+
+            }
+        })
+
+
+    </script>
+
+{% endblock bodyblock %}
+

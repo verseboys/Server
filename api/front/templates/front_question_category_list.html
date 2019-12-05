@@ -1,0 +1,320 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% load  custom_filter %}
+{% block titleblock %}医咖会-研究问答{% endblock titleblock %}
+{% block bodyblock %}
+    <div id="questions-pc2">
+        {% if category_id == 0 %}
+            <div class="ask-ques row" style="display: none">
+                <div>
+                    <p>{{ question_category }}</p>
+                    <div><span class="ask_close ">知道了，退下吧</span> <span class="ask_open">等不及了，马上提问</span></div>
+                </div>
+                <div>
+                    <img src="{% static 'images/ask_ques.svg' %}" alt="">
+                </div>
+            </div>
+        {% else %}
+            {% if question_category %}
+                <div class="tag-box mar-top23">
+                    <h3>{{ title }}</h3>
+                    <div>{{ question_category }}</div>
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if category_id == 0 %}
+            <div style="margin-top: 54px">
+         {% else %}
+            <div>
+        {% endif %}
+            <div class="inline ans-ques-left">
+                <div class="ans-top-list bor-1">
+                    <ul>
+                        <li><a href="{% url 'front_recently_questions' category_id=category_id page=1 %}">最新问答</a></li>
+                        <li><a href="{% url 'front_hold_questions' category_id=category_id page=1 %}">热门问答</a></li>
+                        <li><a href="{% url 'front_wait_relay_questions' category_id=category_id page=1 %}">等待回答</a></li>
+                    </ul>
+                </div>
+                <!--列表-->
+                <div class="ans-bot-list bor-no-bot">
+                   {% if questions_list %}
+                       {% for q in questions_list %}
+                           {% if q.answers_count %}
+                               <div class="ans-ques-list" id="{{ q.question_id }}" link="{% url 'front_question_detail' question_id=q.question_id answer_id=0 parent_page=1 child_page=1 %}">
+                                   <div class="inline ans-ques-z bg-link">
+                                       <span class="block line-height25 ">{{ q.answers_count }}</span>
+                                       <span class="block">回答</span>
+                                   </div>
+                                   <div class="inline bor-bot1 ans-ques-list-right">
+                                       <p class="ans-ques-list-title"><span>{{ q.recently_answer_username }}</span>&nbsp;&nbsp;<span>{{ q.recently_answer_time }}</span>回复了这个问题</p>
+                                       <p class="ans-ques-list-content">{% if q.top %}
+                                           <span style="display: inline-block;color:#fff;line-height: 17px;margin-right: 10px;vertical-align: middle;">
+<svg width="28px" height="16px" viewBox="0 0 28 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="9.问答" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="问答-首页" transform="translate(-255.000000, -607.000000)">
+            <g id="Group-8" transform="translate(255.000000, 607.000000)">
+                <path d="M3,1.72701359e-15 L10.6882045,1.72701359e-15 L14,0 L16.4253055,1.72701359e-15 L25,1.72701359e-15 L25,1.33226763e-15 C26.6568542,1.02790844e-15 28,1.34314575 28,3 L28,13 L28,13 C28,14.6568542 26.6568542,16 25,16 L2.40475579,16 L2.40475579,16 C1.07664584,16 1.78633436e-15,14.9233542 4.4408921e-16,13.5952442 L3.3606751e-16,11.1904884 L0,8 L3.3606751e-16,6.84130136 L3.3606751e-16,3 L0,3 C-2.02906125e-16,1.34314575 1.34314575,1.63662682e-15 3,1.33226763e-15 Z"
+                      id="Rectangle-13" fill="#D84A33"></path>
+                <text id="顶" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" letter-spacing="1.111111" fill="#FFFFFF">
+                    <tspan x="8" y="13">顶</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg></span>{% endif %}<span>{{ q.content|content_img_filter|safe|striptags|truncatechars:'40'}}</span>
+                                           <a href="{% url 'front_recently_questions' category_id=q.question_category_id page=1 %}" class="ques_tainal_link">
+                                             <span class="ans-ques-img-tag"></span><span class="color-link font-14">{{ q.category }}</span>
+                                            </a>
+                                       </p>
+                                   </div>
+                               </div>
+                           {% else %}
+                               <div class="ans-ques-list" id="{{ q.question_id }}" link="{% url 'front_question_detail' question_id=q.question_id answer_id=0 parent_page=1 child_page=1 %}">
+                                   <div class="inline ans-ques-z bg-ori">
+                                       <span class="block line-height25">0</span>
+                                       <span class="block">回答</span>
+                                   </div>
+                                   <div class="inline bor-bot1 ans-ques-list-right">
+                                       <p class="ans-ques-list-title"><span>{{ q.username }}</span>&nbsp;&nbsp;<span>{{ q.create_time }}</span>提问了这个问题</p>
+                                       <p class="ans-ques-list-content">{% if q.top %}
+                                           <span style="display: inline-block;color:#fff;line-height: 17px;margin-right: 10px;vertical-align: middle;">
+<svg width="28px" height="16px" viewBox="0 0 28 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="9.问答" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="问答-首页" transform="translate(-255.000000, -607.000000)">
+            <g id="Group-8" transform="translate(255.000000, 607.000000)">
+                <path d="M3,1.72701359e-15 L10.6882045,1.72701359e-15 L14,0 L16.4253055,1.72701359e-15 L25,1.72701359e-15 L25,1.33226763e-15 C26.6568542,1.02790844e-15 28,1.34314575 28,3 L28,13 L28,13 C28,14.6568542 26.6568542,16 25,16 L2.40475579,16 L2.40475579,16 C1.07664584,16 1.78633436e-15,14.9233542 4.4408921e-16,13.5952442 L3.3606751e-16,11.1904884 L0,8 L3.3606751e-16,6.84130136 L3.3606751e-16,3 L0,3 C-2.02906125e-16,1.34314575 1.34314575,1.63662682e-15 3,1.33226763e-15 Z"
+                      id="Rectangle-13" fill="#D84A33"></path>
+                <text id="顶" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" letter-spacing="1.111111" fill="#FFFFFF">
+                    <tspan x="8" y="13">顶</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg></span>{% endif %}<span>{{ q.content|content_img_filter|safe|striptags|truncatechars:'40'}}</span>
+                                           <a href="{% url 'front_recently_questions' category_id=q.question_category_id page=1 %}" class="ques_tainal_link"><span class="ans-ques-img-tag"></span><span class="color-link font-14">{{ q.category }}</span></a>
+                                       </p>
+                                   </div>
+                               </div>
+                           {% endif %}
+                       {% endfor %}
+                   {% endif %}
+                </div>
+
+            {% if pages and pages|length > 1%}
+                <div class="text-cen">
+                    <ul class="pagination—list">
+                        {% comment %}总页数小于5页的显示方式和大于5页切换另外的显示方式{% endcomment %}
+                        {% if page_count < 5 %}
+                            {% for page in pages %}
+                                {% if page == current_page %}
+                                    <li class="active">{% else %}
+                                    <li>
+                                {% endif %}
+                            <a href="{% url index category_id=category_id page=page %}">{{ page }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                            {% if current_page > 1 %}
+                                <li class="prev"><a rel="prev" href="{% url index category_id=category_id page=current_page|add:-1 %}">上一页</a></li>
+                            {% endif %}
+
+                            {% if current_page > 4 %}
+                                <li><a href="{% url index category_id=category_id page=1 %}">1</a></li>
+                                <li class="disabled"><span>…</span></li>
+                            {% endif %}
+                            
+                            {% for page in pages %}
+                                {% if page == current_page %}
+                                    <li class="active">{% else %}
+                                    <li>
+                                {% endif %}
+                            <a href="{% url index category_id=category_id page=page %}">{{ page }}</a></li>
+                            {% endfor %}
+                               
+                            {% if page_count > 6 and current_page|add:2 < page_count %}
+                                <li class="disabled"><span>…</span></li>
+                            {% endif %}
+                            {% if current_page > 0 and current_page < page_count %}
+                                <li class="next"><a rel="next" href="{% url index category_id=category_id page=current_page|add:1 %}">下一页</a></li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+
+
+            </div>
+            <div class="inline ans_ques_right">
+                <div style="box-shadow: 0 2px 4px 0 rgba(188, 193, 204, 0.5);">
+                    <div class="ans-ques-user-top">医咖会大咖榜 <span class="right">  <span class="color-ori" type="0">全部</span>·<span type="2">本月</span>·<span type="1">本周</span></span></div>
+                    <ol class="ans-ques-user-list"></ol>
+                </div>
+                <div class="share-code">
+                    <img src="{% static 'images/yikacode_v2.png' %}" alt="医咖会"><img src="{% static 'images/yikacode2_v2.png' %}" alt="扫码关注医咖会">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        {% if category_id == 0 %}
+            if (!sessionStorage.getItem('ask_close')) {
+                $('#questions-pc2 .ask-ques').css('display', 'block')
+                $('#questions-pc2 .ask-ques').next().css('margin-top', '0')
+            }
+
+        {% endif %}
+        if (!sessionStorage.getItem('ask_close')) {
+            $('#questions-pc2 .ask-ques').css('display', 'block')
+            $('#questions-pc2 .ask-ques').next().css('margin-top', '0')
+        }
+    ~function () {
+       var ul=window.location.href;
+        if(ul.indexOf('recently_questions')>0){
+            $('.ans-top-list li').eq(0).addClass('checked').find('a').css('color','#4990e2')
+        }else if(ul.indexOf('hold_questions') > 0){
+            $('.ans-top-list li').eq(1).addClass('checked').find('a').css('color', '#4990e2')
+        }else if(ul.indexOf('wait_relay_questions') > 0){
+            $('.ans-top-list li').eq(2).addClass('checked').find('a').css('color', '#4990e2')
+        }else {
+            $('.ans-top-list li').eq(0).addClass('checked').find('a').css('color', '#4990e2')
+        }
+        var ary = window.location.href.split('/');
+        for (var i = 0; i < ary.length; i++) {
+            if (ary[i] === 'recently_questions' || ary[i] === 'hold_questions' || ary[i] === 'wait_relay_questions') {
+                $('#header-pc2 .header-bot a').eq(ary[i+1]).addClass('color-nav').siblings().removeClass('color-nav')
+            }
+        }
+    }()
+        //    window.coollect_list
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                }
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                }
+            },
+{#            computed: {#}
+{#                check_typ: function () {#}
+{#                    console.log(1)#}
+{#                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');#}
+{#                }#}
+{#            }#}
+        })
+
+        var post_tag = null
+        tag_class([
+            {
+                el: '#model_ask_ques .model_tag_list li',
+                cl: 'ask_check_bg',
+                fn: function (e) {
+                    post_tag = $(e.target).attr('pid');
+                    (CKEDITOR.instances.ask_area.getData().length > 0 && post_tag !== null) ?
+                            $('#model_ask_ques .model_btn').css('background-color', '#37aef2').css('cursor', 'pointer') : $('#model_ask_ques .model_btn').css('background-color', '#ccc').css('cursor', 'no-drop')
+                }
+            },
+            {
+                el: '.masg_list_top div',
+                cl: "checked"
+            },
+            {
+                el: '.ans_ques_right .ans-ques-user-top .right span',
+                cl: 'color-ori',
+                fn: function (e) {
+                    time_id = $(e.target).attr('type')
+                    active_users_ranking()
+                }
+            }
+        ])
+
+        $(document.body).on('click', '.ask_close', function () {
+            sessionStorage.setItem('ask_close', 'false');
+            $('#questions-pc2 .ask-ques').css({
+                "height": 0,
+                "padding-top": 0,
+                "min-height": 0,
+                "padding-bottom": 0
+            })
+        })
+        $(document.body).on('click', '.model_close', function () {
+            $(this).parent().parent().parent().hide()
+        })
+
+
+
+        $(document.body).on('click', '#questions-pc2 .ans-ques-list', function () {
+            window.location.href = $(this).attr('link')
+        })
+
+        //排行榜
+        var category_id = {{ category_id }}
+        var time_id = 0 //全部=0 本月=2 本周=1
+        active_users_ranking()
+        function active_users_ranking() {
+            AJAX({
+                url: '/active_users_ranking/'+category_id+'/'+time_id+'/',
+                type: 'get',
+                data: '',
+                fn: function (data) {
+                    if(data.code===200) {
+                        data=data.data;
+                        var str = '';
+                        for(var i=0;i<data.length;i++) {
+                            var im
+                            if(data[i].avatar){
+                                im='/images/avatar/'+ data[i].avatar
+                            }else {
+                                im='{% static "images/user_static.svg" %}'
+                            }
+                            str+='<li><span class="ans-user-list-num">'+ (i+1)+'.</span><span class="user-img" style="background: url('+im+') no-repeat;background-size: cover;"></span> '+data[i].username+'<span class="ans-ques-num">'+data[i].active_count +'</span></li>';
+                        }
+                        $('.ans_ques_right .ans-ques-user-list').html(str)
+                    }
+               }
+//                , error: function () {
+//                if(data.code===200) {
+//                    data=data.data.articles;
+//                    var str = '';
+//                    for(var i=0;i<data.length;i++) {
+//                        str+='<li><a href="'+ +'" class="color-link">'+ +'<span class="inline align-cen color-liter-grey  mar-left10">' + +'个回答</span></a></li>'
+//                    }
+//                    $('.ans_ques_right .ans-ques-detile-list').html(str)
+//                }
+//                }
+            })
+        }
+    </script>
+
+{% endblock bodyblock %}

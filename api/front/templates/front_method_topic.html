@@ -1,0 +1,550 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block titleblock %}热门专题-医咖会{% endblock titleblock %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+    <style>
+        #header-pc2 {
+            /*position: absolute;*/
+        }
+
+        .methods-index-title {
+            border-left: none;
+            border-right: none;
+            border-top: none;
+        }
+
+        .methods-others-list {
+            border-left: none;
+            border-right: none;
+        }
+
+        #container_body {
+            background: #fff;
+        }
+
+        .methods-content-head {
+            min-width: 1200px;
+            padding-left: 0;
+            padding-right: 0;
+            width: auto;
+            overflow: hidden;
+        }
+
+        .RoundRobin_img li {
+            overflow: hidden;
+            padding-bottom: 10px;
+            padding-top: 15px;
+            opacity: .7;
+            transition: opacity .3s ease;
+        }
+
+        .item_content_box {
+            margin-left: 20px;
+            float: left;
+            width: 340px;
+            height: 410px;
+            border-radius: 6px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px 0 #bcc1cc;
+            transition: all .3s ease;
+            position: relative;
+            top: 0;
+        }
+
+        .RoundRobin_img li a:first-child .item_content_box {
+            margin-left: 49px;
+        }
+
+        .item_content_box_img {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .item_content_box .item_content_box_img img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .item_content_box .item_content_box_tit {
+            height: 27px;
+            line-height: 27px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: keep-all;
+            font-family: PingFangSC;
+            font-size: 20px;
+            font-weight: 500;
+            text-align: left;
+            color: #4a4a4a;
+            margin: 24px 25px 16px;
+        }
+
+        .item_content_box .item_content_box_con {
+            position: relative;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            /*height: 63.4px;*/
+            font-family: PingFangSC;
+            font-size: 15px;
+            font-weight: 300;
+            text-align: left;
+            color: #8c96a9;
+            margin: 0 25px 0;
+            -webkit-box-orient: vertical;
+        }
+
+        .carousel-inner .active {
+            opacity: 1;
+        }
+
+        .carousel-inner .active .item_content_box {
+
+            cursor: pointer;
+        }
+
+        .carousel-inner .active .item_content_box:hover {
+            top: -10px;
+            box-shadow: 0 6px 14px 0 #aeb4bf;
+        }
+
+        .RoundRobin_img {
+            position: relative;
+            width: 1158px;
+            margin: 0 auto;
+            padding-left: 21px;
+            padding-right: 21px;
+        }
+
+        .RoundRobin_left, .RoundRobin_right {
+            opacity: 1;
+            background-color: transparent;
+            border-radius: 0;
+            z-index: 1;
+        }
+
+        .RoundRobin_left {
+            left: 0;
+        }
+
+        .RoundRobin_right {
+            right: 0;
+        }
+
+        .item_content_con {
+            position: absolute;
+            bottom: 0;
+            background: #fff;
+            left: 0;
+            width: 100%;
+            height: 132px;
+            padding-bottom: 20px;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+
+        .RoundRobin_img:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            width: 60px;
+            height: 100%;
+            background: #e1e7ed;
+            z-index: 1;
+        }
+
+        .RoundRobin_img:after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            content: '';
+            width: 60px;
+            height: 100%;
+            background: #e1e7ed;
+        }
+    </style>
+{% endblock headblock %}
+
+{% block bodyblock %}
+    <div id="container" style="background: #fff;padding-bottom: 0">
+        <div style="background-color: #edf6fb;">
+            <div class="methods-content-head" style="margin: 0 auto ; padding-top: 94px;	background-color: #e1e7ed;">
+                <div class="relative" style="height: 462px;">
+                    <div class="RoundRobin_img">
+                        <ul class="carousel-inner" style="">
+
+                        </ul>
+                        <div class="RoundRobin_left carousel-prev-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="31px" height="48px" viewBox="0 0 31 48" version="1.1">
+                                <g id="研究方法原型图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g id="研究方法-热门专题" transform="translate(-1275.000000, -316.000000)">
+                                        <path d="M1292.01936,354.179899 L1313.28603,330.180877 C1314.35228,328.977638 1314.35228,327.023824 1313.28603,325.816715 C1312.21978,324.613476 1310.48841,324.613476 1309.41874,325.816715 L1290.08571,347.637525 L1270.75269,325.820584 C1269.68644,324.617345 1267.95508,324.617345 1266.8854,325.820584 C1265.81915,327.023824 1265.81915,328.977638 1266.8854,330.184746 L1288.15207,354.183768 C1289.22175,355.387007 1290.94968,355.387007 1292.01936,354.179899 Z"
+                                              id="Shape-Copy-2" fill="#FFFFFF" fill-rule="nonzero" transform="translate(1290.085714, 340.000000) rotate(-90.000000) translate(-1290.085714, -340.000000) "/>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="RoundRobin_right carousel-next-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="31px" height="48px" viewBox="0 0 31 48" version="1.1">
+                                <g id="研究方法原型图" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g id="研究方法-热门专题" transform="translate(-1275.000000, -316.000000)">
+                                        <path d="M1292.01936,354.179899 L1313.28603,330.180877 C1314.35228,328.977638 1314.35228,327.023824 1313.28603,325.816715 C1312.21978,324.613476 1310.48841,324.613476 1309.41874,325.816715 L1290.08571,347.637525 L1270.75269,325.820584 C1269.68644,324.617345 1267.95508,324.617345 1266.8854,325.820584 C1265.81915,327.023824 1265.81915,328.977638 1266.8854,330.184746 L1288.15207,354.183768 C1289.22175,355.387007 1290.94968,355.387007 1292.01936,354.179899 Z"
+                                              id="Shape-Copy-2" fill="#FFFFFF" fill-rule="nonzero" transform="translate(1290.085714, 340.000000) rotate(-90.000000) translate(-1290.085714, -340.000000) "/>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="container_body">
+            <div class="methods-content-box">
+                <div class="methods-index-title text-cen" style="">
+                    <span class="small_kin_b"></span><span class="litter_kin_b"></span><span class="lager_kin_b"></span>&nbsp;&nbsp;更
+                    / 多 / 教 / 程&nbsp;&nbsp;<span class="lager_kin_b"></span><span class="litter_kin_b"></span><span
+                        class="small_kin_b"></span></div>
+                <ul class="methods-more-list methods-others-list">
+                   {% if topic_article_list %}
+                       {% for t in topic_article_list %}
+                           <li>
+                               <a href="{% url 'front_method_topic_article_detail' article_id=t.id %}" target="_blank">
+                                   <div class="flex_list">
+                                       {% if t.thumbnail %}
+                                           <div class="methods_list_box_index_left">
+                                               <img src="/images/article_images/{{ t.thumbnail }}" alt="t.title">
+                                           </div>
+                                       {% endif %}
+                                       <div style="flex: 1;">
+                                           <h4 class="methods-more-list-head"><span class="title">{{ t.title }}</span></h4>
+                                           <div class="methods-more-list-content">
+                                               <span>{{ t.summary }}</span>
+                                           </div>
+                                           <div class="methods_list_box_index_time">
+                                               <span class="right">{{ t.create_time }}</span>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </a>
+                           </li>
+                       {% endfor %}
+                   {% endif %}
+                </ul>
+                {% if pages and pages|length > 1 %}
+                    <div class="text-cen">
+                        <ul class="pagination—list">
+                            {% if page_count < 5 %}
+                                {% for page in pages %}
+                                    {% if page == current_page %}
+                                        <li class="active">{% else %}
+                                        <li>
+                                    {% endif %}
+                                <a href="{% url 'front_method_topic'  page=page %}">{{ page }}</a></li>
+                                {% endfor %}
+                            {% else %}
+                                {% if current_page > 1 %}
+                                    <li class="prev"><a rel="prev" href="{% url 'front_method_topic'  page=current_page|add:-1 %}">上一页</a></li>
+                                {% endif %}
+
+                                {% if current_page > 4 %}
+                                    <li><a href="{% url 'front_method_topic'  page=1 %}">1</a></li>
+                                    <li class="disabled"><span>…</span></li>
+                                {% endif %}
+
+                                {% for page in pages %}
+                                    {% if page == current_page %}
+                                        <li class="active">{% else %}
+                                        <li>
+                                    {% endif %}
+                                <a href="{% url 'front_method_topic'  page=page %}">{{ page }}</a></li>
+                                {% endfor %}
+
+                                {% if page_count > 6 and current_page|add:2 < page_count %}
+                                    <li class="disabled"><span>…</span></li>
+                                {% endif %}
+                                {% if current_page > 0 and current_page < page_count %}
+                                    <li class="next"><a rel="next" href="{% url 'front_method_topic' page=current_page|add:1 %}">下一页</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                },
+                old_check: 0,
+                collect_lists: [],
+                user: {
+                    ques_id: '1',
+                    ans_id: '2',
+                    tar: ''
+                },
+                item: 0,
+                del_item: '',
+                change_collect_val: {}
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                },
+                check_old: function (num) {
+                    this.old_check = num;
+                    this.check_type = 6
+                },
+                del_collect_list: function (list, num) {
+                    this.del_item = list.id
+                    this.item = num
+                    this.check_type = 22;
+                },
+                cancel_collect_list: function () {
+                    this.check_type = 21
+                },
+                push_del_collect: function () {
+                    $.ajax({
+                        url: '/delete_collect_category/' + this.del_item + '/',
+                        type: 'get',
+                        success: function (data) {
+
+                            $.ajax({
+                                url: '/user_collect_category_list/',
+                                type: 'get',
+                                success: function (data) {
+                                    if (data.code == 200) {
+                                        var list = data.data.user_collect_category_list
+                                        box.collect_lists = list;
+                                    }
+                                }
+                            })
+                        }
+                    })
+
+                    this.check_type = 21;
+                },
+                change_collect_list: function (list, item) {
+                    var self = this
+                    $.ajax({
+                        url: '/alter_collect_category/' + list.id + '/',
+                        type: 'get',
+                        siccess: function (data) {
+                            self.change_collect_val = data.data;
+                            check_type(23)
+                        }
+                    })
+                }
+            },
+            computed: {
+                check_typ: function () {
+                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+                }
+            }
+        });
+        $(document).ready(function () {
+            var win_width = $('#container').width(), s_l, step = 1;
+
+            //设置参数
+            var move_width = 379 //移动单位距离
+                    , move_step = 3  //每次移动数量
+
+            if (win_width <= 1200) {
+                s_l = 0
+            } else {
+                s_l = (win_width - 1200) / 2
+            }
+//        $('.carousel-inner').css('left',(-(step+1)*379)+s_l+'px')
+            //模拟数据
+
+            $.ajax({
+                url:'/method_topic_list/',
+                success:function(data){
+                    if(data.code===200){
+                        var list = [],l= data.data.topic_list;
+                        for (var n = 0; n <l.length ; n++) {
+                            list.push({
+                                url: '/images/topic/'+l[n].thumbnail,
+                                tit: l[n].title,
+                                content: l[n].summary,
+                                id:l[n].id
+                            })
+
+
+                        }
+                        band_data(list)
+                    }
+                }
+            })
+
+            function band_data(list) {
+                //制作数据*3
+                var ary = [];
+                if(list.length>3){
+                    list.forEach(function (t) {
+                        ary.push(t)
+                    })
+                    list.forEach(function (t) {
+                        ary.push(t)
+                    })
+                    list.forEach(function (t) {
+                        ary.push(t)
+                    })
+                }else {
+                    ary=list
+                }
+console.log(list,ary)
+//绑定数据
+                var str = ''
+                for (var i = 0; i <= ary.length; i++) {
+                    if (i === 0) {
+                        str += '<li class="carousel-item active">'
+                    } else if (i === ary.length) {
+                        str += '</li>';
+                        break
+                    } else if (i % 3 === 0) {
+                        str += '</li><li class="carousel-item active">'
+                    }
+                    str += '                            <a href="/method_topic_detail/'+ ary[i].id+'/1/" style="display:inline;width: initial;height: inherit;" target="_blank"><div class="item_content_box">\n' +
+                            '                                    <div class="item_content_box_img">\n' +
+                            '                                        <img src="' + ary[i].url + '" alt="">\n' +
+                            '                                    </div>\n' +
+                            '                                    <div class="item_content_con">\n' +
+                            '                                        <div class="item_content_box_tit">' + ary[i].tit + '</div>\n' +
+                            '                                        <div class="item_content_box_con">' + ary[i].content + '</div>\n' +
+                            '                                    </div>\n' +
+                            '                            </div></a>\n'
+                }
+                $('.carousel-inner').css('width', ary.length / 3 + '00%')
+                if (list.length > 3) {
+                    $('.carousel-inner').css('left', '-100%')
+                    $('.carousel-inner').append(str)
+                    banner_move()
+
+                }else{
+                    $('.carousel-inner').css('left', '0')
+                    $('.carousel-inner').append(str)
+                    var i = $('.RoundRobin_img'), n = i.find(".carousel-prev-btn"), e = i.find(".carousel-next-btn")
+                    n.remove();
+                    e.remove();
+{#                    i.find('li').eq(0).addClass('active').siblings().removeClass('active')#}
+                }
+
+            }
+
+            function banner_move() {
+                var step = 1, max_step, move_type = true, click_type = true;
+
+                var renCas = function () {
+                    var t = $(".carousel-inner"), i = t.find(".carousel-item"), n = i.length, e = i.eq(n - 1).clone(), s = i.eq(0).clone();
+                    max_step = n;
+                    if (n > 1) {
+                        t.width((n + 2) + '00%').prepend(e).append(s).css("left", '-100%');
+{#                        $(".carousel-inner").find('li').eq(1).addClass('active').siblings().removeClass('active')#}
+                        eventBind();
+                 loop()
+                    }
+                }
+                var run = function () {
+                    var n = $(".carousel-inner")
+                    n.animate({left: -step + '00%'}, function () {
+                        var o = n.position().left;
+                        if (step < 1) {
+                            n.css('left', -max_step + '00%');
+                            step = max_step
+                        }
+                        if (step > max_step) {
+                            n.css('left', '-100%')
+                            step = 1
+                        }
+{#                        n.find('li').eq(step).addClass('active').siblings().removeClass('active')#}
+                        click_type = true
+                    })
+{#                    n.find('li').eq(step).addClass('active').siblings().removeClass('active')#}
+                }
+                var loop = function () {
+                    var self = $('.RoundRobin_img');
+                    self.timer = setInterval(function () {
+                        if (move_type) {
+                            step++
+                            run()
+                        }
+                    }, 5000)
+                }
+                var eventBind = function () {
+                    var i = $('.RoundRobin_img'), n = i.find(".carousel-prev-btn"), e = i.find(".carousel-next-btn"),
+                            a = (i.find(".carousel-item").length);
+                    e.on("click", function () {
+                        if (click_type) {
+                            click_type = false;
+                            step++
+                            run()
+                        }
+                    }), n.on("click", function () {
+                        if (click_type) {
+                            click_type = false;
+                            step--
+                            run()
+                        }
+                    }), i.hover(function () {
+                        move_type = false
+                    }, function () {
+                        move_type = true
+                    })
+                }
+                renCas();
+            }
+        })
+    </script>
+{% endblock bodyblock %}
+

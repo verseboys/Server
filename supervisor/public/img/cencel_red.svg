@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43 (38999) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="7.5" cy="7.5" r="7.5"></circle>
+    </defs>
+    <g id="医咖会web-1.1版" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="后台---研究管理---发表新文章" transform="translate(-1046.000000, -162.000000)">
+            <g id="Group" transform="translate(1050.000000, 166.000000)">
+                <g id="Oval-6">
+                    <use fill="#E57163" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    <circle stroke="#F9F9F9" stroke-width="4" cx="7.5" cy="7.5" r="9.5"></circle>
+                </g>
+                <g id="Group-2" transform="translate(5.000000, 5.000000)" fill="#FFFFFF">
+                    <path d="M4.30857157,0.446480837 C4.46720552,0.301066377 4.72265651,0.299466361 4.88159518,0.445160135 L4.88159518,0.445160135 C5.03943342,0.589845192 5.03998276,0.823922454 4.88015441,0.970431776 L0.691428433,4.81009725 C0.532794476,4.95551171 0.277343487,4.95711173 0.118404825,4.81141796 L0.118404825,4.81141796 C-0.0394334189,4.6667329 -0.0399827608,4.43265564 0.119845591,4.28614632" id="Rectangle-6"></path>
+                    <path d="M0.119813112,0.970461548 C-0.0388208444,0.825047088 -0.0405663165,0.590883681 0.118372346,0.445189907 C0.27621059,0.30050485 0.531567603,0.300001287 0.691395954,0.446510609 L4.88012193,4.28617609 C5.03875589,4.43159055 5.04050136,4.66575395 4.8815627,4.81144773 C4.72372445,4.95613279 4.46836744,4.95663635 4.30853909,4.81012703" id="Rectangle-6-Copy"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

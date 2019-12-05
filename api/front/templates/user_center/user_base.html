@@ -1,0 +1,58 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block titleblock %}医咖会-用户信息{% endblock titleblock %}
+
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/user_center.css' %}">
+    <style>
+        #container {
+            padding-left: 33px;
+            padding-right: 21px;
+            width: 1158px;
+            margin: 93px auto 0;
+        }
+
+        #sidebar {
+            margin-left: 27px
+        }
+
+        #info_box {
+            margin-left: 20px;
+        }
+
+        .pc2_collect input {
+            box-sizing: border-box !important;
+        }
+        #myCollectMain,.user-menu-list{
+            padding-bottom:80px;
+        }
+        .contact-bind span{
+            display:inline-block;height:54px;line-height:54px;cursor:pointer;font-size:14px;
+        }
+        .contact-bind span:nth-of-type(1){
+            color:#8C96AA;
+        }
+        .contact-bind span:nth-of-type(2){
+            color:#45a0ea;margin-left:16px;
+        }
+        .user-info-usr .user-info-box .selector_img{
+            background:'';
+            background-size:cover;
+        }
+        [v-clock]{
+            display: none;
+        }
+    </style>
+{% endblock headblock %}
+
+{% block bodyblock %}
+<div id="container" >
+    <input class="header_upload" type="file" style="display:none;" id="up_file" accept="image/*">
+    <div class="user-bar inline">
+        {% include './user_nav.html' %}
+    </div>
+    <div class="inline user-menu">
+        {% block usermain %}{% endblock usermain %}
+    </div>
+</div>
+{% endblock bodyblock %}

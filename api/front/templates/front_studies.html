@@ -1,0 +1,78 @@
+{% extends 'header_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+    <link rel="stylesheet" href="{% static 'css/front_study.css' %}">
+
+{% endblock headblock %}
+
+{% block head-nav %}
+
+{% endblock head-nav %}
+
+{% block bodyblock %}
+    <div id="container" style="margin-top: 62px;">
+        <div id="container_body" class="flex_content">
+            <div class = "study-card-box">
+                <div class = "study-inner-card-box">
+                    {% for study in edcStudies %}
+                        {% if study.is_public %}
+                        <div class = "study-card">
+                            <a href="{% url 'edc_study' study_id=study.study_id %}">
+                                <h3 class ="title">
+                                    {{ study.name}}
+                                </h3>
+                                <div class= "disease-label-box">
+                                    {% for illness in study.illnesses.all %}
+                                        {% if illness.id == 1 %}
+                                        <span class ="disease-label orange">
+                                            {{illness.illness_name}}
+                                        </span>
+                                        {% elif illness.id == 2 %}
+                                        <span class ="disease-label blue">
+                                            {{illness.illness_name}}
+                                        </span>
+                                        {% else %}
+                                        <span class ="disease-label purple">
+                                            {{illness.illness_name}}
+                                        </span>
+                                        {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                                <ul class="list-unstyled content">
+                                    <li>
+                                        研究类型：{{ study.type}}
+                                    </li>
+                                    <li>
+                                        PI：{% for role in study.edcstudyrole_set.all %}
+                                                {% if role.type == "pi" %}
+                                                {{role.name}}                                      
+                                                {% endif %}
+                                            {% endfor %}
+                                    </li>
+                                    <li>
+                                        研究目的：{{study.description}}
+                                    </li>
+                                </ul>
+                                <span class = "label">
+                                    {{study.state_display}}
+                                </span>
+                                <span class = "user-count">
+                                    {{study.user_count}}人已加入
+                                </span>
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}                   
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock bodyblock %}
+
+
+

@@ -1,0 +1,90 @@
+{% extends 'header_base.html'%}
+{% load static %}
+
+{% block titleblock %}医咖会-研究进展{% endblock titleblock %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/news.css' %}">
+{% endblock headblock %}
+
+{% block bodyblock %}
+    <div id="container">
+        {% if articles %}
+            {% for article in articles %}
+                <a href="{% url 'front_article_detail' article_id=article.id %}?ty=news" target="parent">
+                    <div class="item_border">
+                        <div class="title">{{ article.title }}</div>
+                        <div class="message">
+                            {% if article.thumbnail %}
+                                <div class="text body_text_has_img">{{ article.summary }}</div><div class="image "><img src="/images/article_images/{{ article.thumbnail}}"></div>
+                            {% else %}
+                                <div class="text body_text_no_img">{{ article.summary }}</div><div class="image body_image_no_img"></div>
+                            {% endif %}
+                        </div>
+                        <div class="tool_box body_toolbox_has_img">
+                            <div class="time">{{ article.publish_time }}</div>
+                            <div class="reply">{{ article.comment_count }}</div>
+                        </div>
+                        <div class="box_shadow"></div>
+                    </div></a>
+            {% endfor %}
+        {% endif %}
+        <div class="read_more_box">
+            {% if article_count %}
+                {% if article_count > 1 and current_page <= article_count %}
+                    <div class="read_more_btn"><a href="{% url 'front_study_evolve' section_id=2 page=current_page|add:1 %}">下拉加载</a></div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <div id="pc-state-box" class="hide">
+    <div class="hide">{{ check_typ }}</div>
+    <div id="neko_shadow_box" v-show="check_type">
+        <div class="close_btn" @click="close()"></div>
+        <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+        <div v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+            <div id="model_ask_ques">
+                <div class="ask-title">描述问题</div>
+                <div class="ask-text">
+                    <div id="box_content" style="padding: 0">
+                        <div id="common_content">
+                            <textarea id="ask_area" name="editor"></textarea>
+                            <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                <div>
+                    <ul class="model_tag_list"></ul>
+                </div>
+                <div>
+                    <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var box = new Vue({
+            el: '#pc-state-box',
+            data: {
+                check_type: 0,
+                fix_wat: {
+                    show: 'show neko_shadow_box',
+                    hide: 'neko_shadow_box hide'
+                }
+            },
+            methods: {
+                close: function () {
+                    this.check_type = 0
+                }
+            },
+            {#            computed: {#}
+            {#                check_typ: function () {#}
+            {#                    console.log(1)#}
+            {#                    this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');#}
+            {#                }#}
+            {#            }#}
+        })
+    </script>
+{% endblock bodyblock %}

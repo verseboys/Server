@@ -1,0 +1,503 @@
+
+
+/* 信息采集表 */
+/* h3{
+    font-weight:normal;
+} */
+body{
+    background:#fff;
+}
+.container{
+    width:100%;
+}
+
+.title-top{
+    width: 1057px;
+    height: 105px;
+    background-color: #45a0ea;
+    margin:0 auto;
+    border-radius:8px 8px 0 0;
+    position:relative;
+    overflow:hidden;
+}
+/* 未审核 */
+.title-top .status_submitted {
+    width: 80px;
+    height: 80px;
+    background:url("/static/images/submitted.png") no-repeat;
+    background-size:100% 100%; 
+    position:absolute;
+    bottom: -8px;
+    left: -6px;
+}
+/* 审核通过 */
+.title-top .status_pass {
+    width: 80px;
+    height: 80px;
+    background:url("/static/images/andit_pass.png") no-repeat;
+    background-size:100% 100%; 
+    position:absolute;
+    bottom: -8px;
+    left: -6px;
+}
+.title-top .edit {
+    width:112px;
+    height:33px;
+    background:#fff;
+    border-radius:4px;
+    color:#45a0ea;
+    text-align:center;
+    line-height:33px;
+    position:absolute;
+    top:36px;
+    right:27px;
+    cursor: pointer;
+}
+.container-form{
+    width: 317px;
+    height: 40px;
+    font-family: HelveticaNeue;
+    font-size: 28px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.8px;
+    text-align: justify;
+    color: #fff;
+    margin-left:350px;
+    padding-top:35px;
+}
+.explain-wrap {
+    width: 1057px;
+    height: 368px;
+    background-color: #f9f9f9;
+    margin:0 auto;
+    border-radius: 6px;
+  }
+.explain{
+    width: 977px;
+    height: 277px;
+    font-family: HelveticaNeue;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.4px;
+    text-align: justify;
+    color: #4a4a4a;
+    margin-left:42px;
+    padding-top:29px;
+}
+.explain ul li{
+    list-style:disc;
+    margin-left:18px;
+    text-indent:-6px;
+} 
+.text-parag-one,.text-parag-five,.text-parag-six{
+    margin-top: 24px;
+}
+.text-parag-two{
+    margin-bottom: 24px;
+}
+
+.form-wrap{
+    /* height: 1512px; */
+    width: 1057px;
+    margin:0 auto;
+}
+
+.form-one .form-one-h{
+    width: 198px;
+    height: 25px;
+    font-family: HelveticaNeue;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #3260b6;
+    padding-top: 34px;
+    margin-left: 33px;
+    margin-bottom: 18px;
+}
+.form-one-inc{
+    width: 819px;
+    font-family: HelveticaNeue;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 2;
+    letter-spacing: 0.4px;
+    text-align: justify;
+    color: #4a4a4a;
+    margin-left: 27px;
+}
+.form-one-inc input{
+    width: 16px;
+    height: 16px;
+    background-color: #eaeaf0;
+    border: solid 1px #d8d8d8;
+    margin-right:6px;
+    margin-bottom: 10px;
+}
+.form-two-h{
+    width: 252px;
+    height: 25px;
+    font-family: HelveticaNeue;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #3260b6;
+    margin-top: 57px;
+    margin-left: 33px;
+    margin-bottom: 30px;
+}
+.form-o{
+    width: 750px;
+    height: 152px;
+    margin-left: 33px;
+}
+.form-o fieldset,.form-t fieldset{
+    border:0;
+}
+.delete_btn{
+    width: 40px;
+    height: 20px;
+    line-height: 4px;
+    float: right;
+    margin-right: 48px;
+    background: #fff;
+    border: 0;
+    color: #d84a33;
+    cursor:pointer;
+    padding-right: 20px;
+}
+.form-o span, .form-t span, .form-f span, .form-s span, .form-e span{
+    font-size: 14px;
+    line-height: 2.71;
+    color: #404040;
+    box-sizing:border-box;
+    width: 45%;
+    position: relative;
+}
+.form-o input, .form-t input, .form-f input, .form-s input, .form-e input{
+    width: 216px;
+    height: 30px;
+    opacity: 0.92;
+    border: solid 1px #d8d8d8;
+    border-radius: 6px;
+    margin-left: 5px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+.form-o label, .form-t label, .form-f label, .form-s label, .form-e label{
+    width: 75px;
+    /* display: inline-block; */
+}
+
+
+
+#cname1-error, #csubject1-error, #cemail1-error, #cphone1-error, #cplace1-error, #cwork1-error,#cjob1-error,
+#cname2-error, #csubject2-error, #cjob2-error,#cemail2-error, #cphone2-error,
+#cname3-error, #csubject3-error, #cjob3-error, #cemail3-error, #cphone3-error,
+#cname4-error, #csubject4-error, #cjob4-error, #cemail4-error, #cphone4-error,
+#cname5-error, #csubject5-error, #cjob5-error, #cemail5-error, #cphone5-error,
+#cname6-error, #csubject6-error, #cjob6-error, #cemail6-error, #cphone6-error,
+#cname7-error, #csubject7-error, #cjob7-error, #cemail7-error, #cphone7-error,
+#cname8-error, #csubject8-error, #cjob8-error, #cemail8-error, #cphone8-error,
+#cname9-error, #csubject9-error, #cjob9-error, #cemail9-error, #cphone9-error,
+#cname10-error, #csubject10-error, #cjob10-error, #cemail10-error, #cphone10-error,
+#cname11-error, #csubject11-error, #cjob11-error, #cemail11-error, #cphone11-error,
+#cname12-error, #csubject12-error, #cjob12-error, #cemail12-error, #cphone12-error,
+#cname13-error, #csubject13-error, #cjob13-error, #cemail13-error, #cphone13-error,
+#cnameN-error, #csubjectN-error, #cjobN-error, #cemailN-error, #cphoneN-error{
+    position: absolute;
+    width: 80px;
+    right: -56px;
+    top: -2px;
+}
+#cplace1-error{
+    right: -49px;
+}
+.form-o span:nth-child(7){
+    width:100%;
+}
+.form-o span:nth-child(7) input{
+    width: 608px;
+}
+.form-three-h,.form-six-h{
+    width: 342px;
+    height: 25px;
+    font-family: HelveticaNeue;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #3260b6;
+    margin-top: 66px;
+    margin-left: 33px;
+    margin-bottom: 30px;
+}
+.form-t{
+    width: 750px;
+    margin-left: 33px;
+}
+
+.form-t .form-bor{
+    width: 750px;
+    border-bottom: dashed 2px #EAEAF0;
+    margin-top: 30px;
+    opacity: 0.92;
+    margin-bottom: 30px;
+}
+.form-four,.form-five{
+    margin-top:60px;
+}
+.form-f,.form-e,.form-s{
+    width: 750px;
+    height: 108px;  
+    margin-left: 33px;
+}
+
+.form-f .form-bor,.form-s .form-bor{
+    width: 750px;
+    border-bottom: dashed 2px #EAEAF0;
+    margin-top: 30px;
+    opacity: 0.92;
+}
+#submit1{
+	width: 160px;
+    height: 33px;
+    border: solid 1px #45a0ea;
+    color: #45a0ea;
+    background: #fff;	
+    margin-top: 25px;
+    border-radius: 4px;
+    margin-left: 32px;
+    cursor: pointer;
+  }
+
+.form-footer{
+    margin-top: 49px;
+}
+.form-footer .form-footer-p{
+    width: 676px;
+    height: 40px;
+    font-family: HelveticaNeue;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 0.3px;
+    color: #9b9b9b;
+    margin-left: 32px;
+}
+.form-footer-btn-w{
+    width: 676px;
+    height: 93px;
+    margin-left: 32px;
+    margin-bottom: 209px;
+}
+.form-footer-btn-w input:nth-child(1){
+    width: 112px;
+    height: 33px;
+    background-color: #9b9b9b;
+    margin-top: 30px;
+    margin-left: 206px;
+    border-radius: 4px;
+    color: #f8f9fd;
+}
+.form-footer-btn-w input:nth-child(2){
+    width: 112px;
+    height: 33px;
+    background-color: #37aef2;
+    margin-top: 30px;
+    margin-left: 29px;
+    border-radius: 4px;
+    color: #f8f9fd;
+}
+.form-footer-btn-w button:nth-child(2) span{
+    width: 32px;
+    height: 22px;
+    font-family: HelveticaNeue;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: right;
+    color: #f8f9fd;
+}
+.error{
+    color:red!important;
+}
+input.error{
+    color:black!important;
+}
+/* html,body{
+    width: 100%;
+    height: 100%;
+} */
+#pop_up_failed,#pop_up_success_green{
+	width: 100%;
+	height: 100%;
+    position: fixed;
+    top:0;
+    left:0;
+	display: none;
+	background: rgba(0, 0, 0, 0.23);
+    overflow: hidden;
+}
+.submission_failed,.submission_success_green{
+      width: 499px;
+      height: 55px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.23);
+      background-color:rgb(255, 255, 255,1);
+      position: fixed;
+      top:20%; 
+      left: 50%;
+      margin-left: -250px;
+      line-height: 55px;
+      text-align: center;
+      border-radius: 6px; 
+      /* position: relative; */
+}
+.img_success_green,.img_fail{
+    position: absolute;
+    top: 18px;
+    left: 52px;
+}
+#delete_pop-up_box,#delete_pop-up_box_t{
+    width: 100%;
+	height: 100%;
+    position: fixed;
+    top:0;
+    left:0;
+	display: none;
+	background: rgba(0, 0, 0, 0.23);
+    overflow: hidden;
+}
+.delete_box,.delete_box_t{
+    width: 476px;
+    height: 289px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.23);
+    background-color:rgb(255, 255, 255,1);
+    position: fixed;
+    top:34%; 
+    left: 50%;
+    margin-left: -250px;
+    line-height: 55px;
+    text-align: center;
+    border-radius: 6px;
+}
+.delete_box_one,.delete_box_two,.delete_box_one_t,.delete_box_two_t{
+    display: inline-block;
+    width: 476px;
+    height: 33px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+}			
+.delete_box_three,.delete_box_four,#delete_box_three_t,.delete_box_four_t{
+    width: 131px;
+    height: 38px;
+    background-color: #d8d8d8;
+    margin-top: 40px;
+    border-radius: 6px;
+}
+/**上传成功样式**/
+.apply-success-wrapper {
+    background: url(/static/images/apply_success.svg) no-repeat 50%; 
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+}
+.apply-success-wrapper h1 {
+    text-align: center;
+    padding-top: 370px;
+    line-height: 38px;
+    font-family: HelveticaNeue;
+    font-size: 28px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #404040;
+}
+
+/* 弹框 */
+#mask,#delete_pop-up_box  {
+    display:none;
+    width:  100%;
+    height:  100%;
+    position:  fixed;
+    top:0;
+    left:0;
+    background:  rgba(0,  0,  0,  0.23);
+    overflow:  hidden;
+}
+#mask  .dialog,#delete_pop-up_box  .dialog  {
+    position:absolute;
+    top:30%;left:40%;
+    width:  476px;
+    height:  289px;
+    box-shadow:  0  2px  4px  0  rgba(0,  0,  0,  0.31);
+    background:#fff;
+    border-radius:8px;
+}
+#mask  .dialog  .delete_box_one  {
+    font-size:24px;
+    margin-top:36px
+}
+#mask  .dialog  .delete_box_two  {
+    margin-top:50px;
+    font-size:16px;
+}  
+#form1  .delete_btn{
+    display:none;
+}
+.dialog  .button  {
+    padding-top:10px;
+    text-align:  center;
+}    
+.button  .delete_box_three,.delete_box_cancel,.delete_box_four,.delete_box_sure  {
+    width:131px;
+    height:38px;
+    line-height:38px;
+    text-align:center;
+    display:inline-block;
+    border-radius:3px;
+    color:#4a4a4a;
+    margin-right:21px;
+    cursor:  pointer;
+}
+.button .delete_box_three,.delete_box_cancel{
+    background:#d8d8d8;
+}
+.button .delete_box_four,.delete_box_sure{  
+    background:#45a0ea;
+  
+}
+/* 解决input框中默认黄色背景 */
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    border: 1px solid #CCC;
+}
+
+.error_inputter{
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    border: 1px solid red!important;
+}

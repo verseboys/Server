@@ -1,0 +1,5 @@
+.tag-class-box:first-child .par-tag .tag-move-up{
+    background: url("../img/tag-el-up.svg") no-repeat center;
+    cursor: default;
+    pointer-events: none;
+}

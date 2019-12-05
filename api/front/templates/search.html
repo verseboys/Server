@@ -1,0 +1,319 @@
+{% extends 'header_base.html' %}
+{% load static %}
+
+{% block titleblock %}医咖会-搜索{% endblock titleblock %}
+{% block headblock %}
+    <link rel="stylesheet" href="{%static 'css/search.css' %}">
+{% endblock headblock %}
+
+{% block bodyblock %}
+<div id="questions-pc2">
+    <div id="toolbox">
+        <div class="tool_box t_type">
+            <div class="tool_tip" type="type">类型</div>
+            <div class="selector" type="search_questions" tid="3">研究问答</div>
+            <div class="selector " type="search_articles" tid="1">研究方法</div>
+            <div class="selector" type="search_articles" tid="2">研究进展</div>
+        </div>
+        <div class="tool_box t_time">
+            <div class="tool_tip" type="time">时间</div>
+            <div class="selector" type="one_week" tid="1">一周内</div>
+            <div class="selector" type="one_month" tid="2">一个月内</div>
+            <div class="selector" type="three_month" tid="3">三个月内</div>
+            <div class="selector" type="one_year" tid="4">一年内</div>
+            <div class="selector selected" type="all" tid="5">不限</div>
+        </div>
+        <div class="tool_box t_content">
+            <div class="tool_tip" type="content">内容</div>
+            <div class="selector" type="only_title" tid="title">仅标题</div>
+            <div class="selector" type="only_body" tid="content">仅内容</div>
+            <div class="selector selected" type="all_content" tid="all">全部</div>
+        </div>
+        <div class="submit_btn active">筛选</div>
+    </div>
+    <div id="search_box">
+        <div class="tip_box"></div>
+        <div class="content_box"></div>
+    </div>
+</div>
+
+<!--弹框-->
+<div id="pc-state-box" class="hide">
+    <div class="hide">{{check_typ}}</div>
+    <div id="neko_shadow_box" v-show="check_type">
+        <div class="close_btn" @click="close()"></div>
+        <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+        <div  v-bind:class="[check_type===10 ? fix_wat.show :  fix_wat.hide]">
+            <div id="model_ask_ques">
+                <div class="ask-title">描述问题</div>
+                <div class="ask-text">
+                    <div id="box_content" style="padding: 0">
+                        <textarea id="editor" name="editor"></textarea>
+                    </div>
+                </div>
+                <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                <div>
+                    <ul class="model_tag_list">
+                        <li>研究方法</li>
+                        <li>统计方法</li>
+                        <li>Mate分析</li>
+                        <li>统计图表</li>
+                        <li>样本量计算</li>
+                        <li>其他</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="model_btn block-center mar-top38">提交问题</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script type="application/javascript">
+    var search_url = null, search_page;
+    var box = new Vue({
+        el: '#pc-state-box',
+        data: {
+            check_type: 0,
+            fix_wat: {
+                show: 'show neko_shadow_box',
+                hide: 'neko_shadow_box hide'
+            }
+        },
+        methods: {
+            close: function () {
+                this.check_type = 0
+            }
+        },
+        computed: {
+            check_typ: function () {
+                this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+            }
+        }
+    })
+    let search_article_question_params_dict = {
+        time_range:{
+            1:"1w",
+            2:"1m",
+            3:"3m",
+            4:"1y",
+            5:"all"
+        },
+        article_type:{
+            1:"method",
+            2:"news"
+        }
+    }
+    var post_data = {
+        "section_id": "1",
+        "search_in":"all",
+        "time": '5',
+        "page": 1,
+        key:null
+    }
+    var key_word = function () {
+        var opa = window.location.href.split('?')[1].split('&');
+        var obj = {}
+        for (var i = 0; i < opa.length; i++) {
+            obj[opa[i].split('=')[0]] = decodeURI(opa[i].split('=')[1])
+        }
+        return obj
+    }
+
+    post_data.section_id = key_word().t;
+    post_data.key=key_word().wd;
+    $('#toolbox .t_type .selector[tid=' + post_data.section_id + ']').addClass('selected').siblings().removeClass('selected');
+    search_url = $('#toolbox .t_type .selector[tid=' + post_data.section_id + ']').attr('type')
+    tag_class([
+        {
+            el: '#toolbox .t_type .selector',
+            cl: 'selected',
+            fn:function () {
+                SEARCH_TYPE= $('#toolbox .t_type .selected').attr('tid');
+                //非研究问答有标题与内容选项
+                if(SEARCH_TYPE==="3"){
+                    $(".t_content").hide()
+                }else{
+                    $(".t_content").show()
+                }
+            }
+        },
+        {
+            el: '#toolbox .t_time .selector',
+            cl: 'selected',
+        },
+        {
+            el: '#toolbox .t_content .selector',
+            cl: 'selected',
+        }
+        ,
+        {
+            el: '.head-nav .header-bot li',
+            cl: 'color-nav'
+        },
+        {
+            el: ".ans-top-list li",
+            cl: 'checked'
+        },
+        {
+            el: '#model_ask_ques .model_tag_list li',
+            cl: 'ask_check_bg'
+        },
+        {
+            el: '.masg_list_top div',
+            cl: "checked"
+        }
+    ])
+    var data
+    $('#toolbox .submit_btn').click(function () {
+        post_data.page = 1;
+        post_data.section_id = $('#toolbox .t_type .selected').attr('tid');
+        post_data.time = $('#toolbox .t_time .selected').attr('tid');
+        post_data.search_in = $('#toolbox .t_content .selected').attr('tid');
+        search_url = $('#toolbox .t_type .selected').attr('type')
+        $('#search_box .content_box').html('')
+        search();
+    });
+    function search() {
+        AJAX({
+            type: 'post',
+            url:'/' + search_url + '/?page=' + post_data.page,
+            data: SEARCH_TYPE!=="3"?
+                    {
+                        keyword: post_data.key,
+                        time_range: search_article_question_params_dict["time_range"][post_data.time],
+                        article_type: search_article_question_params_dict["article_type"][post_data.section_id],
+                        search_in: post_data.search_in
+                    }
+                :
+                    {
+                        keyword: post_data.key,
+                        time_range: search_article_question_params_dict["time_range"][post_data.time],
+                        question_category: 'all'
+                    },
+            fn: function (data) {
+                if (data.code !== 200) {
+                    $('#search_box .tip_box').remove()
+                    return
+                }
+                var key, ser_key;
+                key_word().wd ? key = '提到 ' + '"' + key_word().wd + '"' : key = "";
+                key_word().wd ? ser_key = key_word().wd : ser_key = "";
+                $('#search_box .tip_box').remove()
+                var str = ''
+                if (post_data.section_id == '1') {
+                    var s= 'methods'
+                    search_page = data.data.page_count;
+                    $('#search_box .content_box').before('<div class="tip_box">' + '共搜索出' + data.data.article_count + '篇文章' + key + '</div>')
+                    for (var i = 0; i < data.data.articles.length; i++) {
+                        var id = data.data.articles[i].id,
+                                title = data.data.articles[i].title,
+                                summary = data.data.articles[i].summary? data.data.articles[i].summary:'';
+
+                        ser_key === "" ? title = title : title = title.replace(new RegExp(ser_key , 'gi'), function (item) {
+                            return '<div class="selected_words">' + item + '</div>'
+                        })
+                        ser_key === "" ? summary = summary : summary = summary.replace(new RegExp(ser_key, 'gi'), function (item) {
+                            return '<div class="selected_words">' + item + '</div>'
+                        })
+                        str += '<a href="'+(data.data.articles[i].category_id===13? '/method_topic_article_detail/': '/method_article_detail/') + id + '/?ty='+s+'">';
+                        str += '<div class="content_item">'
+                        str += '<div class="item_title">'
+                        str += title;
+                        str += '</div>'
+                        str += '<div class="item_content">'
+                        str += summary
+                        str += '</div>'
+                        str += '</div>'
+                        str += '</a>'
+                    }
+                }else if (post_data.section_id == '2') {
+                    var s= 'news'
+                    search_page = data.data.page_count;
+                    $('#search_box .content_box').before('<div class="tip_box">' + '共搜索出' + data.data.article_count + '篇文章' + key + '</div>')
+                    for (var i = 0; i < data.data.articles.length; i++) {
+                        var id = data.data.articles[i].id,
+                                title = data.data.articles[i].title,
+                                summary = data.data.articles[i].summary? data.data.articles[i].summary:'';
+
+                        ser_key === "" ? title = title : title = title.replace(new RegExp(ser_key, 'gi'), function (item) {
+                            return '<div class="selected_words">' + item + '</div>'
+                        })
+                        ser_key === "" ? summary = summary : summary = summary.replace(new RegExp(ser_key, 'gi'), function (item) {
+                            return '<div class="selected_words">' + item + '</div>'
+                        })
+                        str += '<a href="/news_detail/' + id + '/1/">';
+                        str += '<div class="content_item">'
+                        str += '<div class="item_title">'
+                        str += title;
+                        str += '</div>'
+                        str += '<div class="item_content">'
+                        str += summary
+                        str += '</div>'
+                        str += '</div>'
+                        str += '</a>'
+                    }
+                }
+                else {
+                    search_page = data.data.page_count
+                    $('#search_box .content_box').before('<div class="tip_box">' + '共搜索出' + data.data.question_count + '个问答' + key + '</div>')
+                    for (var i = 0; i < data.data.questions.length; i++) {
+                        var id = data.data.questions[i].question_id,
+                                title = data.data.questions[i].content,
+                                time = data.data.questions[i].recently_answer_time ? data.data.questions[i].recently_answer_time : data.data.questions[i].create_time,
+                                user = data.data.questions[i].username ? data.data.questions[i].username : data.data.questions[i].recently_answer_username,
+                                type = data.data.questions[i].category,
+                                ans = data.data.questions[i].answers_count === null ? 0 : data.data.questions[i].answers_count,
+                                text = data.data.questions[i].username ? "发表" : "回复";
+                        ser_key === "" ? title = title : title = title.replace(new RegExp('(<[^>]+>)', 'g'), '').replace(new RegExp(ser_key, 'gi'), function (item) {
+                            return '<span class="selected_words">' + item + '</span>'
+                        })
+                        str += ' <a href="/question_detail/' + id + '/0/1/1/">\n' +
+                                '                    <div class="content_item_box">\n' +
+                                '                        <div class="inline ans_type">'
+                        if (ans === 0) {
+                            str += ' <div class="ans_type_2"><span>' + 0 + '</span><span>回答</span></div>'
+                        } else {
+                            str += ' <div class="ans_type_1"><span>' + ans + '</span><span>回答</span></div>'
+                        }
+                        str += '                        </div>\n' +
+                                '                        <div class="inline ans_box">\n' +
+                                '                            <div class="title">' + user + '&nbsp;' + time + '&nbsp;' + text + '了这个问题</div>\n' +
+                                '                            <div class="content">' + title + '<span class="user-tag-icon" style="margin-left: 13px;">' + type + '</span></div>\n' +
+                                '                        </div>\n' +
+                                '                    </div>\n' +
+                                '                    \n' +
+                                '                </a>'
+                    }
+                }
+                $('#search_box .content_box').append(str);
+                window.ajax_type = true;
+                fix_foot()
+            }
+
+        })
+    }
+
+    load_ajax(function () {
+        var page = parseFloat(post_data.page);
+        page++
+        if (page > search_page) {
+            return
+        }
+        post_data.page = page;
+        search()
+    })
+    $().ready(()=>{
+        window.SEARCH_TYPE = $('#toolbox .t_type .selected').attr('tid');
+        if(SEARCH_TYPE==="3"){
+            $(".t_content").hide()
+        }else{
+            $(".t_content").show()
+        }
+        search();
+    })
+</script>
+
+{% endblock bodyblock %}

@@ -1,0 +1,206 @@
+{% extends './_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+    <link rel="stylesheet" href="{% static 'css/front_study.css' %}">
+    <script src="{% static 'js/javaScripts/bootstrap.min.js' %}"></script>
+{% endblock headblock %}
+
+{% block bodyblock %}
+    <div id="container" class="min_width_container" style="margin-top: 20px;width:100%;">
+        <!-- 科研项目的课程列表（课程列表页）-->
+        <div class="course_list" style="background:none;">
+            {% if course.public_scope == 1 and member is not None or course.public_scope == 2  %}
+                <div class="course">
+                    <div class="basic_course">
+                        <div class="course_video">
+                            <!-- 视频 -->
+                            <a href="javascript:;">
+                                <img src="{{course.pic_url}}" alt="" style="width:100%;height:100%;">
+                            </a>
+                        </div>
+                        <div class="course_video">
+                            <!-- 培训说明 -->
+                            <h2>{{course.name}}
+                                {% if course.serial_state == 'loading' %}
+                                    <span>连载中</span>
+                                {% elif course.serial_state == 'finished' %}
+                                    <span style="background-color: #cff8e4;color:#03a675;">已完结</span>
+                                {% endif %}
+                            </h2>
+                            <p style="width:760px;word-break:break-all;">{{course.description}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab_nav">
+                    {% if course.data_collection is True %}
+                        <ul class="uls">
+                            {% if not learned_all or course.data_collection is False or course.serial_state == 'loading' %}
+                                <li class="train" style="width:598px;">
+                                    <a class="tab_nav_a train_nav_active train_nav_active_after" href="#training-course">1.培训课程</a>
+                                </li>
+                                <li class="data" style="width:569px;">
+                                    <a class="tab_nav_a" href="#data-collection">2.数据采集</a>
+                                </li>
+                            {% else %}
+                                <li class="train" style="width:598px;">
+                                    <a class="tab_nav_a" href="#training-course">1.培训课程</a>
+                                </li>
+                                <li class="data" style="width:569px;">
+                                    <a class="tab_nav_a train_nav_active train_nav_active_before" href="#data-collection">2.数据采集</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                    <div class="tab_cont">
+                        <div class="training" id="training-course" style="width:1147px;">
+                            <p>目前已经完成<span> {{watched_count}} </span>课时 ，共<span> {{video_count}} </span>课时，学习完成以下全部视频后才能更好地开展临床研究！</p>
+                            <div class="training_course">
+                                <div class="table" style="border-top:1px solid #d8d8d8;border-bottom:1px solid #d8d8d8;margin:0 30px;">
+                                    {% for v in videos %}
+                                        <a class="to_cource_video" data-course="{{course.id}}" data-video="{{v.id}}" data-href="{% url 'network_course_video' network_id=network.id course_id=course.id video_id=v.id %}" style="cursor: pointer;">
+                                            <div class="thead">
+                                                <span>第{{v.order}}节</span>
+                                                <span>{{v.video.title}}</span>
+                                                <span>时长：{{v.video.video_time}}</span>
+                                                {% if v.watched == False %}
+                                                    <span><img class="state_img" src="{% static 'images/correct_no.svg' %}" alt=""></span>
+                                                {% elif v.watched == True %}
+                                                    <span><img class="state_img" src="{% static 'images/correct.svg' %}" alt=""></span>
+                                                {% endif %}
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if course.data_collection is True and learned_all is True and course.serial_state == 'finished' %}
+                            <!-- 数据采集为是并已完结 课程全部播放完毕状态下 -->
+                            <div class="training" id="data-collection" style="width:1147px;text-align:center;display:none;">
+                                <div>
+                                    <img class="medal_img" src="{{course.medal.ss_pic_url}}" alt="" style="margin-top:90px;">
+                                </div>
+                                <div class="sorry">
+                                    <h3 style="font-size: 20px;color:#666;padding-top:35px;">恭喜您学习完成“慢阻肺临床研究专项”的基础课程，可以正式开展研究了！</h3>
+                                    <p style="color:#999;font-size: 16px;margin:0 auto;height:40px;padding:0;padding-top:16px;line-height:20px;">已为您开通EDC系统的使用权限，账号初始信息为您当前医咖会账号的邮箱和密码</p>
+                                </div>
+                                <div style="width:291px;height:40px;line-height:40px;text-align:center;background:#449fea;color:#fff;margin:0 auto;border-radius: 4px;margin-top:11px;">
+                                    <a href="https://www.einmatrix.com">
+                                        <div class="btn" style="color:#fff;">点击进入医维云科研大数据平台</div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% elif course.data_collection is True and course.serial_state == 'loading' or course.data_collection is True and learned_all is False %}
+                            <!-- 数据采集为是并连载中或者数据采集为是课程并未全部看完 -->
+                            <div class="training" id="data-collection" style="width:1147px;text-align:center;display:none;">
+                                <div>
+                                    <img class="medal_img" src="{{course.medal.ss_pic_nagative_url}}" alt="" style="margin-top:90px;">
+                                </div>
+                                <div class="sorry" style="margin-bottom:75px;">
+                                    <h3 style="font-size: 20px;color:#666;padding-top:35px;">为保证项目的顺利开展，请观看完本项目相关的基础课程视频</h3>
+                                    <p style="color:#999;font-size: 14px;width:465px;margin:0 auto;height:40px;padding:0;padding-top:16px;line-height:20px;">观看完全部课程后，工作人员就会为您开通电子数据采集（EDC）系统的使用权限，用于提交和管理数据，正式开展研究！</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <!--无权限-->
+                <div class="tab_three authority" style="display:block;width:1200px;">
+                    <div class="train research">
+                        <div style="text-align: center;">
+                            <img src="{% static 'images/sorry.svg' %}" alt="" style="margin-top:145px;">
+                        </div>
+                        <div class="sorry">
+                            <h3>抱歉，您无法参与科研培训！</h3>
+                            <p style="text-align:center;font-weight: bolder;line-height:32px;">本培训课程是<span>“慢阻肺临床研究专项”</span>研究人员的定制化课程。</p>
+                            <p>如果您是“慢阻肺临床研究专项”的研究人员，请先在本平台内提交申请信息。运营人员会在1~3个工作日内进行审核，审核通过后，会给您发送通知邮件（可能在您的垃圾邮件中），点击邮件中的课程链接即可获得培训课程权限。如有疑问，请发送邮件至<a href="javascript:;">help@natureself.cn</a>。</p>
+                            <p>如果您还不是“慢阻肺临床研究专项”的研究人员，有意向参与本项目，请发送邮件至<a href="javascript:;">help@natureself.cn</a>进行咨询。</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+<script>
+    $(function(){
+        let hash = window.location.hash;
+        let page = hash.substring(1);
+        
+            {% if not learned_all or course.data_collection is False or course.serial_state == 'loading' %}
+                $('#training-course').show()
+                $('#data-collection').hide()
+                window.location.hash = '#training-course';
+            {% else %}
+                $('#training-course').hide()
+                $('#data-collection').show()
+                window.location.hash = '#data-collection';
+            {% endif %}
+        setTimeout (function () {
+            window.scrollTo(0,0);
+        }) 
+    })
+    function navToPage (item, elem) {
+        let hash = window.location.hash; // 当前点击的锚点
+        let objClass = hash.slice(1); // 当前点击的锚点的类名
+        window.location.hash = `#${item}`;
+        $(`.${objClass}`).removeClass('bg');
+        $(`.${item}`).addClass('bg');
+        $(`${hash}`).hide();
+        $(`#${item}`).show();
+        $(".tab_nav_a").removeClass("train_nav_active").removeClass("train_nav_active_after").removeClass("train_nav_active_before")
+        $(`.train a[href='${hash}']`).addClass("train_nav_active").addClass("train_nav_active_after")
+        $(`.data a[href='${hash}'`).addClass("train_nav_active").addClass("train_nav_active_before")
+    }
+    $(".train a[href='#training-course']").click(function(){ 
+        navToPage('training-course');
+        $(".tab_nav_a").removeClass("train_nav_active").removeClass("train_nav_active_after").removeClass("train_nav_active_before")
+        $(this).addClass("train_nav_active").addClass("train_nav_active_after")
+        return false;
+    });
+    $(".data a[href='#data-collection']").click(function(){
+        navToPage('data-collection');
+        $(".tab_nav_a").removeClass("train_nav_active").removeClass("train_nav_active_after").removeClass("train_nav_active_before")
+        $(this).addClass("train_nav_active").addClass("train_nav_active_before")
+        return false;
+    });
+    $(".to_cource_video").click(function(){
+        let {href} = $(this).data()
+        window.open(href)
+    })
+    //是否已经载入勋章页面标识
+    let isAlreadyLoaded = false
+    setInterval(()=>{
+        let videoId = localStorage.getItem('videoPlayOver')
+        if(videoId){
+            if($(`a[data-video='${videoId}']`).find(".state_img")[0].src!="{% static 'images/correct.svg' %}"){
+                $(`a[data-video='${videoId}']`).find(".state_img")[0].src="{% static 'images/correct.svg' %}"
+            }
+            localStorage.removeItem('videoPlayOver')
+        }
+        /* // 判断最后一个视频播放完毕之后改变correct状态并跳转到数据采集页面
+        if($(`img[src="{% static 'images/correct.svg' %}"]`).length===3){
+            if(!isAlreadyLoaded){
+                $("#data-collection").html(
+                    `
+                        <div>
+                            <img class="medal_img" src="{{course.medal.ss_pic_url}}" alt="" style="margin-top:90px;">
+                        </div>
+                        <div class="sorry">
+                            <h3 style="font-size: 20px;color:#666;padding-top:35px;">恭喜您学习完成“慢阻肺临床研究专项”的基础课程，可以正式开展研究了！</h3>
+                            <p style="color:#999;font-size: 16px;margin:0 auto;height:40px;padding:0;padding-top:16px;line-height:20px;">已为您开通电子数据采集（EDC）系统--医维云科研大数据平台的使用权限，您可以在线提交和管理数据了</p>
+                        </div>
+                        <div style="width:291px;height:40px;line-height:40px;text-align:center;background:#449fea;color:#fff;margin:0 auto;border-radius: 4px;margin-top:11px;">
+                            <a href="https://www.einmatrix.com">
+                                <div class="btn" style="color:#fff;">点击进入医维云科研大数据平台</div>
+                            </a>
+                        </div>
+                        <p style="color: #b2b2b2;font-size:14px;text-align:center;padding-top:20px;margin-bottom:30px;">提醒：医咖会与医维云平台已实现账号互通，可直接使用医咖会账号登录医维云</p>
+                    `
+                )
+                isAlreadyLoaded = true
+            }
+        }*/
+    },1000)
+</script>
+{% endblock bodyblock %}

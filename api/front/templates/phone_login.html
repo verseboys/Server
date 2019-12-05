@@ -1,0 +1,414 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>医咖会—短信登录</title>
+    <link rel="shortcut icon" href="{% static 'images/20171213113454.png' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input:focus {
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        ::placeholder {
+            color: #b3bac6;
+            font-weight: 300;
+        }
+
+        * div {
+            font-weight: 300;
+        }
+        /* pc */
+        @media only screen
+        and (min-device-width : 768px) {
+            .login-box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                min-height: 440px;
+                min-width: 500px;
+                background: url({% static 'images/yika_bg.jpg' %}) no-repeat top;
+                background-size: cover;
+            }
+            .login-box .register_phone {
+                width: 376px;
+                height: 347px;
+                padding: 40px;
+                background: #fff;
+                border-radius: 4px;
+                box-shadow: 0 2px 13px 5px rgba(69, 160, 234, 0.17);
+            }
+            .logo-text {
+                margin-bottom: 32px;
+                font-family: PingFang SC, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft YaHei, Noto Sans CJK SC, WenQuanYi Micro Hei, Arial, sans-serif;
+                font-size: 30px;
+                text-align: center;
+                color: #403f40;
+                font-weight: 400;
+                margin-top: 10px;
+            }
+            .shadow_btn {
+                display: inline-block;
+                color: #fff;
+                font-size: 16px;
+                width: 84px;
+                height: 100%;
+                text-align: center;
+                background-color: #33A466;
+                border-radius: 2px;
+                cursor: pointer;
+            }
+            .shadow_btn:hover {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+            }
+            .neko_btn {
+                height: 38px;
+                float: right;
+                color: #403f40;
+            }
+            .regist_login {
+                display: inline-block;
+                color: #403f40;
+                font-size: 14px;
+                padding-right: 10px;
+                cursor: pointer;
+                margin-left: 19px;
+            }
+            .regist_login a {
+                color: #403f40;
+            }
+            .input_item {
+                display: flex;
+                position: relative;
+                background-color: #F5F9FF;
+                border-radius: 2px;
+                align-items: center;
+                margin-top: 20px;
+            }
+            .neko_input {
+                flex: 1;
+                background-color: #F5F9FF;
+                color: #333;
+                height: 48px;
+                font-size: 14px;
+                padding-left: 25px;
+                box-sizing: border-box;
+                display: inline-block;
+                vertical-align: top;
+                border: none;
+            }
+            .verify {
+                position: absolute;
+                right: 0;
+                height: 48px;
+                cursor: pointer;
+                padding: 0 15px;
+                border-radius: 4px;
+                background-color: #45a0ea;
+            }
+            .verify button {
+                border: none;
+                background: none;
+                color: #fff;
+                font-size: 14px;
+                outline:none;
+                cursor: pointer;
+            }
+            .regist_submit {
+                display: block;
+                width: 376px;
+                line-height: 46px;
+                border-radius: 2px;
+                background-color: #45a0ea;
+                color: #fff;
+                text-align: center;
+            }
+            .error_tip {
+                width: 377px;
+                height: 26px;
+            } 
+            .error_tip .error-tip {
+                line-height: 26px;
+                background-color: #e46d7c;
+                text-align: center;
+                color: #fff;
+                font-size: 14px;
+            }
+        }
+
+        /* 移动端 */
+        @media only screen
+        and (max-device-width : 768px) {
+            .login-box {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+            }
+            .login-box .register_phone {
+                width: 82%;
+                top: 50%;
+                left: 50%;
+                position: absolute;
+                transform: translate(-50%, -50%);
+            }
+            .logo-text {
+                margin-bottom: 32px;
+                font-family: PingFang SC, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft YaHei, Noto Sans CJK SC, WenQuanYi Micro Hei, Arial, sans-serif;
+                font-size: 28px;
+                text-align: center;
+                color: #403f40;
+                font-weight: 400;
+            }
+            .shadow_btn {
+                display: inline-block;
+                color: #fff;
+                font-size: 16px;
+                width: 84px;
+                height: 100%;
+                text-align: center;
+                background-color: #33A466;
+                border-radius: 2px;
+                cursor: pointer;
+            }
+            .shadow_btn:hover {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+            }
+            .neko_btn {
+                height: 38px;
+                float: right;
+                color: #403f40;
+            }
+            .regist_login {
+                display: inline-block;
+                color: #403f40;
+                font-size: 14px;
+                padding-right: 10px;
+                cursor: pointer;
+                margin-left: 19px;
+            }
+            .regist_login a {
+                color: #403f40;
+            }
+            .input_item {
+                display: flex;
+                position: relative;
+                background-color: #F5F9FF;
+                border-radius: 2px;
+                align-items: center;
+                margin-top: 15px;
+            }
+            .neko_input {
+                flex: 1;
+                background-color: #F5F9FF;
+                color: #333;
+                height: 45px;
+                font-size: 14px;
+                padding-left: 25px;
+                box-sizing: border-box;
+                display: inline-block;
+                vertical-align: top;
+                border: none;
+            }
+            .verify {
+                position: absolute;
+                right: 0;
+                height: 45px;
+                cursor: pointer;
+                padding: 0 15px;
+                border-radius: 4px;
+                background-color: #45a0ea;
+            }
+            .verify button {
+                border: none;
+                background: none;
+                color: #fff;
+                font-size: 14px;
+                outline:none;
+                cursor: pointer;
+            }
+            .regist_submit {
+                display: block;
+                width: 100%;
+                line-height: 40px;
+                border-radius: 2px;
+                background-color: #45a0ea;
+                color: #fff;
+                text-align: center;
+            }
+            .error_tip {
+                width: 100%;
+                height: 26px;
+            }
+            .error_tip .error-tip {
+                line-height: 26px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <div class="register_phone" style="position: relative;">
+        <div class="logo-text" style="margin-bottom:0;">登录</div>
+        <div class="error_tip">
+            <div class="error-tip" style="background-color: #e46d7c;text-align: center;color: #fff;display: none;"></div>
+        </div>
+        <div class="input_item" style="margin-top: 4px;">
+            <input placeholder="请输入手机号" type="phone" class="neko_input usr_phone">
+        </div>
+        <div style="position: relative;display: flex;">
+            <div class="input_item" style="flex: 1;margin-right: 115px;">
+                <input placeholder="填写验证码" class="neko_input usr_cap">
+            </div>
+            <div class="controls input_item verify" id="J_getCode">
+                <button class="get-code">获取验证码</button>
+                <button class="reset-code" id="J_resetCode" style="display:none;padding:0 24px;"><span id="J_second">60</span>s</button>
+            </div>
+        </div>
+        <div style="margin-top: 32px;">
+            <a href="javascript:;" class="regist_submit">登录</a>
+        </div>
+        <div style="display: flex;justify-content: space-between;padding-top: 20px;font-size: 14px;">
+            <a href="/register/" style="color: #45a0ea;">注册</a>
+            <a href="{% url 'front_login' %}#1" style="color: #45a0ea;">密码登录</a>
+        </div>
+    </div>
+</div>
+<script src="https://lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script type="application/javascript" src="{% static 'js/utils.js' %}?t=1558667234"></script>
+<script>
+    $(document).ready(function () {
+        var ary_type={}
+        var ary_click_defult = [
+            {
+                name: '.usr_phone', // 手机号
+                type:'phone'
+            }, {
+                name: '.usr_cap', // 验证码
+                type:'cap'
+            },
+        ]
+        var telPattern = /^[1]([3-9])[0-9]{9}$/; // 手机号匹配正则
+        // 失去焦点
+        $(".usr_phone").blur(function(){
+            if ($('.usr_phone').val() != '' && !telPattern.test($('.usr_phone').val())) {
+                $('.error-tip').html('手机号格式错误')
+                $('.error-tip').fadeIn(1000)
+            } else {
+                $('.error-tip').fadeOut(1000)
+            }
+        })
+        $(document).on('click', '.regist_submit', function () {
+            // 手机号校验
+            if ($('.usr_phone').val()==='') {
+                $('.error-tip').html('手机号不能为空');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            } else if (!telPattern.test($('.usr_phone').val())) {
+                $('.error-tip').html('手机号格式错误');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            }
+            // 验证码校验
+            if ($('.usr_cap').val() === '') {
+                $('.error-tip').html('验证码不能为空');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            }
+            if($('.usr_phone').val() && $('.usr_cap').val()){
+                $.ajax({
+                    type: 'post',
+                    url: '/phone_login/', {# TODO 改成短信登录的接口 #}
+                    data: {
+                        phone: $('.usr_phone').val(),
+                        captcha: $('.usr_cap').val(),
+                    },
+                    success: function (data) {
+                        if (data.code === 200) {
+                            //成功
+                            var redirect='/'
+                            var pair_value = getParameterByName('next')
+                            if (pair_value != null){
+                                redirect = pair_value
+                            }
+                            window.location.href=redirect
+                        } else {
+                            //失败 账号未注册情况下
+                            $('.error-tip').html(data.message)
+                            $('.error-tip').fadeIn(1000)
+                            data = data.data
+                            if (data.phone) {
+                                $('.error-tip').html(data.phone)
+                                $('.error-tip').fadeIn(1000)
+                            }
+                            if(data.captcha){
+                                $('.error-tip').html(data.captcha)
+                                $('.error-tip').fadeIn(1000)
+                            }
+                        }
+                    }
+                })
+            }
+        })
+        
+        // 手机注册获取验证码
+        $(document).on('click','#J_getCode', function() {
+            $.ajax({
+                type: 'post',
+                url: '/send_phone_login_code/',
+                data: {
+                    phone: $('.usr_phone').val(),
+                },
+                success: function (data) {
+                    if (data.code === 200) {
+                        //成功
+                        $('.get-code').hide();
+                        $('#J_resetCode').show();
+                        $('#J_second').html('59');
+                        var second = 60;
+                        var timer = null;
+                        timer = setInterval(function(){
+                            second -= 1;
+                            if(second >0 ){
+                                $('#J_second').html(second);
+                            }else{
+                                clearInterval(timer);
+                                $('.get-code').show();
+                                $('#J_resetCode').hide();
+                            }
+                        },1000);
+                        $('.error-tip').html(data.message)
+                        $('.error-tip').fadeIn(1000)
+                    } else if (data.code === 400) {
+                        //失败
+                        data = data.data;
+                        if (data.phone) {
+                            $('.error-tip').html(data.phone)
+                            $('.error-tip').fadeIn(1000)
+                        }
+                    } 
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>

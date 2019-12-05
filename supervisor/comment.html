@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-评论管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js"></script>
+    <style>
+        .box_content{
+        display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章连接管理</li>
+                <li data-url="custom_menu_tag.html">菜单分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div id="panel_header">
+            <div id="header_left">
+                <div id="header_left_info">详细内容</div>
+                <div id="header_left_search"><input id="header_left_search_input" placeholder="点击搜索关键词…">
+                    <div id="header_left_search_button"></div>
+                </div>
+            </div><div id="header_right">
+                <div id="header_right_name">用户名</div><div id="header_right_time">评论时间</div><div id="header_right_ctrl">操作</div>
+            </div>
+        </div>
+        <div id="panel_body">
+            <ul id="panel_message">
+            </ul>
+            <div id="compents_paginator">
+                <ul class="compents_paginator paginator">
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number">7</div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div><div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var page = 1, page_num = 0,del_id;
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            get_methods()
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            get_methods()
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            get_methods()
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            get_methods()
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            get_methods()
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup','input',function (e) {
+        if(e.keyCode===13){
+            page=$(this).val();
+            get_methods();
+            $(this).val('').blur();
+        } else {
+            if($(this).val()>page_num){
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g,''))
+        }
+    })
+    var url='/supervisor/news_comments/',type='get',val='';
+    get_methods()
+
+    function get_methods() {
+        AJAX({
+                type: type,
+                url: url + page + '/',
+                data: val,
+            fn: function (data) {
+                if(data.code!==200){
+
+                    return
+                }
+                var str = '';
+                var content = data.data.comments
+                for (var i = 0; i < content.length; i++) {
+                    var da = content[i];
+                    str+='<li class="message_item" pid="' + da.id +'">';
+                    str+='<div class="item_title">';
+                    str+=da.comment;
+                    str+='</div><div class="item_right"><div class="item_name">';
+                    str+=da.username
+                    str+='</div><div class="item_time">';
+                    str+=new Date(da.create_time).format('yyyy年MM月dd日 hh:mm')
+                    str+='</div><div class="item_del" did="'+ da.id+'">删除</div>';
+                    str+='</div>';
+                    str+='</li>';
+                }
+                $('#panel_message').html(str);
+                var str_li = '';
+                if (page !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                if (data.data.page_count !== 1) {
+                    for (var p = 0; p < data.data.page_count; p++) {
+                        if (Number(page) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.page_count !== 1 && page !== data.data.page_count) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+                $('#compents_paginator .paginator').html(str_li);
+                $('#page_number').html(data.data.page_count);
+                page_num = data.data.page_count;
+
+                if (data.data.page_count === 1) {
+                    $('#compents_paginator .paginator_controller').hide()
+                } else {
+                    $('#compents_paginator .paginator_controller').show()
+                }
+                $('#content')[0].scrollTop=0
+            }
+        })
+    }
+    function del_method() {
+    }
+    $('#container').on('click','.item_del',function () {
+
+        del_id=Number($(this).attr('did'))
+        $('#alert_area').removeClass('hide');
+    })
+    $('#alert_box .box_item .item_left').click(function () {
+        $('#alert_area').addClass('hide');
+    })
+    $(document.body).on('click','#alert_box .box_item .item_right',function () {
+
+        AJAX({
+            url:'/supervisor/delete_news_comment/',
+            type:'post',
+            data: {'comment_id':del_id},
+            fn:function (data) {
+                if(data.code ==200){
+                    $('#alert_area').addClass('hide');
+                    get_methods();
+                }
+            },
+            error:function () {
+
+                $('#alert_area').addClass('hide');
+                $('#panel_message .message_item[pid="'+ del_id+'"]').remove();
+            }
+        })
+    })
+    function search_list() {
+        url='/supervisor/search_comment/';
+        type='post',val={'search_keyword':$('#container .search_box input').val()}
+        page = 1;
+        get_methods()
+    }
+    $('#header_left_search_button').click(search_list)
+    $('#header_left_search_input').keyup(function (e) {
+        if(e.keyCode===13){
+            search_list()
+        }
+    })
+</script>
+</body>
+</html>

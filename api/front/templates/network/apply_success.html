@@ -1,0 +1,25 @@
+{% extends './_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+    <link rel="stylesheet" href="{% static 'css/network.css' %}">   
+{% endblock headblock %}
+
+{% block head-nav %}
+    <div class="head-methods-list">
+        <div class="header-methods-list-bot"> </div>
+    </div>
+{% endblock head-nav %}
+
+{% block bodyblock %}
+    <div id="container">
+        <div class="container">
+            <div class = "apply-success-wrapper">
+                <h1>
+                    信息提交成功 <br>
+                    请等待后续通知
+                </h1>
+            </div>
+        </div>
+    </div>
+{% endblock bodyblock %}

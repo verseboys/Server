@@ -1,0 +1,130 @@
+#container {
+    min-width: 1170px;
+}
+.flex-2{
+    display: flex;
+}
+.flex-left{
+    flex: 1.8;
+    margin-right: 25px;
+}
+.flex-6{
+    flex: 3;
+}
+.flex-4{
+    flex: 2;
+}
+.flex-4{
+    flex: 2;
+}
+.flex-right{
+    flex:1;
+    background-color: #ffffff;
+    box-shadow: 0 2px 1px 0 #d8d8d8;
+    padding: 11px 17px 19px;
+}
+.tag-if-show{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 2px;
+    background-color: #d8d8d8;
+    vertical-align: middle;
+    cursor: pointer;
+    position: relative;
+    font-family: inherit;
+    /* margin-right: 135px; */
+    font-family: PingFangSC-Regular;
+}
+.tag-if-show.checked{
+    background:#d8d8d8 url("../img/tag-if-show.svg") no-repeat center center;
+    background-size: 11px;
+
+
+}
+.flex-title{
+    height: 33px;
+    line-height: 33px;
+    background-color: #d8d8d8;
+    font-family: PingFangSC;
+    font-size: 15px;
+    color: #393939;
+    display: flex;
+}
+.flex-title div{
+    /*flex: 1;*/
+    text-align: center;
+}
+.flex-list .flex-title{
+    background-color: #f9f9f9;
+    line-height: 50px;
+    height: 50px;
+    border-bottom: solid 1px #e1e7ed;
+}
+.flex-list .flex-title .classify{
+    width: 115px;
+    height: 26px;
+    background-color: #e1e7ed;
+    border: solid 1px #d8d8d8;
+    border-radius: 5px;
+    color: #393939;
+}
+.flex-list .flex-title .class-num{
+    width: 68px;
+    height: 26px;
+    background-color: #e1e7ed;
+    border: solid 1px #d8d8d8;
+    border-radius: 5px;
+    color: #393939;
+}
+.add-new-classify .flex-title {
+    height: 90px;
+    line-height: 50px;
+    background-color: #f9f9f9;
+    padding-bottom: 40px;
+}
+.add-new-classify select {
+    width: 115px;
+    height: 26px;
+    background-color: #e1e7ed;
+    border: solid 1px #d8d8d8;
+    border-radius: 5px;
+    padding-left: 9px;
+    font-weight: 400;
+}
+.add-new-classify input::placeholder{
+    color: #393939;
+    font-weight: 400;
+}
+.add-new-classify input:focus{
+    box-sizing: border-box;
+}
+.add-new-classify{
+    margin-bottom: 60px;
+}
+.sub-btn{
+    display: inline-block;
+    width: 160px;
+    height: 40px;
+    border-radius: 5px;
+    font-family: PingFangSC;
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: 1.1px;
+    text-align: center;
+    color: #ffffff;
+    line-height: 40px;
+}
+.subchange{
+    background-color: #4588f1;
+}
+.submove{
+    background-color: #8c96a9;
+    margin-right: 24px;
+}
+.te-right{
+    text-align: right;
+}

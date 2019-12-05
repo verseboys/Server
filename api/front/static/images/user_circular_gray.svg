@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="13px" viewBox="0 0 11 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43 (38999) - http://www.bohemiancoding.com/sketch -->
+    <title>signup</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="1.-研究方法" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="UI：研究方法" transform="translate(-1204.000000, -24.000000)" fill="#BCC1CC">
+            <g id="signup" transform="translate(1204.000000, 24.000000)">
+                <g id="Group">
+                    <path d="M5.5,0 C6.88333317,0 8,1.34000015 8,3 C8,4.65999984 6.88333317,6 5.5,6 C4.11666675,6 3,4.65999984 3,3 C3,1.34000015 4.11666675,0 5.5,0 Z" id="Path"></path>
+                    <path d="M5.5,13 C3.20833333,13 1.18249996,11.7809518 0,9.93333314 C0.0275001833,8.0380954 3.66666667,7 5.5,7 C7.32416639,7 10.9725011,8.0380954 11,9.93333314 C9.81749908,11.7809518 7.79166667,13 5.5,13 Z" id="Path"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

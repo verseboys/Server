@@ -1,0 +1,437 @@
+{% extends 'network/_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+    <link rel="stylesheet" href="{% static 'css/front_study.css' %}">
+{% endblock headblock %}
+
+{% block head-nav %}
+  
+{% endblock head-nav %}
+
+{% block bodyblock %}
+    <div id="container" class="study-detail-container min_width_container">
+        <div class = "study-header" >
+            <div class="text-center study-name">
+                <h1 class = "study-title">
+                    {{study.name}}
+                </h1>
+                <h4>
+                    主办方：
+                    {% for org in study.organizers.all%}
+                        {{org.organizer_name}}
+                    {% endfor %}
+                </h4>
+            </div>
+        </div>
+        <div style="padding-bottom: 40px;">
+            <div class = "front-study-detail-box">
+                    <div id ="profile" class="detail profile">
+                        <h2>
+                            <?xml version="1.0" encoding="UTF-8"?>
+                            <svg width="25px" height="29px" viewBox="0 0 25 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+                                <title>简介 copy</title>
+                                <desc>Created with Sketch.</desc>
+                                <defs></defs>
+                                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g id="医咖会4.0-研究项目详情页" transform="translate(-224.000000, -1466.000000)" fill="#45A0EA" fill-rule="nonzero">
+                                        <g id="简介-copy" transform="translate(224.000000, 1466.000000)">
+                                            <path d="M21.4303571,0 L3.57142857,0 C1.60892857,0 0,1.4518125 0,3.222625 L0,25.777375 C0,27.5481875 1.60892857,29 3.57142857,29 L21.4303571,29 C23.3946429,29 25,27.5481875 25,25.777375 L25,3.222625 C25,1.4518125 23.3964286,0 21.4303571,0 Z M5.01964286,6.7189375 L19.975,6.7189375 L19.975,9.5391875 L5.01964286,9.5391875 L5.01964286,6.7189375 Z M19.975,22.185 L5.01964286,22.185 L5.01964286,19.3629375 L19.975,19.3629375 L19.975,22.185 Z M20.0196429,15.89925 L5.06428571,15.89925 L5.06428571,13.0010625 L20.0196429,13.0010625 L20.0196429,15.89925 Z" id="Shape"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                            <span>项目简介</span>
+                        </h2>
+                        <ul>
+                            <li>
+                                <div class ="sub-title">项目名称</div>  
+                                <div class ="sub-item">{{ study.name}}</div>
+                            </li>
+                            {% comment %} <li>
+                                <div class ="sub-title">项目状态</div>  
+                                <div class ="sub-item">{{ study.state_display}}</div>
+                            </li> {% endcomment %}
+                            <li>
+                                <div class ="sub-title">项目类型</div>  
+                                <div class ="sub-item">{{ study.type}}</div>
+                            </li>
+                            <li>
+                                <div class ="sub-title">研究疾病</div>  
+                                <div class ="sub-item"> 
+                                    {% for illness in study.illnesses.all %}
+                                        {{illness.illness_name}}
+                                    {% endfor %}
+                                </div>
+                            </li>
+                            <li>
+                                <div class ="sub-title">项目级别</div>  
+                                <div class ="sub-item">{{ study.level_type_display}}</div>
+                            </li>
+                            <li>
+                                <div class ="sub-title">研究目的</div>  
+                                <div class ="sub-item">{{ study.description}}</div>
+                            </li>
+                            <li>
+                                <div class ="sub-title">主办方</div>  
+                                <div class ="sub-item">
+                                    {% for org in study.organizers.all %}
+                                        {{org.organizer_name}}
+                                    {% endfor %}                                
+                                </div>
+                            </li>
+                            <li>
+                                <div class ="sub-title">起止时间</div>  
+                                <div class ="sub-item">{{study.start_date|date:"Y/m/d"}}-{{study.finish_date|date:"Y/m/d"}}</div>
+                            </li>    
+                            {% comment %} <li>
+                                <div class ="sub-title">项目网址</div>  
+                                <div class ="sub-item link">
+                                    {% if study.study_website %}
+                                    <a href="{{study.study_website}}" target="_blank">{{study.study_website}}</a>   
+                                    {% endif%}                               
+                                </div>
+                            </li>     {% endcomment %}
+                            <li>
+                                <div class ="sub-title">数据管理平台</div>  
+                                <div class ="sub-item link">
+                                    <!-- <a href="{{study.edc_platform.url}}"> {{study.edc_platform.platform_name}}</a>  -->
+                                    <a href="https://www.einmatrix.com" target="_blank"> 医维云科研大数据平台</a>   
+                                </div>
+                            </li>   
+                            {% comment %} <li>
+                                <div class ="sub-title">申请条件</div>  
+                                <div class ="sub-item">{{study.apply_term}}</div>
+                            </li>
+                            <li>
+                                <div class ="sub-title">申请途径</div>  
+                                <div class ="sub-item">{{study.apply_way}}</div>
+                            </li>    
+                            <li>
+                                <div class ="sub-title">课题申报方式</div>  
+                                <div class ="sub-item">{{study.declare_type_display}}</div>
+                            </li>   
+                            <li>
+                                <div class ="sub-title">数据是否共享</div>  
+                                <div class ="sub-item">{{study.is_data_share_display}}</div>
+                            </li> 
+                            <li>
+                                <div class ="sub-title">申请截止时间</div>  
+                                <div class ="sub-item">{{study.apply_due_date|date:"Y/m/d"}}</div>
+                            </li> {% endcomment %}
+                        </ul>
+                    </div>
+                    <div id ="research" class ="detail">
+                            <h2>
+                                <?xml version="1.0" encoding="UTF-8"?>
+                                <svg width="25px" height="29px" viewBox="0 0 25 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+                                    <title>简介 copy</title>
+                                    <desc>Created with Sketch.</desc>
+                                    <defs></defs>
+                                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g id="医咖会4.0-研究项目详情页" transform="translate(-224.000000, -1466.000000)" fill="#45A0EA" fill-rule="nonzero">
+                                            <g id="简介-copy" transform="translate(224.000000, 1466.000000)">
+                                                <path d="M21.4303571,0 L3.57142857,0 C1.60892857,0 0,1.4518125 0,3.222625 L0,25.777375 C0,27.5481875 1.60892857,29 3.57142857,29 L21.4303571,29 C23.3946429,29 25,27.5481875 25,25.777375 L25,3.222625 C25,1.4518125 23.3964286,0 21.4303571,0 Z M5.01964286,6.7189375 L19.975,6.7189375 L19.975,9.5391875 L5.01964286,9.5391875 L5.01964286,6.7189375 Z M19.975,22.185 L5.01964286,22.185 L5.01964286,19.3629375 L19.975,19.3629375 L19.975,22.185 Z M20.0196429,15.89925 L5.06428571,15.89925 L5.06428571,13.0010625 L20.0196429,13.0010625 L20.0196429,15.89925 Z" id="Shape"></path>
+                                            </g>
+                                        </g>
+                                    </g>    
+                                </svg>
+                                <span>科研队伍</span>    
+                            </h2>
+                            <div class = "detail-inbox">
+                                <div class = "pi">
+                                    <h3>
+                                        <?xml version="1.0" encoding="UTF-8"?>
+                                        <svg width="24px" height="23px" viewBox="0 0 24 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+                                            <title>箭头往上</title>
+                                            <desc>Created with Sketch.</desc>
+                                            <defs></defs>
+                                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g id="医咖会4.0-研究项目详情页" transform="translate(-229.000000, -1557.000000)" fill-rule="nonzero">
+                                                    <g id="箭头往上" transform="translate(241.000000, 1568.500000) rotate(-270.000000) translate(-241.000000, -1568.500000) translate(230.000000, 1557.000000)">
+                                                        <path d="M10.7810311,0 L21.2186794,10.8540875 C21.6980704,11.3528464 21.673167,12.134438 21.1626467,12.6027847 C20.6521265,13.0680902 19.848991,13.0468017 19.372713,12.5480429 L10.7810311,3.61296048 L2.18934927,12.5480429 C1.70684539,13.0468017 0.906822844,13.0680902 0.399415545,12.6027847 C-0.111104682,12.134438 -0.136008108,11.3528464 0.346495765,10.8540875 L10.7810311,0 Z" id="Shape" fill="#4A90E2"></path>
+                                                        <path d="M10.7810311,10.0625 L21.2186794,20.9160838 C21.6980704,21.4146798 21.673167,22.1960162 21.1626467,22.6642101 C20.6521265,23.1293636 19.848991,23.1080821 19.372713,22.6094861 L10.7810311,13.6773211 L2.18934927,22.6094861 C1.70684539,23.1080821 0.906822844,23.1324039 0.399415545,22.6642101 C-0.111104682,22.1960162 -0.136008108,21.4146798 0.346495765,20.9160838 L10.7810311,10.0625 Z" id="Shape" fill="#87D4E8"></path>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <span>主要研究者（PI）</span>
+                                    </h3>
+                                    <ul>
+                                        {% for role in study.edcstudyrole_set.all %}
+                                            {% if role.type == "pi" %}
+                                            <li class = "logo-box">
+                                                <dl>
+                                                    <dd>
+                                                        <div class = "image-wrapper">
+                                                            <img src="{% static 'images/doc0.png' %}" alt="">
+                                                            <img class = "line-bg" src="{% static 'images/line_orange.png' %}" alt="">
+                                                        </div>
+                                                    </dd>
+                                                    <dt>
+                                                        <h4>{{role.name}}</h4>   
+                                                    </dt>
+                                                </dl>
+                                            </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <li class = "logo-box">
+                                            <dl>
+                                                <dd>
+                                                    <div class = "image-wrapper">
+                                                        <img src="{% static 'images/doc0.png' %}" alt="">
+                                                        <img class = "line-bg" src="{% static 'images/line_orange.png' %}" alt="">
+                                                    </div>
+                                                </dd>
+                                                <dt>
+                                                   <h4>王辰</h4>   
+                                                </dt>
+                                            </dl>
+                                        </li>                                            
+                                    
+                                    </ul>
+                                </div>
+                                <div class="expert">
+                                    <h3>
+                                        <?xml version="1.0" encoding="UTF-8"?>
+                                        <svg width="24px" height="23px" viewBox="0 0 24 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+                                            <title>箭头往上</title>
+                                            <desc>Created with Sketch.</desc>
+                                            <defs></defs>
+                                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g id="医咖会4.0-研究项目详情页" transform="translate(-229.000000, -1557.000000)" fill-rule="nonzero">
+                                                    <g id="箭头往上" transform="translate(241.000000, 1568.500000) rotate(-270.000000) translate(-241.000000, -1568.500000) translate(230.000000, 1557.000000)">
+                                                        <path d="M10.7810311,0 L21.2186794,10.8540875 C21.6980704,11.3528464 21.673167,12.134438 21.1626467,12.6027847 C20.6521265,13.0680902 19.848991,13.0468017 19.372713,12.5480429 L10.7810311,3.61296048 L2.18934927,12.5480429 C1.70684539,13.0468017 0.906822844,13.0680902 0.399415545,12.6027847 C-0.111104682,12.134438 -0.136008108,11.3528464 0.346495765,10.8540875 L10.7810311,0 Z" id="Shape" fill="#4A90E2"></path>
+                                                        <path d="M10.7810311,10.0625 L21.2186794,20.9160838 C21.6980704,21.4146798 21.673167,22.1960162 21.1626467,22.6642101 C20.6521265,23.1293636 19.848991,23.1080821 19.372713,22.6094861 L10.7810311,13.6773211 L2.18934927,22.6094861 C1.70684539,23.1080821 0.906822844,23.1324039 0.399415545,22.6642101 C-0.111104682,22.1960162 -0.136008108,21.4146798 0.346495765,20.9160838 L10.7810311,10.0625 Z" id="Shape" fill="#87D4E8"></path>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <span>专家委员会</span>
+                                    </h3>
+                                    <ul>
+                                        {% for role in study.edcstudyrole_set.all %}
+                                        {% if role.type == "expertComm" %}
+                                            <li class ="logo-box">
+                                                <dl>
+                                                    <dd>
+                                                        <div class = "image-wrapper">
+                                                            <img src="{% static 'images/doc0.png' %}" alt="">
+                                                            <img class = "line-bg" src="{% static 'images/line_blue.png' %}" alt="">
+                                                        </div>
+                                                    </dd>
+                                                    <dt>
+                                                        <h4>{{role.name}}</h4>   
+                                                    </dt>
+                                                </dl>
+                                            </li>
+                                         {% endif %}
+            
+                                        {% endfor %}
+                                        <li class = "logo-box">
+                                                <dl>
+                                                    <dd>
+                                                        <div class = "image-wrapper">
+                                                            <img src="{% static 'images/doc1.png' %}" alt="">
+                                                            <img class = "line-bg" src="{% static 'images/line_blue.png' %}" alt="">
+                                                        </div>
+                                                    </dd>
+                                                    <dt>
+                                                       <h4>王辰</h4>   
+                                                    </dt>
+                                                </dl>
+                                        </li> 
+                                        <li class = "logo-box">
+                                                <dl>
+                                                    <dd>
+                                                        <div class = "image-wrapper">
+                                                            <img src="{% static 'images/doc2.png' %}" alt="">
+                                                            <img class = "line-bg" src="{% static 'images/line_blue.png' %}" alt="">
+                                                        </div>
+                                                    </dd>
+                                                    <dt>
+                                                       <h4>王辰</h4>   
+                                                    </dt>
+                                                </dl>
+                                        </li> 
+                                        <li class = "logo-box">
+                                                <dl>
+                                                    <dd>
+                                                        <div class = "image-wrapper blue">
+                                                            <img src="{% static 'images/doc3.png' %}" alt="">
+                                                            <img class = "line-bg" src="{% static 'images/line_blue.png' %}" alt="">
+                                                        </div>
+                                                    </dd>
+                                                    <dt>
+                                                       <h4>王辰</h4>   
+                                                    </dt>
+                                                </dl>
+                                        </li> 
+                                        <li class = "logo-box">
+                                                <dl>
+                                                    <dd>
+                                                        <div class = "image-wrapper blue">
+                                                            <img src="{% static 'images/doc4.png' %}" alt="">
+                                                            <img class = "line-bg" src="{% static 'images/line_blue.png' %}" alt="">
+                                                        </div>
+                                                    </dd>
+                                                    <dt>
+                                                       <h4>王辰</h4>   
+                                                    </dt>
+                                                </dl>
+                                        </li> 
+
+                                    </ul>
+                                </div>
+                                <div class = "researcher">
+                                    <h3>
+                                        <?xml version="1.0" encoding="UTF-8"?>
+                                        <svg width="24px" height="23px" viewBox="0 0 24 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+                                            <title>箭头往上</title>
+                                            <desc>Created with Sketch.</desc>
+                                            <defs></defs>
+                                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g id="医咖会4.0-研究项目详情页" transform="translate(-229.000000, -1557.000000)" fill-rule="nonzero">
+                                                    <g id="箭头往上" transform="translate(241.000000, 1568.500000) rotate(-270.000000) translate(-241.000000, -1568.500000) translate(230.000000, 1557.000000)">
+                                                        <path d="M10.7810311,0 L21.2186794,10.8540875 C21.6980704,11.3528464 21.673167,12.134438 21.1626467,12.6027847 C20.6521265,13.0680902 19.848991,13.0468017 19.372713,12.5480429 L10.7810311,3.61296048 L2.18934927,12.5480429 C1.70684539,13.0468017 0.906822844,13.0680902 0.399415545,12.6027847 C-0.111104682,12.134438 -0.136008108,11.3528464 0.346495765,10.8540875 L10.7810311,0 Z" id="Shape" fill="#4A90E2"></path>
+                                                        <path d="M10.7810311,10.0625 L21.2186794,20.9160838 C21.6980704,21.4146798 21.673167,22.1960162 21.1626467,22.6642101 C20.6521265,23.1293636 19.848991,23.1080821 19.372713,22.6094861 L10.7810311,13.6773211 L2.18934927,22.6094861 C1.70684539,23.1080821 0.906822844,23.1324039 0.399415545,22.6642101 C-0.111104682,22.1960162 -0.136008108,21.4146798 0.346495765,20.9160838 L10.7810311,10.0625 Z" id="Shape" fill="#87D4E8"></path>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <span>研究者</span>    
+                                    </h3>
+                                    <ul>
+                                        {% for role in study.edcstudyrole_set.all %}
+                                        {% if role.type == "researcher" %}
+                                            <li class = "logo-box">
+                                                <dl>
+                                                    <dd>
+                                                        <div class = "image-wrapper">
+                                                            <img src="{% static 'images/doc5.png' %}" alt="">
+                                                            <img class = "line-bg" src="{% static 'images/line_grey.png' %}" alt="">
+                                                        </div>
+                                                    </dd>
+                                                    <dt>
+                                                        <h4>{{role.name}}</h4>   
+                                                    </dt>
+                                                </dl>
+                                            </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <li class = "logo-box">
+                                            <dl>
+                                                <dd>
+                                                    <div class = "image-wrapper">
+                                                        <img src="{% static 'images/doc5.png' %}" alt="">
+                                                        <img class = "line-bg" src="{% static 'images/line_grey.png' %}" alt="">
+                                                    </div>
+                                                </dd>
+                                                <dt>
+                                                    <h4>王辰</h4>   
+                                                </dt>
+                                            </dl>
+                                        </li>
+                                        <li class = "logo-box">
+                                            <dl>
+                                                <dd>
+                                                    <div class = "image-wrapper">
+                                                        <img src="{% static 'images/doc6.png' %}" alt="">
+                                                        <img class = "line-bg" src="{% static 'images/line_grey.png' %}" alt="">
+                                                    </div>
+                                                </dd>
+                                                <dt>
+                                                    <h4>王辰</h4>   
+                                                </dt>
+                                            </dl>
+                                        </li> 
+                                    </ul>
+                                </div>
+                                <div class= "site">
+                                    <h3>
+                                        <?xml version="1.0" encoding="UTF-8"?>
+                                        <svg width="24px" height="23px" viewBox="0 0 24 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+                                            <title>箭头往上</title>
+                                            <desc>Created with Sketch.</desc>
+                                            <defs></defs>
+                                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <g id="医咖会4.0-研究项目详情页" transform="translate(-229.000000, -1557.000000)" fill-rule="nonzero">
+                                                    <g id="箭头往上" transform="translate(241.000000, 1568.500000) rotate(-270.000000) translate(-241.000000, -1568.500000) translate(230.000000, 1557.000000)">
+                                                        <path d="M10.7810311,0 L21.2186794,10.8540875 C21.6980704,11.3528464 21.673167,12.134438 21.1626467,12.6027847 C20.6521265,13.0680902 19.848991,13.0468017 19.372713,12.5480429 L10.7810311,3.61296048 L2.18934927,12.5480429 C1.70684539,13.0468017 0.906822844,13.0680902 0.399415545,12.6027847 C-0.111104682,12.134438 -0.136008108,11.3528464 0.346495765,10.8540875 L10.7810311,0 Z" id="Shape" fill="#4A90E2"></path>
+                                                        <path d="M10.7810311,10.0625 L21.2186794,20.9160838 C21.6980704,21.4146798 21.673167,22.1960162 21.1626467,22.6642101 C20.6521265,23.1293636 19.848991,23.1080821 19.372713,22.6094861 L10.7810311,13.6773211 L2.18934927,22.6094861 C1.70684539,23.1080821 0.906822844,23.1324039 0.399415545,22.6642101 C-0.111104682,22.1960162 -0.136008108,21.4146798 0.346495765,20.9160838 L10.7810311,10.0625 Z" id="Shape" fill="#87D4E8"></path>
+                                                    </g>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <span>研究中心</span>
+                                    </h3>
+                                    <ul style = "overflow: hidden;margin-top:15px">
+                                        <!-- {% for site in study.edcstudyrole_set.all %}
+                                            {{site.id}}
+                                        {% endfor %} -->
+                                        <li class = "logo-box">
+                                            <img src="{% static 'images/site_1.png' %}" alt="">
+                                        </li> 
+                                        <li class = "logo-box">
+                                            <img src="{% static 'images/site_2.png' %}" alt="">
+                                        </li> 
+                                        <li class = "logo-box">
+                                            <img src="{% static 'images/site_3.png' %}" alt="">
+                                        </li> 
+                                        <li class = "logo-box">                                                
+                                            <img src="{% static 'images/site_4.png' %}" alt="">
+                                        </li> 
+                                        <li class = "logo-box">
+                                            <img src="{% static 'images/site_5.png' %}" alt="">
+                                        </li> 
+                                    </ul>
+                                </div>
+                            </div>
+                    </div>  
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript">
+        $(document).ready(function () {
+            $('#research').css({
+                display: 'none'
+            });
+            $('#profile').css({
+                display: 'block'
+            });
+            $('.profile').addClass('active');
+            window.location.hash = '#profile';
+            setTimeout (function () {
+                window.scrollTo(0,0);
+            }) 
+        })
+        
+        function navToPage (item, elem) {
+            let hash = window.location.hash;
+            let objClass = hash.slice(1);
+            window.location.hash = `#${item}`;
+            $(`.${objClass}`).removeClass('active');
+            $(`.${item}`).addClass('active');
+
+            $(`${hash}`).css({
+                display: 'none'
+            });  
+            $(`#${item}`).css({
+                display: 'block'
+            });
+        }
+
+        $(".profile a[href='#profile']").click(function(){ navToPage('profile'); return false; });
+        $(".research a[href='#research']").click(function(){ navToPage('research'); return false; });
+    </script>
+
+{% endblock bodyblock %}
+
+
+

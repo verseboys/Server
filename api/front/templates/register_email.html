@@ -1,0 +1,678 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>医咖会—邮箱注册</title>
+    <link rel="shortcut icon" href="{% static 'images/20171213113454.png' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        input:focus {
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        ::placeholder {
+            color: #b3bac6;
+            font-weight: 300;
+        }
+
+        * div {
+            font-weight: 300;
+        }
+        /* pc */
+        @media only screen
+        and (min-device-width : 768px) {
+            .login-box {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                min-height: 440px;
+                min-width: 500px;
+                background: url({% static 'images/yika_bg.jpg' %}) no-repeat top;
+                background-size: cover;
+            }
+            .login-box .front-register {
+                width: 376px;
+                height: 437px;
+                padding: 40px;
+                background: #fff;
+                border-radius: 4px;
+                box-shadow: 0 2px 13px 5px rgba(69, 160, 234, 0.17);
+            }
+            .logo-text {
+                margin-bottom: 32px;
+                font-family: PingFang SC, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft YaHei, Noto Sans CJK SC, WenQuanYi Micro Hei, Arial, sans-serif;
+                font-size: 30px;
+                text-align: center;
+                color: #403f40;
+                font-weight: 400;
+                margin-top: 40px;
+                margin-bottom:0;
+            }
+            .shadow_btn {
+                display: inline-block;
+                color: #fff;
+                font-size: 16px;
+                width: 84px;
+                height: 100%;
+                text-align: center;
+                background-color: #33A466;
+                border-radius: 2px;
+                cursor: pointer;
+            }
+            .shadow_btn:hover {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+            }
+            .tool_box {
+                margin-top: 20px;
+                line-height: 38px;
+            }
+            .tool_box .tip_msg_box {
+                font-size: 12px;
+                display: inline-block;
+            }
+            .tool_box .tip_msg_box .msg {
+                display: inline-block;
+                color: #999;
+            }
+            .tool_box .tip_msg_box .jump_msg {
+                color: #2F8BE6;
+                display: inline-block;
+                cursor: pointer;
+            }
+            .regist_login {
+                display: inline-block;
+                color: #403f40;
+                font-size: 14px;
+                padding-right: 10px;
+                cursor: pointer;
+                margin-left: 19px;
+            }
+            .regist_login a {
+                color: #403f40;
+            }
+            .input_item {
+                display: flex;
+                position: relative;
+                background-color: #F5F9FF;
+                border-radius: 2px;
+                align-items: center;
+                margin-top: 20px;
+            }
+            .neko_input {
+                flex: 1;
+                background-color: #F5F9FF;
+                color: #333;
+                height: 48px;
+                font-size: 14px;
+                padding-left: 25px;
+                box-sizing: border-box;
+                display: inline-block;
+                vertical-align: top;
+                border: none;
+            }
+            .input_item .defule {
+                color: #999;
+            }
+            .verify {
+                position: absolute;
+                right: 0;
+                height: 48px;
+                cursor: pointer;
+                background: #fff;
+            }
+            #yika_agreement {
+                position: fixed;
+                top: 0;
+                height: 100%;
+                width: 100%;
+                background: #f9f9f9;
+            }
+            #yika_agreement .agreement_info{
+                padding: 30px 10%;
+                box-sizing: border-box;
+                border-radius: 2px 2px 0 0;
+                border-bottom: 1px solid #2A2A2A;
+                overflow-y: auto;
+                margin: 0;
+                white-space: pre-line;
+                line-height: 27px;
+            }
+            #yika_agreement .agreement_btn{
+                text-align: center;
+                height: 40px;
+                color: #333;
+                font-size: 16px;
+                border-radius: 0 0 2px 2px;
+                line-height: 40px;
+                cursor: pointer;
+            }
+            .email_active_inform {
+                width: 456px;
+                height: 389px;
+                border-radius: 4px;
+                box-shadow: 0 2px 13px 5px rgba(69, 160, 234, 0.17);
+                background-color: #fff;
+            }
+            .email_active_inform>p {
+                margin: 0 auto;
+                padding: 40px 53px;
+                color: #666;
+                font-size: 15px;
+                line-height: 24px;
+                text-align:center;
+            }
+            .email_active_inform>a.activate {
+                display: block;
+                width: 379px;
+                line-height: 46px;
+                border-radius: 2px;
+                background-color: #03a675;
+                color: #fff;
+                text-align: center;
+                margin: 0 auto;
+            }
+            .email_active_inform .resend_email {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 40px;
+                padding-top: 23px;
+            }
+            .error_tip {
+                width: 377px;
+                height: 26px;
+            } 
+            .error_tip .error-tip {
+                line-height: 26px;
+                background-color: #e46d7c;
+                text-align: center;
+                color: #fff;
+                font-size: 14px;
+            }
+            .regist_submit {
+                display: block;
+                width: 376px;
+                line-height: 46px;
+                border-radius: 2px;
+                background-color: #45a0ea;
+                color: #fff;
+                text-align: center;
+            }
+        }
+        /* 移动端 */
+        @media only screen
+        and (max-device-width : 768px) {
+            .login-box {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+            }
+            .login-box .front-register {
+                width: 82%;
+                top: 50%;
+                left: 50%;
+                position: absolute;
+                transform: translate(-50%, -50%);
+            }
+            .logo-text {
+                margin-bottom: 32px;
+                font-family: PingFang SC, Hiragino Sans GB, Helvetica Neue, Helvetica, Microsoft YaHei, Noto Sans CJK SC, WenQuanYi Micro Hei, Arial, sans-serif;
+                font-size: 28px;
+                text-align: center;
+                color: #403f40;
+                font-weight: 400;
+                margin-top: 0;
+            }
+            .shadow_btn {
+                display: inline-block;
+                color: #fff;
+                font-size: 16px;
+                width: 84px;
+                height: 100%;
+                text-align: center;
+                background-color: #33A466;
+                border-radius: 2px;
+                cursor: pointer;
+            }
+            .shadow_btn:hover {
+                background-image: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05));
+            }
+            .tool_box {
+                margin-top: 0;
+                line-height: 38px;
+            }
+            .tool_box .tip_msg_box {
+                font-size: 12px;
+                display: inline-block;
+            }
+            .tool_box .tip_msg_box .msg {
+                display: inline-block;
+                color: #999;
+            }
+            .tool_box .tip_msg_box .jump_msg {
+                color: #2F8BE6;
+                display: inline-block;
+                cursor: pointer;
+            }
+            .regist_login {
+                display: inline-block;
+                color: #403f40;
+                font-size: 14px;
+                padding-right: 10px;
+                cursor: pointer;
+                margin-left: 19px;
+            }
+            .regist_login a {
+                color: #403f40;
+            }
+            .input_item {
+                display: flex;
+                position: relative;
+                background-color: #F5F9FF;
+                border-radius: 2px;
+                align-items: center;
+                margin-top: 15px;
+            }
+            .neko_input {
+                flex: 1;
+                background-color: #F5F9FF;
+                color: #333;
+                height: 45px;
+                font-size: 14px;
+                padding-left: 25px;
+                box-sizing: border-box;
+                display: inline-block;
+                vertical-align: top;
+                border: none;
+            }
+            .input_item .defule {
+                color: #999;
+            }
+            .verify {
+                position: absolute;
+                right: 0;
+                height: 45px;
+                cursor: pointer;
+                background: #fff;
+            }
+            .regist_submit {
+                display: block;
+                width: 100%;
+                line-height: 40px;
+                border-radius: 2px;
+                background-color: #45a0ea;
+                color: #fff;
+                text-align: center;
+            }
+            #yika_agreement {
+                position: fixed;
+                top: 0;
+                height: 100%;
+                width: 100%;
+                background: #f9f9f9;
+            }
+            #yika_agreement .agreement_info{
+                padding: 30px 10%;
+                box-sizing: border-box;
+                border-radius: 2px 2px 0 0;
+                border-bottom: 1px solid #2A2A2A;
+                overflow-y: auto;
+                margin: 0;
+                white-space: pre-line;
+                line-height: 27px;
+            }
+            #yika_agreement .agreement_btn{
+                text-align: center;
+                height: 40px;
+                color: #333;
+                font-size: 16px;
+                border-radius: 0 0 2px 2px;
+                line-height: 40px;
+                cursor: pointer;
+            }
+            .error_tip {
+                width: 100%;
+                height: 26px;
+            }
+            .error_tip .error-tip {
+                line-height: 26px;
+                font-size: 14px;
+            }
+            .email_active_inform {
+                width: 100%;
+                border-radius: 4px;
+                top: 50%;
+                left: 50%;
+                position: absolute;
+                transform: translate(-50%, -50%);
+            }
+            .email_active_inform>p {
+                margin: 0 auto;
+                padding: 30px 53px;
+                color: #666;
+                font-size: 15px;
+                line-height: 24px;
+                text-align:center;
+                padding-top: 0;
+            }
+            .email_active_inform>a.activate {
+                display: block;
+                width: 84%;
+                line-height: 40px;
+                border-radius: 2px;
+                background-color: #03a675;
+                color: #fff;
+                text-align: center;
+                margin: 0 auto;
+            }
+            .email_active_inform .resend_email {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 30px;
+                padding-top: 23px;
+                width: 84%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="login-box">
+    <div class="front-register">
+        <div class="logo-text" style="margin-bottom:0;">邮箱注册</div>
+        <div class="error_tip">
+            <div class="error-tip" style="background-color: #e46d7c;text-align: center;color: #fff;display: none;"></div>
+        </div>
+        <div class="input_item" style="margin-top: 4px;">
+            <input placeholder="请输入邮箱" type="email" class="neko_input usr_email">
+        </div>
+        <div style="position: relative;display: flex;">
+            <div class="input_item" style="flex: 1;margin-right: 115px;">
+                <input placeholder="填写验证码" class="neko_input usr_cap">
+            </div>
+            <div class="input_item verify">
+                <img src="">
+            </div>
+        </div>
+        <div class="input_item">
+            <input placeholder="设置密码" type="password" class="neko_input usr_pass">
+        </div>
+        <div class="tool_box">
+            <div class="tip_msg_box">
+                <input type="checkbox" id="checkbox1" style="vertical-align: middle;">
+                <div class="msg">我已阅读并同意</div>
+                <div class="jump_msg">《医咖会协议》</div>
+            </div>
+        </div>
+        <div class="input_item" style="margin-top: 0;">
+            <a href="javascript:;" class="regist_submit">注册</a>
+        </div>
+        <div style="display: flex;justify-content: space-between;padding-top: 20px;">
+            <a href="{% url 'front_register' %}" style="font-size: 14px;color: #45a0ea;">手机注册</a>
+            <span style="font-size: 14px;color: #999;">已有账号，<a href="{% url 'front_login' %}#1" style="color: #45a0ea;">去登录</a></span>
+        </div>
+    </div>
+</div>
+<script src="https://lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        img_captcha()
+        var ary_type={}
+        var ary_click_defult = [
+            {
+                name: '.usr_email', // 邮箱
+                type:'email'
+            }, {
+                name: '.usr_cap', // 验证码
+                type:'cap'
+            }, {
+                name: '.usr_pass', // 密码
+                type:'pass'
+            },
+        ]
+        // var uPattern = /[\u4E00-\u9FA5a-zA-Z0-9_-]{2,16}/; // 用户名正则表达式
+        var ePattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; // 邮箱正则表达式
+        $(".usr_email").blur(function(){
+            if ($('.usr_email').val() != '' && !ePattern.test($('.usr_email').val())) {
+                $('.error-tip').html('邮箱格式错误');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            } else {
+                $('.error-tip').fadeOut(1000);
+            }
+        })
+        $(document).on('click','.regist_submit', function () {
+            // 邮箱校验
+            if ($('.usr_email').val()==='') {
+                $('.error-tip').html('邮箱不能为空')
+                $('.error-tip').fadeIn(1000);
+                return false;
+            } else if (!ePattern.test($('.usr_email').val())) {
+                $('.error-tip').html('邮箱格式错误');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            }
+            // 验证码校验
+            if ($('.usr_cap').val() === '') {
+                $('.error-tip').html('验证码不能为空');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            }
+            // 密码校验
+            if(!$('.usr_pass').val()){
+                $('.error-tip').html('密码不能为空');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            }else if(!($('.usr_pass').val().length>=4 && $('.usr_pass').val().length<=16)){
+                $('.error-tip').html('请输入4-16位长度密码');
+                $('.error-tip').fadeIn(1000);
+                return false;
+            }
+            if($('#checkbox1').prop('checked')){
+                $.ajax({
+                    type: 'post',
+                    url: '/front_register/',
+                    data: {
+                        email: $('.usr_email').val(),
+                        captcha: $('.usr_cap').val(),
+                        password: $('.usr_pass').val(),
+                    },
+                    success: function (data) {
+                        if (data.code === 200) {
+                            //成功
+                            $('.front-register').hide();
+                            var usr_email = $('.usr_email').val();
+                            var activate = `
+                            <div class="email_active_inform">
+                                <div class="logo-text">邮箱验证</div>
+                                <div class="error_tip" style="margin: auto;">
+                                    <div class="error-tip" style="background-color: #e46d7c;text-align: center;color: #fff;display: none;"></div>
+                                </div>
+                                <p>激活邮件已经发送到：<span>${usr_email}</span>，请在24h内点击邮件中的激活链接完成注册，逾期需要重新发送激活链接。</p>
+                                <a href="javascript:;" class="activate">激活邮箱</a>
+                                <div class="resend_email">
+                                    <span style="font-size: 13px;color: #b2b2b2;">没有收到邮件，怎么办？在邮箱的垃圾邮件中找找</span>
+                                    <a href="javascript:;" class="resend" style="font-size: 13px;color: #45a0ea;">重新发送</a>
+                                </div>
+                            </div>`
+                            $('.login-box').append(activate);
+                        } else {
+                            //失败
+                            img_captcha()
+                            data = data.data;
+                            if (data.email) {
+                                $('.error-tip').html(data.email)
+                                $('.error-tip').fadeIn(1000)
+                            }
+                            if(data.captcha){
+                                $('.error-tip').html(data.captcha)
+                                $('.error-tip').fadeIn(1000)
+                            }
+                            if(data.password){
+                                $('.error-tip').html(data.password)
+                                $('.error-tip').fadeIn(1000)
+                            }
+                        }
+                    }
+                })
+            }
+            if(!$('#checkbox1').prop('checked')) {
+                // 没有被选中
+                $('.error-tip').html('需要接受《医咖会协议》')
+                $('.error-tip').fadeIn(1000)
+                setTimeout(function() {
+                    $('.error-tip').fadeOut(1000)
+                },2000)
+                return;
+            }
+        })
+
+        // 验证码
+        $(document).on('click','.verify',function () {
+            img_captcha()
+        })
+        // 医咖会协议
+        $(document).on('click','.jump_msg',function () {
+            agree_ment()
+        })
+        // 医咖会协议 确定按钮
+        $('#checkbox1').prop('checked', true);
+        $(document).on('click','.agreement_btn',function () {
+            $('#yika_agreement').remove();
+            document.body.style.overflow='auto';
+            $('#checkbox1').prop('checked', true);
+        })
+        function img_captcha() {
+            var num=Math.random()
+            $('.verify img').attr('src','/extends/captcha/?='+ num)
+        }
+        // 点击激活邮箱
+        $(document).on('click','.activate',function() {
+            var activate_email = $('.usr_email').val();
+            var url = activate_email.split('@')[1];
+            var pattern = /^([A-Za-z0-9_\-\.])+\@(163.com|qq.com)$/; // 判断邮箱为163.com 或 qq.com
+            if (pattern.test(activate_email) === true){
+                if (url == '163.com') {
+                    window.location.href = 'http://mail.163.com';
+                } else if (url == 'qq.com') {
+                    window.location.href = 'http://mail.qq.com';
+                }
+            } else {
+                // 其他邮箱@后面的跳转baidu查询
+                window.location.href = 'https://www.baidu.com/'+ 's?wd=mail.'+ url;
+            }
+        })
+        // 重新发送邮件
+        $(document).on('click','.resend',function() {
+            $.ajax({
+                type: 'post',
+                url: '/resend_active_mail/',
+                data: {
+                    email: $('.usr_email').val(),
+                },
+                success: function (data) {
+                    if (data.code === 200) {
+                        //成功
+                        $('.error-tip').html(data.message)
+                        $('.error-tip').fadeIn(1000)
+                        setTimeout(function(){
+                            $('.error-tip').fadeOut(1000)
+                        },2000)
+                    } else {
+                        //失败
+                        $('.error-tip').html(data.message)
+                        $('.error-tip').fadeIn(1000)
+                        setTimeout(function(){
+                            $('.error-tip').fadeOut(1000)
+                        },2000)
+                    }
+                }
+            })
+        })
+        $(window).resize(function () {
+            if($('#yika_agreement')[0]){
+                $('.agreement_info').css('height',document.body.clientHeight-40+'px')
+            }
+        })
+        function agree_ment() {
+            var h=document.body.clientHeight-40
+            $(document.body).append('<div id="yika_agreement"><pre class="agreement_info" style="height:'+h+'px"><center>《医咖会使用协议》</center>'+
+                '一、总则\n' +
+                '1、为了保护网络信息安全，保障公民、法人和其他组织的合法权益，维护国家安全和社会公共利益，根据国家法律法规，医咖会制定并按照本协议提供网络服务。用户应当充分阅读并同意本协议的全部条款并按照页面上的提示完成全部的注册程序（未成年人应与法定监护人共同完成）。用户在注册过程中点击“同意”按钮即表示用户完全接受本协议项下的全部条款，用户选择访问或使用医咖会有关服务，将视为同意接受本协议全部条款的约束。\n' +
+                '2、除非另有明确规定，医咖会所推出的新产品、新功能和新服务，均无条件的适用本协议。\n' +
+                '3、医咖会保留在任何时候修改本协议条款的权利，且无需另行通知。用户在使用服务时应关注并遵守。\n' +
+                '4、用户在使用医咖会提供的各项服务之前，应仔细阅读本协议。如果您不同意本协议，可以主动取消医咖会提供的服务；如果您继续使用医咖会服务，则视为您已经接受本协议全部内容，包括医咖会对本协议所做的任何修改。\n' +
+                '5、用户无论通过何种方式使用医咖会服务，均受本协议约束。\n' +
+                '\n' +
+                '二、用户账号\n' +
+                '1、用户可以通过注册账号使用医咖会提供的各项服务。用户注册成功后，医咖会将给予用户一个账号及相应的密码，在医咖会审核通过后，每个账号对应一个唯一的名字（或昵称、用户名）。医咖会账号（包括名字、昵称、用户名等）的所有权归医咖会，用户完成申请注册手续后，获得医咖会账号的使用权，但仅限为个人而非商业目的使用。\n' +
+                '2、用户自行保管其账号和密码。用户账号、密码使用权仅属于初始申请注册人，禁止赠与、借用、租用、转让或者售卖。' +
+                '3、用户应提供完整、真实、准确和最新的个人资料，该资料对于使用医咖会的服务以及找回丢失的医咖会账号和密码至关重要。如因注册信息不真实而引起的问题由用户本人承担，医咖会不负任何责任并有权暂停或终止用户的账号。\n' +
+                '4、用户账号和密码遭到他人非法使用或发生其他任何安全问题，用户应当立即通知医咖会。因黑客行为或用户的过错导致账号、密码被他人非法使用，医咖会不承担任何责任。\n' +
+                '    \n' +
+                '三、使用规则\n' +
+                '    1、用户对以其账号发生的或通过其账号发生的一切活动和事件（包括但不限于用户发表的任何内容以及由此产生的任何结果）负全部法律责任。\n' +
+                '2、用户在使用医咖会服务时，必须遵守中华人民共和国相关法律法规的规定，用户应同意将不会利用医咖会进行任何违法或不正当的活动，包括但不限于下列行为：\n' +
+                '(1) 上载、下载、张贴、以电子邮件发送、传输、存储或以其他方式提供任何非法、有害、胁迫、骚扰、侵权、中伤、粗俗、猥亵、诽谤、淫秽、暴力、侵害他人隐私、种族歧视或其他令人不快的包括但不限于资讯、资料、文字、软件、音乐、照片、图形、信息或其他资料（以下简称内容）。\n' +
+                '(2) 以任何方式危害他人。\n' +
+                '(3) 冒充任何人或机构，或以虚伪不实的方式谎称或使人误认为与任何人或任何机构有关。\n' +
+                '(4) 伪造标题或以其他方式操控识别资料，使他人产生误解。\n' +
+                '(5) 上载、张贴、发送电子邮件或以其他方式传送无权传送的内容。\n' +
+                '(6) 侵犯他人著作权或其他知识产权，或违反保密、雇佣或不披露协议披露他人商业秘密或保密信息。\n' +
+                '(7) 张贴、发送、传输或以其他方式提供任何未经收件人请求或授权的电子邮件信息、广告、促销资料、垃圾邮件等，包括但不限于大批量的商业广告和信息公告。\n' +
+                '(8) 上载、张贴、以电子邮件发送、传输、存储或以其他方式提供包含病毒或包含旨在危害、干扰、破坏或限制有关服务（或其任何部分）或任何其他计算机软件、硬件或通讯设备之正常运行的任何其他计算机代码、文档或程序的任何资料。\n' +
+                '(9) 干扰或破坏有关服务，或与有关服务连接的任何服务器或网络，或与有关服务连接之网络的任何政策、要求或规定。\n' +
+                '(10)采集并存储涉及有关服务任何其他用户的个人信息，以用于任何上述被禁止的活动。\n' +
+                '(11)故意或非故意违反任何相关的中国法律、法规、规章、条例等其他具有法律效力的规范。\n' +
+                '    \n' +
+                '四、知识产权\n' +
+                '    1、医咖会服务中包含的任何文字、图表、音频、视频或软件（包括但不限于软件中包含的图表、动画、音频、视频、界面实际、数据和程序、代码、文档）等信息或材料均受著作权法、商标法或其它法律法规的保护，未经相关权利人书面同意，用户不得以任何方式使用该等信息或材料，但出于使用医咖会服务目的而使用的除外。\n' +
+                '2、本协议未授予用户使用医咖会任何商标、服务标记、标识、域名和其他显著品牌特征的权利。\n' +
+                '3、除本协议明确允许的以外，用户不得以任何形式或任何方式对医咖会服务部分或全部内容进行修改、出租、租赁、出借、出售、分发、复制、创作衍生品或用于任何商业用途。\n' +
+                '4、用户在医咖会上发布的信息不得侵犯任何第三人的知识产权，未经相关权利人之事先书面同意，用户不得以任何方式上传、发布、修改、传播或复制任何受著作权保护的材料、商标或属于其他人的专有信息。\n' +
+                '5、用户同意，对于其上传到医咖会的任何内容，医咖会在全世界范围内不限形式和载体地享有永久的、不可撤销的、免费的、非独家的使用权和转授权的权利，包括但不限于修改、复制、发行、展览、改编、汇编、出版、翻译、信息网络传播、广播、表演和再创作及著作权法等法律法规确定的其他权利。\n' +
+                '    \n' +
+                '五、隐私权\n' +
+                '    1、保护用户的隐私是医咖会的一项基本政策。\n' +
+                '2、用户在使用医咖会服务时，会向医咖会提供个人信息，例如姓名、电子邮件地址、电话号码。用户同意后，医咖会在用户使用服务的过程中获取信息。此类信息包括但不限于：\n' +
+                '    （1）设备信息--例如用户的硬件型号、操作系统版本、唯一设备识别码以及包括电话号码在内的移动网络信息。\n' +
+                '    （2）位置信息--例如来自用户设备的传感器数据就可以提供附近 Wi-Fi 接入点和基站的信息。\n' +
+                '    （3）本地存储--使用浏览器网络存储等机制（包括 HTML 5）和应用程序数据缓存，在用户的设备上收集信息（包括个人信息）并进行本地存储。\n' +
+                '    （4）医生用户在医咖会上发布、储存的信息。\n' +
+                '    \n' +
+                '六、免责声明\n' +
+                '    1、鉴于网络服务的特殊性，医咖会不保证网络服务的及时性、安全性和准确性，用户同意医咖会有权不经事先通知，随时变更、中断或终止部分或全部的网络服务而无论同意与否，医咖会对用户和任何第三人均无需承担任何责任。\n' +
+                '2、对于经由医咖会服务而传送的内容，医咖会不保证前述内容的正确性、完整性或品质。用户在接受有关服务时，有可能会接触到令人不快、不适当或令人厌恶的内容。在任何情况下，医咖会均不对任何内容负责，包括但不限于任何内容发生任何错误或纰漏以及衍生的任何损失或损害。医咖会有权（但无义务）自行拒绝或删除经由本服务提供的任何内容。用户使用上述内容，应自行承担风险。\n' +
+                '3、用户可通过医咖会有关网络服务获得第三方的某些内容，或者医咖会可能为方便用户而提供通往第三方网站的链接，但医咖会不负责检查或评估任何该等第三方材料、产品、服务或网站内容的准确性，并且，医咖会对此不作保证、不承担任何责任、也不负有任何义务。用户对此自行加以判断，并承担因使用该等内容而引起的所有风险，包括但不限于因对内容的正确性、完整性或实用性的依赖而产生的风险。\n' +
+                '4、用户经由医咖会服务与广告商进行通讯联系或商业往来或参与促销活动，完全属于用户与广告商之间的行为，与医咖会没有任何关系，若因商业行为所产生之任何损害或损失，医咖会不承担任何责任。\n' +
+                '5、用户明确同意其使用医咖会服务所存在的风险及其后果将完全由其自己承担，医咖会对用户不承担任何责任。如因用户违反有关法律、法规或本协议项下的任何条款而给医咖会或任何其他第三人造成损失，用户同意承担由此造成的损害赔偿责任。\n' +
+                '    \n' +
+                '七、其他\n' +
+                '    1、本协议的版权归医咖会所有，医咖会保留对本协议的一切解释和修改权利。\n' +
+                '2、本协议的订立、执行和争议的解决均应适用中华人民共和国法律。如双方就本协议内容或其执行发生任何争议，双方应尽量友好协商解决；协商不成时，任何一方均可向医咖会所在地有管辖权的人民法院提起诉讼。\n' +
+                '3、医咖会未行使本协议的任何权利或规定，不构成对前述权利之放弃。\n' +
+                '4、如本协议中的任何条款完全或部分无效，本协议的其余条款仍有效并且有约束力。</pre><div class="agreement_btn" >确认</div></div>')
+            document.body.style.overflow='hidden'
+        }
+    })
+
+</script>
+</body>
+</html>

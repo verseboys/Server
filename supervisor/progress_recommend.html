@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会--研究进展首页推荐</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/methods.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content{
+            display: block;
+        }
+        .progress-list{
+            display: flex;
+            text-align: center;
+            padding: 0 22px 0 22px;
+            line-height: 40px;
+            border-bottom: solid 1px #d8d8d8;
+        }
+        .progress-title{
+            flex: 2;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .progress-tag{
+            flex: 1;
+        }
+        .progress-recom{
+            flex: 2;
+        }
+        #compents_paginator{
+            padding-right: 22px;
+        }
+        .search_box{
+            float: right;
+        }
+        .progress-tages{
+            line-height: 38px;
+            border: solid 2px #b4dbf0;
+            font-family: PingFangSC;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            color: #2d3c5b;
+        }
+        .progress-tages div{
+            float: left;
+            width: 100px;
+            border-right:solid 1px #b4dbf0;
+            cursor: pointer;
+        }
+        .progress-tages div:last-child{
+            border-right:none;
+            pointer-events: none;
+        }
+        .progress-tages div.select{
+            background: #b4dbf0;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav"></div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <div class="progress-tages">
+                <div class="select hot_banner" p_tag="2">推荐图</div>
+                <div  class="hot_article" p_tag="1">热文推荐</div>
+                <div class="hot_search" >搜索结果</div>
+            </div>
+            <div class="search_box"><input placeholder="点击搜索关键词…">
+                <div class="search_img"></div>
+            </div>
+        </div>
+        <div class="progress-list" style="background:#d8d8d8;line-height: 33px;margin-top: 27px" id="progress-list-head">
+            <div class="progress-title">标题</div><div class="progress-tag">标签</div><div class="progress-recom">是否推荐</div>
+        </div>
+        <div class="panel_body" style="padding:0 0 76px 0">
+            <div id="panel_content"></div>
+            <div id="compents_paginator"></div>
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div><div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var page = '', page_num = 0,del_id,hot_article={},hot_banner={},p_tag=2, key_type=true;
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            get_methods()
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            get_methods()
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            get_methods()
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            get_methods()
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            get_methods()
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup','input',function (e) {
+        if(e.keyCode===13){
+            page=$(this).val();
+            get_methods();
+            $(this).val('').blur();
+        } else {
+            if($(this).val()>page_num){
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g,''))
+        }
+    })
+    var url='/hold_news/'+p_tag,type='get',val='',item='0/';
+    $.ajax({
+        url:u+'/supervisor/hold_news/0/',
+        success:function (data) {
+            if(data.code===200){
+                bind_hot(data.data.hold_news)
+            }else {
+                get_meth()
+            }
+        }
+    })
+    function bind_hot(list) {
+        hot_article={};
+        hot_banner={}
+        if(list){
+            for(var i=0;i<list.length;i++){
+                    if(parseFloat(list[i].type)===1){
+                        hot_article[list[i].id]=true
+                    }else{
+                        hot_banner[list[i].id]=true
+                    }
+            }
+        }
+        if (key_type) {
+            get_meth()
+        }else{
+            get_methods()
+        }
+
+    }
+    function get_meth(){
+        AJAX({
+            type: 'get',
+            url: u + '/supervisor' + url + page + '/',
+            data: val,
+            fn: function (data) {
+                var str = '';
+                var content = data.data.hold_news;
+                if (content) {
+                    for (var i = 0; i < content.length; i++) {
+                        var da = content[i];
+                        str += '<div class="progress-list" style="line-height: 40px"><div class="progress-title" title="' + da.title + '">' + da.title + '</div><div class="progress-tag">' + da.category + '</div>'
+                            if (parseFloat(p_tag) === 1) {
+                                if (hot_article[da.id]) {
+                                    str += '<div class="progress-recom"><span class="tag-if-show checked" p_type="1" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                                } else {
+                                    str += '<div class="progress-recom"><span class="tag-if-show " p_type="1" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                                }
+                            } else if (parseFloat(p_tag) === 2) {
+                                if (hot_banner[da.id]) {
+                                    str += '<div class="progress-recom"><span class="tag-if-show checked" p_type="2" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                                } else {
+                                    str += '<div class="progress-recom"><span class="tag-if-show " p_type="2" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                                }
+                            }
+
+                        str += '</div>'
+                    }
+                }
+                $('#panel_content').html(str);
+                    $('#compents_paginator').html('')
+                $('#content')[0].scrollTop = 0
+            },
+        })
+    }
+    function get_methods() {
+        AJAX({
+            type: type,
+            url: u+'/supervisor'+url + page+'/',
+            data: val,
+            fn: function (data) {
+                var str = '';
+                var content = data.data.news;
+                if(content){
+                    for (var i = 0; i < content.length; i++) {
+                        var da = content[i];
+                        str+='<div class="progress-list" style="line-height: 40px"><div class="progress-title" title="'+da.title+'">'+da.title+'</div><div class="progress-tag">'+da.category+'</div>'
+                        if (hot_banner[da.id]) {
+                            str += '<div class="progress-recom"><span class="tag-if-show checked" p_type="2" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                        } else {
+                            str += '<div class="progress-recom"><span class="tag-if-show " p_type="2" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                        }
+                          if (hot_article[da.id]) {
+                              str += '<div class="progress-recom"><span class="tag-if-show checked" p_type="1" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                          } else {
+                              str += '<div class="progress-recom"><span class="tag-if-show " p_type="1" p_id="' + da.id + '" style="margin-right: 0"></span></div>'
+                          }
+
+                            str+='</div>'
+                    }
+                }
+                $('#panel_content').html(str);
+                if(!content){
+                    return
+                }
+                var str_li = '';
+                var ppp=parseFloat(page);
+                if (ppp !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                var pagecount = data.data.page_count, start, last;
+                if (data.data.page_count > 1) {
+                    if (pagecount - Number(ppp) > 2 && Number(ppp) > 2 && pagecount > 5) {
+                        start = Number(ppp) - 3;
+                        last = Number(ppp) + 2
+                    }
+                    else if (pagecount - Number(ppp) <= 2 && pagecount > 5) {
+                        start = pagecount - 6;
+                        last = pagecount;
+                    }
+                    else if (Number(ppp) <= 2 && pagecount > 5) {
+                        start = 0;
+                        last = 5
+                    }
+                    else if (pagecount <= 5) {
+                        start = 0;
+                        last = pagecount;
+                    }
+                    for (var p = start; p < last; p++) {
+                        if (Number(ppp) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.page_count !== 1 && ppp !== data.data.page_count) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+                page_num = data.data.page_count;
+                if (data.data.page_count != 1) {
+                    $('#compents_paginator').html('<ul class="compents_paginator paginator">\n' +str_li+
+                        '                </ul>\n' +
+                        '                <ul class="compents_paginator paginator_controller">\n' +
+                        '                    <li class="page_number">\n' +
+                        '                        <div id="page_number">'+data.data.page_count+'</div>\n' +
+                        '                    </li>\n' +
+                        '                    <li class="page_saver"><input id="page_saver"></li>\n' +
+                        '                    <li class="page_ender">页</li>\n' +
+                        '                </ul>\n')
+
+                }else {
+                    $('#compents_paginator').html('')
+                }
+                $('#content')[0].scrollTop=0
+            },
+        })
+    }
+    $(document).on('click','#panel_content .tag-if-show',function () {
+       var type=$(this).attr('p_type'),p=$(this).attr('p_id')
+           if($(this).hasClass('checked')){
+               $.ajax({
+                    url:u+'/supervisor/delete_hold_news/'+p+'/'+type+'/',
+                    success:function (data) {
+                        $.ajax({
+                            url:u+'/supervisor/hold_news/0/',
+                            success:function (data) {
+                                if(data.code===200){
+                                    bind_hot(data.data.hold_news)
+                                }else {
+                                    if(parseFloat(type)===1){
+                                        hot_article = {}
+                                    }else {
+                                        hot_banner = {}
+                                    }
+                                    if (key_type) {
+                                        get_meth()
+                                    } else {
+                                        get_methods()
+                                    }
+                                }
+                            }
+                        })
+                    }
+               })
+           }else {
+               $.ajax({
+                   url:u+'/supervisor/add_hold_news/'+p+'/'+type+'/',
+                   success:function (data) {
+
+                       $.ajax({
+                           url:u+'/supervisor/hold_news/0/',
+                           success:function (data) {
+                               if(data.code===200){
+                                   bind_hot(data.data.hold_news)
+                               }else {
+                                   if (parseFloat(type) === 1) {
+                                       hot_article = {}
+                                   } else {
+                                       hot_banner = {}
+                                   }
+                                   if (key_type) {
+                                       get_meth()
+                                   } else {
+                                       get_methods()
+                                   }
+                               }
+                           }
+                       })
+                   }
+               })
+           }
+
+   })
+    $(document).on('click','.progress-tages div',function () {
+        key_type=true
+        $('#progress-list-head').html('<div class="progress-title">标题</div><div class="progress-tag">标签</div><div class="progress-recom">是否推荐</div>')
+        page=''
+        p_tag=$(this).attr('p_tag');
+        item='';
+        url= '/hold_news/' + p_tag
+        $(this).addClass('select').siblings().removeClass('select')
+        get_meth()
+    })
+    function search_list() {
+        key_type=false
+        $('#progress-list-head').html('<div class="progress-title">标题</div><div class="progress-tag">标签</div><div class="progress-recom">推荐图</div><div class="progress-recom">热文推荐</div>')
+        url='/search_news/';
+        type='post',val={'search_key_words':$('#container .search_box input').val()}
+        page = 1;
+        item='';
+        $('.hot_search').addClass('select').siblings().removeClass('select')
+        get_methods()
+    }
+    $('#container .search_box .search_img').click(search_list)
+    $('#container .search_box input').keyup(function (e) {
+        if(e.keyCode===13){
+            search_list()
+        }
+    })
+</script>
+</body>
+</html>

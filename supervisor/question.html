@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会后台-问题管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js"></script>
+    <style>
+        .box_content{
+            display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div id="panel_header">
+            <div id="header_left">
+                <div id="header_left_info">详细内容</div>
+                <div id="header_left_search"><input id="header_left_search_input" placeholder="点击搜索关键词…">
+                    <div id="header_left_search_button"></div>
+                </div>
+            </div><div id="header_right">
+            <div id="header_right_name">用户名</div><div id="header_right_time">评论时间</div><div id="header_right_ctrl">操作</div>
+        </div>
+        </div>
+        <div id="panel_body">
+            <ul id="panel_message">
+            </ul>
+            <div id="compents_paginator">
+                <ul class="compents_paginator paginator">
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number">7</div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div><div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    var page = 1, page_num = 0,del_id,is_search=false;
+    var url = '/supervisor/question_list/', type = 'get', val = '';
+
+    $('#compents_paginator').on('click', 'li', function (e) {
+        if ($(this).hasClass('page')) {
+            page = Number($(this).attr('jp-data'));
+            if(is_search){
+                val = {'search_word': $('#header_left_search_input').val(), page: page}
+                get_methods(url)
+            }else {
+                get_methods(url + page + '/')
+            }
+        }
+        if ($(this).hasClass('prev')) {
+            page--;
+            if (is_search) {
+                val = {'search_word': $('#header_left_search_input').val(), page: page}
+                get_methods(url)
+            } else {
+                get_methods(url + page + '/')
+            }
+        }
+        if ($(this).hasClass('next')) {
+            page++;
+            if (is_search) {
+                val = {'search_word': $('#header_left_search_input').val(), page: page}
+                get_methods(url)
+            } else {
+                get_methods(url + page + '/')
+            }
+        }
+        if ($(this).hasClass('first')) {
+            page = 1;
+            if (is_search) {
+                val = {'search_word': $('#header_left_search_input').val(), page: page}
+                get_methods(url)
+            } else {
+                get_methods(url + page + '/')
+            }
+        }
+        if ($(this).hasClass('last')) {
+            page = page_num;
+            if (is_search) {
+                val = {'search_word': $('#header_left_search_input').val(), page: page}
+                get_methods(url)
+            } else {
+                get_methods(url + page + '/')
+            }
+        }
+
+
+    })
+    $('#compents_paginator').on('keyup','input',function (e) {
+        if(e.keyCode===13){
+            page=$(this).val();
+            if (is_search) {
+                val = {'search_word': $('#header_left_search_input').val(), page: page}
+                get_methods(url)
+            } else {
+                get_methods(url + page + '/')
+            }
+            $(this).val('').blur();
+        } else {
+            if($(this).val()>page_num){
+                $(this).val(page_num);
+            }
+            $(this).val($(this).val().replace(/[^0-9]/g,''))
+        }
+    })
+    get_methods(url + page + '/')
+
+    function get_methods(url) {
+        AJAX({
+            type: type,
+            url: url,
+            data: val,
+            fn: function (data) {
+                if(data.code!==200){
+                    return
+                }
+                var str = '';
+                var content = data.data.questions
+                for (var i = 0; i < content.length; i++) {
+                    var da = content[i];
+                    str+='<li class="message_item" pid="' + da.id +'">';
+                    str+='<div class="item_title" page_id="' + da.id +'">';
+                    str+=da.content.replace(new RegExp('(<[^>]+>)', 'g'), '');
+                    str+='</div><div class="item_right"><div class="item_name">';
+                    str+=da.author__username
+                    str+='</div><div class="item_time">';
+                    str+=new Date(da.create_time).format('yyyy年MM月dd日 hh:mm')
+                    str+='</div><div class="item_del" did="'+ da.id+'">删除</div>';
+                    str+='</div>';
+                    str+='</li>';
+                }
+                $('#panel_message').html(str);
+                var str_li = '';
+                if (page !== 1) {
+                    str_li += '<li class="first disabled" jp-role="first" jp-data="1"><a href="javascript:;">首页</a></li>';
+                    str_li += '<li class="prev disabled" jp-role="prev" jp-data="0"><a href="javascript:;">上一页</a></li>';
+                }
+                var pagecount = data.data.pageCount, start, last;
+                if (data.data.pageCount > 1) {
+                    if (pagecount - Number(page) > 2 && Number(page) > 2 && pagecount > 5) {
+                        start = Number(page) - 3;
+                        last = Number(page) + 2
+                    }
+                    else if (pagecount - Number(page) <= 2 && pagecount > 5) {
+                        start = pagecount - 6;
+                        last = pagecount;
+                    }
+                    else if (Number(page) <= 2 && pagecount > 5) {
+                        start = 0;
+                        last = 5
+                    }
+                    else if (pagecount <= 5) {
+                        start = 0;
+                        last = pagecount;
+                    }
+                    for (var p = start; p < last; p++) {
+                        if (Number(page) === (p + 1)) {
+                            str_li += '<li class="page active" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        } else {
+                            str_li += '<li class="page" jp-role="page" jp-data="' + (p + 1) + '"><a href="javascript:;">' + (p + 1) + '</a></li>';
+                        }
+                    }
+                }
+                if (data.data.pageCount !== 1 && page !== data.data.pageCount) {
+                    str_li += ' <li class="next" jp-role="next" jp-data="2"><a href="javascript:;">下一页</a></li>';
+                    str_li += '<li class="last" jp-role="last" jp-data="5"><a href="javascript:;">尾页</a></li>'
+                }
+                $('#compents_paginator .paginator').html(str_li);
+                $('#page_number').html(data.data.pageCount);
+                page_num = data.data.pageCount;
+                if (data.data.pageCount === 1) {
+                    $('#compents_paginator .paginator_controller').hide()
+                } else {
+                    $('#compents_paginator .paginator_controller').show()
+                }
+                $('#content')[0].scrollTop = 0
+
+
+            }
+        })
+    }
+    function del_method() {
+    }
+    $('#container').on('click','.item_del',function () {
+        del_id=Number($(this).attr('did'))
+        $('#alert_area').removeClass('hide');
+    })
+    $('#alert_box .box_item .item_left').click(function () {
+        $('#alert_area').hide();
+    })
+    $(document.body).on('click','#alert_box .box_item .item_right',function () {
+        AJAX({
+            url:'/supervisor/delete_question/',
+            type:'post',
+            data:{question_id:del_id},
+            fn:function (data) {
+                if(data.code!==200){
+                    alert(data.message)
+                    return
+                }
+                $('#alert_area').addClass('hide');
+                $('#panel_message .message_item[pid="'+ del_id+'"]').remove();
+            }
+        })
+    })
+    function search_list() {
+        url='/supervisor/search_question/';
+        type='post',val={'search_word':$('#header_left_search_input').val(),page:1}
+        page = 1;
+        is_search=true;
+        get_methods(url)
+    }
+    $('#header_left_search_button').click(search_list)
+    $('#header_left_search_input').keyup(function (e) {
+        if(e.keyCode===13){
+            search_list()
+        }
+    })
+    $(document.body).on('click','#panel_message li .item_title',function () {
+        window.location.href='question_detil.html?p='+$(this).attr('page_id')
+    })
+</script>
+</body>
+</html>

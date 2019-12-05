@@ -1,0 +1,695 @@
+{% extends './_base.html' %}
+{% load static %}
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/method.css' %}">
+    <link rel="stylesheet" href="{% static 'css/network.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.18.0/jquery.validate.min.js"></script>
+    <script>
+        (function( factory ) {
+            if ( typeof define === "function" && define.amd ) {
+                define( ["jquery", "../jquery.validate"], factory );
+            } else {
+                factory( jQuery );
+            }
+        }(function( $ ) {
+
+            /*
+            * Translated default messages for the jQuery validation plugin.
+            * Locale: ZH (Chinese, 中文 (Zhōngwén), 汉语, 漢語)
+            */
+            $.extend($.validator.messages, {
+                phone:"格式错误",
+                phone_n: "格式错误",
+                required: "必填",
+                remote: "请修正此字段",
+                email: "格式错误",
+                url: "请输入有效的网址",
+                date: "请输入有效的日期",
+                dateISO: "请输入有效的日期 (YYYY-MM-DD)",
+                number: "请输入有效的数字",
+                digits: "格式错误",
+                creditcard: "请输入有效的信用卡号码",
+                equalTo: "你的输入不相同",
+                extension: "请输入有效的后缀",
+                maxlength: $.validator.format("最多可以输入 {0} 个字符"),
+                minlength: $.validator.format("最少要输入 {0} 个字符"),
+                rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
+                range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
+                max: $.validator.format("请输入不大于 {0} 的数值"),
+                min: $.validator.format("请输入不小于 {0} 的数值")
+            });
+        }));
+
+        let postData =     {
+            "edc_study_ids": [],
+            "site": "",
+            "address": "",
+            "leader": {
+                "name": "",
+                "email": "",
+                "phone": "",
+                "department": "",
+                "title": "",
+            },
+            "researchers": [
+                //{
+                //   "name": "",
+                //   "email": "",
+                //   "phone": "",
+                //   "department": "",
+                //   "title": "",
+                //}
+            ]
+        }
+        
+        //用来标注所有表单的校验状态 必填默认false 选填默认true
+        //提交表单时会根据formIds重置此数组中状态(id>=4时为选填项,默认最多增加十个选填成员) 在每个表单的submitHandler(校验成功回调) 与 invalidHandler(校验失败回调) 中修改此数组中状态
+        //最后遍历此对象 状态全部为true时 校验通过 发送post请求
+        let tag = {
+            "#form1":false,
+            "#form2":false,
+            "#form3":false,
+            "#formN":true,
+        }
+        //记录当前页面表单id集合(会在addFormRule调用时动态添加)
+        let formIds = ["#form1","#form2","#form3","#formN"];
+        //记录被删除表单元素
+        let deleteForm = null
+        //记录被删除表单id
+        let deleteFormId = null
+        let resetTag = function(){
+            for(let formId of formIds){
+                tag = {
+                    "#form1":false,
+                    "#form2":false,
+                    "#form3":false,
+                    "#formN":true,
+                }
+                // 需要考虑表单最后项id为N情况
+                let id = Number(Array.from(formId).filter((v)=>{return ((v>="0")&&(v<="9"))||v==="N"}).join(""))
+                if(id>=4||id==="N"){
+                    tag[formId] = true;
+                }else{
+                    tag[formId] = false;
+                }
+            }
+
+        }
+
+
+        let clearPostData = function(){
+            postData = {
+                "edc_study_ids": [],
+                "site": "",
+                "address": "",
+                "leader": {
+                "name": "",
+                "email": "",
+                "phone": "",
+                "department": "",
+                "title": "",
+                },
+                "researchers": [
+                  //{
+                  //   "name": "",
+                  //   "email": "",
+                  //   "phone": "",
+                  //   "department": "",
+                  //   "title": "",
+                  //}
+                ]
+            }
+        }
+
+        jQuery.validator.addMethod("phone", function(value, element) {
+            if(!value.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)){
+                return false;
+            }
+            return true;
+        });
+        jQuery.validator.addMethod("phone_n", function(value, element) {
+            if(value==""){
+                return true
+            }
+            if(!value.match(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/)){
+                return false;
+            }
+            return true;
+        });
+        
+        $().ready(function() {
+            $("#form3").find(".delete_btn").hide()
+            $("#form1").validate({
+                rules: {
+                    topic: {
+                        required: true,
+                        minlength: 1
+                    }
+                },
+                messages:{
+                    topic: "至少选择一项"
+                },
+                submitHandler: function(form) {
+                    let arrayData = $(form).find("input:checked").toArray().map((el)=>{
+                        return Number($(el).val());
+                    })
+                    postData.edc_study_ids = arrayData;
+                    tag["#form1"] = true;
+                },
+                invalidHandler(){
+                    failedPopup()
+                }
+            });
+            $("#form2").validate({
+                rules: {
+                    phone: {
+                        required:()=>{return true},
+                        phone:""
+                    }
+                },
+                messages:{
+                    phone: ()=>{ if($("#form2").find("#cphone1").val()!==""){return "必填"} else {return "格式错误"} }
+                },
+                submitHandler: function(form) {
+                    let name = $(form).find("#cname1").val();
+                    let subject = $(form).find("#csubject1").val();
+                    let email = $(form).find("#cemail1").val();
+                    let job = $(form).find("#cjob1").val();
+                    let phone = $(form).find("#cphone1").val();
+                    let work = $(form).find("#cwork1").val();
+                    let place = $(form).find("#cplace1").val();
+                    postData.leader.name = name;
+                    postData.leader.email = email;
+                    postData.leader.phone = phone;
+                    postData.leader.department = subject;
+                    postData.leader.title = job;
+                    postData.site = work;
+                    postData.address = place;
+                    tag["#form2"] = true;
+                },
+                invalidHandler(){
+                    failedPopup()
+                }
+            });
+            $("#form3").validate({
+                rules: {
+                    phone_n: {
+                        required:()=>{ return true },
+                        phone_n:"",
+                    },
+                    email:{
+                        required:()=>{ return true }
+                    },
+                    name:{
+                        required:()=>{ return true }
+                    },
+                    subject:{
+                        required:()=>{ return true }
+                    },
+                    job:{
+                        required:()=>{ return true }
+                    }
+                },
+                messages:{
+                    phone: "格式错误"
+                },
+                submitHandler: function(form) {
+                    let name = $(`#crname2`).val();
+                    let department = $(`#crsubject2`).val();
+                    let email = $(`#cremail2`).val();
+                    let phone = $(`#crphone2`).val();
+                    let title = $(`#crjob2`).val();
+                    let researcher = {
+                        name,
+                        department,
+                        email,
+                        phone,
+                        title,
+                    };
+                    postData.researchers.push(researcher);
+                    tag["#form3"] = true;
+                },
+                invalidHandler(){
+                    failedPopup()
+                }
+            });
+            let isAnyInputNotEmpty = function(forId){
+                if(Array.from($(forId).find("input")).every((el)=>{return $(el).val()===""})){return false}else{return true}
+            }
+
+            let addFormRule = function(id){
+                let formId = "#form"+id;
+                formIds.splice(formIds.length-1,0,formId)
+                $(formId).validate({
+                    rules: {
+                        phone_n: {
+                            required:()=>{ return isAnyInputNotEmpty(formId) },
+                            phone_n:"",
+                        },
+                        email:{
+                            required:()=>{ return isAnyInputNotEmpty(formId) }
+                        },
+                        name:{
+                            required:()=>{ return isAnyInputNotEmpty(formId) }
+                        },
+                        subject:{
+                            required:()=>{ return isAnyInputNotEmpty(formId) }
+                        },
+                        job:{
+                            required:()=>{ return isAnyInputNotEmpty(formId) }
+                        }
+                    },
+                    messages:{
+                        phone_n: ()=>{ if($(formId).find("#crphone"+(id-1)).val()!==""){return "必填"} else {return "格式错误"} }
+                    },
+                    submitHandler(form){
+                        let researcher = {
+                            name: $("#crname"+(id-1)).val(),
+                            department: $("#crsubject"+(id-1)).val(),
+                            email: $("#cremail"+(id-1)).val(),
+                            phone: $("#crphone"+(id-1)).val(),
+                            title: $("#crjob"+(id-1)).val(),
+                        };
+                        for(key in researcher){
+                            if(researcher[key].trim() === ""){
+                                return;
+                            }
+                        }
+                        postData.researchers.push(researcher);
+                        tag[formId] = true;
+                    },
+                    invalidHandler(){
+                        failedPopup()
+                        tag[formId] = false;
+                        return true;
+                    }
+                })
+            }
+
+            let form3_id = 3;
+            for(let i = 2;i<=$(".form-three").find("form").length;i++){
+                form3_id++
+                addFormRule(form3_id)
+            }
+
+            $("#formN").validate({
+                rules: {
+                    phone_n: {
+                        required:()=>{ if(Array.from($("#formN").find("input")).every((el)=>{return $(el).val()===""})){return false}else{return true} },
+                        phone_n:"",
+                    },
+                    email:{
+                        required:()=>{ if(Array.from($("#formN").find("input")).every((el)=>{return $(el).val()===""})){return false}else{return true} }
+                    },
+                    name:{
+                        required:()=>{ if(Array.from($("#formN").find("input")).every((el)=>{return $(el).val()===""})){return false}else{return true} }
+                    },
+                    subject:{
+                        required:()=>{ if(Array.from($("#formN").find("input")).every((el)=>{return $(el).val()===""})){return false}else{return true} }
+                    },
+                    job:{
+                        required:()=>{ if(Array.from($("#formN").find("input")).every((el)=>{return $(el).val()===""})){return false}else{return true} }
+                    }
+                },
+                messages:{
+                    phone_n: ()=>{ if($("#formN").find("#cphoneN").val()!==""){return "必填"} else {return "格式错误"} }
+                },
+                submitHandler(form){
+                    let datamanager = {
+                        name: $("#cnameN").val(),
+                        department: $("#csubjectN").val(),
+                        email: $("#cemailN").val(),
+                        phone: $("#cphoneN").val(),
+                        title: $("#cjobN").val(),
+                    }
+                    tag["#formN"] = true;
+                    for(key in datamanager){
+                        if(datamanager[key].trim()===""){
+                            return;
+                        }
+                    }
+                    postData.datamanager = datamanager;
+                },
+                invalidHandler(){
+                    failedPopup()
+                    tag["#formN"] = false;
+                    return true;
+                }
+            })
+
+
+            $("#submitButton").click(()=>{
+                // 点击提交 判断必填内容是否完整（是：判断页面信息是否改变--{是：提交成功 申请加入按钮变成修改申请按钮 （点击修改申请按钮跳转到已提交的信息表进行预览，可以点击编辑按钮进行修改）；否：提交成功，无任何修改};否：提示提交失败，信息必须填写完整）
+                clearPostData()
+                resetTag()
+                removeErrorInputter('input')
+                Array.from(formIds).map((id)=>{
+                    $(id).submit()
+                })
+                for(key in tag){
+                    if(tag[key]===false){
+                        return
+                    }
+                }
+                $.ajax({
+                    type:"POST",
+                    url:"/networks/1/apply/?edit=1",
+                    data:JSON.stringify(postData),
+                    contentType:"application/json",
+                    dataType:"json",
+                    success(data){
+                        if(data.message=='申请已提交成功'){
+                            $("#pop_up_success_green").fadeIn();
+                            setTimeout(function(){
+                                location.href = "/networks/1/apply/";
+                            },1000)
+                        }
+                    },
+                    error(data){
+                        if(data.status===400){
+                            let responseData = JSON.parse(data.responseText)
+                            failedPopup(responseData.message)
+                            if(responseData.message.indexOf("邮箱")!=-1){
+                                lightErrorInputter(responseData.form_errors.email)
+                            }else{
+                                lightErrorInputter(responseData.form_errors.phone)
+                            }
+                        }
+                    }
+                })
+            })
+
+            //高亮错误输入框
+            let lightErrorInputter = function(val){
+                let elms = $("input")
+                for(var index = 0;index < elms.length;index++){
+                    let el = $(elms[index])
+                    if(el.val()==val){
+                        el.addClass("error_inputter")
+                    }
+                }
+            }
+            let removeErrorInputter = function(selector){
+                $(selector).removeClass("error_inputter")
+            }
+
+            $("#submit1").click(function(){
+                form3_id++
+                let b = form3_id-1;
+                if($("#form3").find("form").length<=100){
+                    let template = ``;
+                    template +=`
+                                <form action=""  id="form${b+1}" class="form-t cmxform">
+                                    <fieldset style="border:none">
+                                            <span style = "float:left">
+                                                <label for="crname${b}">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                                                <input id="crname${b}" name="name" type="text" required>
+                                            </span>
+                                            <span style = "float:right">
+                                                <label for="crsubject${b}">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
+                                                <input id="crsubject${b}" name="subject" type="text" required></span>
+                                            <span style = "float:left;width:52%;">
+                                                <label for="cremail${b}">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+                                                <input id="cremail${b}" type="email" name="email" required>
+                                            </span>
+                                            <span style = "float:right">
+                                                    <label for="crjob${b}">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+                                                    <input id="crjob${b}" type="text" name="job" id="cname3" required>
+                                            </span>
+                                            <span style = "float:left;width:52%;">
+                                                <label for="crphone${b}" for="number">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+                                                <input id="crphone${b}" name="phone_n" type="text"  name="number">
+                                            </span>
+                                    </fieldset>
+                                    <div class="delete_btn" data-delete="${b+1}">删除</div>
+                                    <div class="form-bor"></div>
+                                </form>                
+                    `
+                    $("#id1").append(template)
+                    addFormRule(b+1)
+                }else{
+                    template = ``;
+                }
+                $(".delete_btn").off("click").click(function(){
+                    deleteFormId = $(this).data().delete
+                    deleteForm = $(this).parent()
+                    $("#delete_pop-up_box").fadeIn();
+                })
+            })
+            $(".delete_box_three").click(function(){
+                $("#delete_pop-up_box").fadeOut();
+            })
+            $(".delete_btn").off("click").click(function(){
+                deleteFormId = $(this).data().delete
+                deleteForm = $(this).parent()
+                $("#delete_pop-up_box").fadeIn();
+            })
+            $(".delete_box_four").click(function(){
+                formIds = formIds.filter((forId)=>{
+                    return forId !== "#form"+deleteFormId
+                })
+                deleteForm.remove()
+                $("#delete_pop-up_box").fadeOut();
+            })
+            // 编辑页跳转页面的弹出框
+            function prompt(click,path){
+                $(click).on("click",function(){
+                    event.stopPropagation();
+                    event.preventDefault();
+                    $("#mask").fadeIn();
+                    $(".delete_box_cancel").on("click",function(){
+                        $("#mask").fadeOut();
+                    })
+                    $(".delete_box_sure").on("click",function(){
+                        location.href = path;
+                    })
+                })
+            }
+            prompt(".click9","/")
+            prompt(".click1","/")
+            prompt(".click2","/recently_questions/0/1/")
+            prompt(".click3","/news/1/0/")
+            prompt(".click4","/science/")
+            prompt(".click5","/about_us/")
+            prompt("#closeButton","/networks/1/")  
+            prompt(".click7","/user/?t=user/")
+            prompt(".click8","/logout/")
+            prompt(".ask","/ask_question/?next=/networks/1/apply/")
+            prompt(".right","/user/?t=mess/")
+            // 覆盖慢阻肺专项的点击事件，执行弹出框
+            $("#special_project").off("click").click(function(){       
+                    event.preventDefault();
+                    $("#mask").fadeIn();
+                    $(".delete_box_cancel").on("click",function(){
+                        $("#mask").fadeOut();
+                    })
+                    $(".delete_box_sure").on("click",function(){
+                        location.href = " {% url 'network' network_id=1  %} ";
+                    })      
+            })        
+            // 提交失败的函数
+            function failedPopup (messages) {
+                if(messages){
+                    $("#pop_up_failed").find(".alter_content").html(messages)
+                }else{
+                    $("#pop_up_failed").find(".alter_content").html("提交失败，请您将必填信息填写完整后再提交 ！")
+                }
+                $("#pop_up_failed").fadeIn();
+                setTimeout(function(){
+                    $("#pop_up_failed").fadeOut()
+                },2000);  
+            };
+        });       
+    </script>
+{% endblock headblock %}
+
+{% block head-nav %}
+    <div class="head-methods-list">
+        <div class="header-methods-list-bot"> </div>
+    </div>
+{% endblock head-nav %}
+
+{% block bodyblock %}
+    <div id="container">
+        <div class="container">
+            <div class="title-top">
+                <h3 class="container-form">科研团队成员信息采集表</h3>
+            </div>
+            <div class="explain-wrap">
+                <div class="explain">
+                    <b class="text-parag">尊敬的研究者，您好：</b>
+                    <p class="text-parag-one">欢迎加入“慢阻肺临床研究专项”！</p>
+                    <p class="text-parag-two">首先，需要您根据项目要求提供您中心参与该项目的研究组成员基本信息，便于我们为您创建您专属的<span style="font-weight:600">临床研究型科室（Clinical Research Formation）<span>。</p>
+                    <p>以一个中心为单位的研究组，应至少包含以下成员：</p>
+                    <ul>
+                        <li><span style="font-weight:600">研究组负责人</span>：1名</li>
+                        <li><span style="font-weight:600">研究人员（如医生、医学生）</span>：1~3名</li>
+                        <li><span style="font-weight:600">数据管理员</span>：1名 *</li>
+                    </ul>
+                    <p class="text-parag-five">* 请您推荐一名数据管理员，具体要求为全面负责所在中心的数据采集、质控和管理，我们将根据项目方的要求对该人员进行针对项目的培训和考核，根据其工作成果、绩效给予相应的报酬。</p>
+                    <p class="text-parag-six">请您在下侧的表格中勾选您参与的项目名称，并填写研究组成员信息，<span style="color:red">请如实填写邮箱和手机号等信息，否则将无法为其开通研究权限！</span></p>
+                </div>
+            </div>
+            <div class="form-wrap">
+                <div class="form-one">
+                    <h4 class="form-one-h">一、项目名称（可多选）</h4>
+                    <form action="" id="form1">
+                        <fieldset id="newsletter_topics"  style="border:none">
+                            <div class="form-one-inc" style="border:none">
+                                {% for study in studies %}
+                                    {% if study.study_id in form.edc_study_ids %}
+                                        <p>
+                                            <label >
+                                                <input type="checkbox" class="newsletter"  value="{{study.study_id}}" name="topic" checked>{{study.name}}
+                                            </label>
+                                        </p>
+                                    {% else %}
+                                        <p>
+                                            <label >
+                                                <input type="checkbox" class="newsletter"  value="{{study.study_id}}" name="topic">{{study.name}}
+                                            </label>
+                                        </p>
+                                    {% endif %}
+                                {% endfor %}                                    
+                                <p>
+                                    <label for="topic" class="error"></label>
+                                </p>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="form-two">
+                    <h4 class="form-two-h">二、研究组负责人信息（必填）</h4>
+                    <form action="" id="form2" class="form-o cmxform">
+                        <fieldset>                              
+                            <span style = "float:left">
+                                <label for="cname1">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                                <input id="cname1" name="name" type="text" required value="{{form.leader.name}}">
+                            </span>
+                            <span style = "float:right">
+                                <label for="csubject1">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
+                                <input id="csubject1" type="text" required value="{{form.leader.department}}"></span>
+                            <span style = "float:left">
+                                <label for="cemail1">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+                                <input id="cemail1" type="email" name="email" required value="{{form.leader.email}}">
+                            </span>
+                            <span style = "float:right">
+                                <label for="cjob1">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+                                <input id="cjob1" type="text" name="job" id="cname3" required value="{{form.leader.title}}"></span>
+                            <span style = "float:left">
+                                <label for="cphone1">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+                                <input id="cphone1" name="phone" type="text" value="{{form.leader.phone}}" name="number">
+                            </span>
+                            <span style = "float:right">
+                                <label for="cwork1">工作单位： </label>
+                                <input id="cwork1" type="text" name="work"  required  value="{{form.site}}">
+                            </span>
+                            <span style = "float:left;">
+                                <label for="cplace1">工作地址： </label>
+                                <input id="cplace1" type="text" name="place"  required  value="{{form.address}}">
+                            </span>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="form-three">
+                    <h4 class="form-three-h">三、研究人员的信息（至少填写一名人员）</h4>
+                    {% for research in form.researchers %}
+                    <form action="" id="form{{ forloop.counter|add:2}}" class="form-t cmxform original">
+                        <fieldset style="border:none">
+                            <span style = "float:left">
+                                <label for="crname{{forloop.counter|add:1}}">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                                <input id= "crname{{forloop.counter|add:1}}" name="name" type="text" required value="{{research.name}}">
+                            </span>
+                            <span style = "float:right">
+                                <label for="crsubject{{forloop.counter|add:1}}">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
+                                <input id="crsubject{{forloop.counter|add:1}}" type="text" name="subject" required value="{{research.department}}"></span>
+                            <span style = "float:left;width: 52%;">
+                                <label for="cremail{{forloop.counter|add:1}}">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+                                <input id="cremail{{forloop.counter|add:1}}" type="email" name="email" required value="{{research.email}}">
+                            </span>
+                            <span style = "float:right">
+                                <label for="crjob{{forloop.counter|add:1}}">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+                                <input id="crjob{{forloop.counter|add:1}}" type="text" name="job"  required value="{{research.title}}">
+                            </span>
+                            <span style = "float:left;width: 52%;">
+                                <label for="crphone{{forloop.counter|add:1}}">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+                                <input id="crphone{{forloop.counter|add:1}}" name="phone_n" type="text" value="{{research.phone}}">
+                            </span>  
+                        </fieldset>
+                        <div class="delete_btn" data-delete="{{forloop.counter|add:2}}">删除</div>
+                        <div class="form-bor"></div>
+                    </form>
+                    {% endfor %}
+                    <div id="id1"></div>
+                    <input type="submit" name="" id="submit1" value="+点击添加成员" />
+                </div>                 
+                <div class="form-six">
+                    <h4 class="form-six-h">四、数据管理员信息（选填）</h4>    
+                    <form action="" id="formN" class="form-e">
+                        <fieldset style="border:none">
+                            <span style = "float:left">
+                                <label for="cnameN">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</label>
+                                <input id="cnameN" name="name" type="text" value="{{form.datamanager.name}}">
+                            </span>
+                            <span style = "float:right">
+                                <label for="csubjectN">科&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;室：</label>
+                                <input id="csubjectN" name="subject" type="text" value="{{form.datamanager.department}}"></span>
+                            <span style = "float:left">
+                                <label for="cemailN">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</label>
+                                <input id="cemailN" type="email" name="email" value="{{form.datamanager.email}}">
+                            </span>
+                            <span style = "float:right">
+                                    <label for="cjobN">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</label>
+                                    <input id="cjobN" name="job" type="text" value="{{form.datamanager.title}}">
+                            </span>
+                            <span style = "float:left">
+                                <label for="cphoneN" for="number">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：</label>
+                                <input id="cphoneN"  name="phone_n" type="text" value="{{form.datamanager.phone}}">
+                            </span>
+                        </fieldset>
+                        <div class="form-bor"></div>
+                    </form>
+                </div>
+                <div class="form-footer">
+                    <p class="form-footer-p">以上信息确认无误后，请点击下方“提交”按钮。再次感谢您的配合，医咖会作为项目的技术支持平台，将为您提供科研项目管理、科研培训、数据管理、统计分析等服务。</p>
+                    <p class="form-footer-p">如有疑问，请发送邮件至help@natureself.cn咨询。</p>
+                </div>
+                <div class="form-footer-btn-w">
+                    <input type="submit" style="cursor:pointer" id="closeButton" value="取消">
+                    <input type="submit" style="cursor:pointer" id="submitButton" value="提交">
+                </div>
+            </div>
+            <div id="pop_up_success_green">		
+                <p class="submission_success_green">
+                <img src="{% static 'images/success_green.svg' %}" alt="" class="img_success_green">
+                提交成功&nbsp;！</p>
+            </div>
+            <div id="pop_up_failed">
+                <p class="submission_failed">
+                    <img src="{% static 'images/fail.svg' %}" alt="" class="img_fail">
+                    <span class="alter_content">提交失败，请您将必填信息填写完整后再提交&nbsp;！</span>
+                </p>
+            </div>
+            <div  id="delete_pop-up_box">
+                <div  class="dialog">
+                    <h2  class="delete_box_one"  style="font-size:24px;margin-top:36px">删除</h2>
+                    <p  class="delete_box_two"  style="  margin-top:50px;font-size:16px;">确定要删除这条信息吗？</p>
+                    <div  class="button">
+                        <span  class="delete_box_three">取消</span>
+                        <span  class="delete_box_four">确定</span>
+                    </div>
+                </div>        
+            </div>
+            <div id="mask">
+                <div class="dialog">
+                    <h2 class="delete_box_one">离开</h2>
+                    <p class="delete_box_two">你正在编辑申请信息，确定要离开当前页面？</p>
+                    <div class="button" style="margin-top:30px">
+                        <span class="delete_box_cancel">取消</span>
+                        <span class="delete_box_sure">确定</span>
+                    </div>
+                </div>    
+            </div>
+        </div>
+    </div>
+{% endblock bodyblock %}

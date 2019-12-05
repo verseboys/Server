@@ -1,0 +1,1133 @@
+{% extends './user_base.html' %}
+{% load static %}
+
+{% block usermain %}
+<!-- 个人信息 -->
+{% include './my_bindcontact_modal.html' %}
+<div id="userInfoMain" v-if="isShowSelf" v-clock>
+    <div class="user-menu-list" data-link="user">
+        <div class="user-info">
+            <div class="user-info-tag">
+                <div class="inline" :class="{'checked': userTabType === 'myInfo'}" @click="switchTab('myInfo')">个人中心</div>
+                <div class="inline" :class="{'checked': userTabType === 'changePsw'}" @click="switchTab('changePsw')">修改密码</div>
+                <div class="inline" :class="{'checked': userTabType === 'bindIdentity'}" @click="switchTab('bindIdentity')">账号设置</div>
+                <div class="inline medal_button" :class="{'checked': userTabType === 'myMedal'}" @click="switchTab('myMedal')">我的勋章</div>
+            </div>
+            <div class="user-info-bot">
+                <div>
+                    <!-- 个人中心 -->
+                    <div v-if="userTabType === 'myInfo'">
+                        <div class="user-info-usr" type="user" v-if="userInfo">
+                            <div class="user-info-title">基本信息</div>
+                            <div class="row">
+                                <div class="user-info-box">
+                                    <div class=" pointer">
+                                        <input type="file" accept="image/*" class="hide" id="myAvatar" @change="selectAvatar">
+                                        <label for="myAvatar" class="pointer">
+                                            <div class="selector_img" :style="{backgroundImage:'url(/images/avatar/'+ userInfo.avatar+')',backgroundSize:'cover'}" style="border-radius: 100%"></div>
+                                            <div class="selector_text">选择头像</div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="user-info-box">
+                                    <div class="wi1">
+                                        <input type="text" placeholder="用户名" v-model="userInfo.username" /> 
+                                    </div>
+                                </div>
+                                <div class="user-info-box">
+                                    <div class="wi1">
+                                        <input type="text" placeholder="真实姓名" v-model="userInfo.fullname" /> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 15px;">
+                                <div class="user-info-box" @click="isShowSelectSex=!isShowSelectSex">
+                                    <div class="chooser" :class="{'chooser_active':isShowSelectSex}" v-if="userInfo.gender===0" type="sex">男</div>
+                                    <div class="chooser" :class="{'chooser_active':isShowSelectSex}" v-if="userInfo.gender===1" type="sex">女</div>
+                                    <div class="chooser" :class="{'chooser_active':isShowSelectSex}" v-if="userInfo.gender===2" type="sex">保密</div>
+                                    <div class="chooser" :class="{'chooser_active':isShowSelectSex}" v-if="userInfo.gender===''" type="sex">性别</div>
+                                    <div class="chooser_list" style="display: none;" v-show="isShowSelectSex">
+                                        <div class="chooser_item no_next" @click.stop="selectSex(0)">男</div>
+                                        <div class="chooser_item no_next" @click.stop="selectSex(1)">女</div>
+                                        <div class="chooser_item no_next" @click.stop="selectSex(2)">保密</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-info-title">职业资料</div>
+                            <div class="row">
+                                <div class="user-info-box">
+                                    <div class="wi1">
+                                        <input type="text" placeholder="单位" v-model="userInfo.corporation" />
+                                    </div>
+                                </div>
+                                <div class="user-info-box">
+                                    <div class="chooser" :class="{'chooser_active':isShowSelectDepartment}" type="pro" v-text="(userInfo.profession && userInfo.profession.department_name)||'专业科室'" @click="getDepartmentData({'cid':0,'text':''})"></div>
+                                    <div class="chooser_list" style="display: none;" v-show="isShowSelectDepartment">
+                                        <div class="chooser_item" v-for="item in departmentDatas" :key="item.id" @click="getDepartmentData({'cid':item.id,'text':item.department_name})" v-text="item.department_name"></div>
+                                    </div>
+                                </div>
+                                <div class="user-info-box">
+                                    <div class="chooser" :class="{'chooser_active':isShowSelectJob}" type="pro" v-text="(userInfo.jobTitle && userInfo.jobTitle.job_name)||'职称'" @click="getJobData({'cid':0,'text':''})"></div>
+                                    <div class="chooser_list" style="display: none;" v-show="isShowSelectJob">
+                                        <div class="chooser_item" v-for="item in jobDatas" :key="item.id" @click="getJobData({'cid':item.id,'text':item.job_name})" v-text="item.job_name"></div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-info-title">联系方式</div>
+                            <div class="row">
+                                <div class="user-info-box">
+                                    <input type="tel" placeholder="手机号" v-model="userInfo.mobile" id="user_mobile">  
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 15px;">
+                                <div class="user-info-box">
+                                    <input type="email" placeholder="邮箱" v-model="userInfo.contact_email" id="user_email">
+                                </div>
+                            </div>
+                            <div class="user-info-title">一句话简介</div>
+                            <div class="row mar-bot40">
+                                <div class="user-info-box width-1">
+                                    <input type="text" placeholder="(28个字以内)" v-model="userInfo.signature" id="user_signature">
+                                </div>
+                            </div>
+                            <div class="fin_toolbox">
+                                <div class="information_box information_success_box" v-if="successInfo" v-text="successInfo"></div>
+                                <div class="information_box information_error_box" v-if="errorInfo" v-text="errorInfo"></div>
+                                <div class="submit shadow_btn user_pwd_submit disabled" v-if="!isSaveDisabled">保存</div>
+                                <div class="submit shadow_btn user_pwd_submit" v-else @click="saveMyInfo">保存</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 修改密码 -->
+                    <div v-if="userTabType === 'changePsw'">
+                        <div class="user-info-pass row" type="pass">
+                            <div class="left align-top">
+                                <div class="user-info-title">旧密码</div>
+                                <div class="user-info-box">
+                                    <input type="password" v-model="pswObj.old" placeholder="输入旧密码"/>
+                                </div>
+                            </div>
+                            <div class="right align-top">
+                                <div class="user-info-title">新密码</div>
+                                <div class="user-info-box block">
+                                    <input type="password" v-model="pswObj.new" placeholder="输入新密码"/>
+                                </div>
+                                <div class="user-info-box block">
+                                    <input type="password" v-model="pswObj.repeat" placeholder="确认新密码"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fin_toolbox">
+                            <div class="information_box information_success_box" v-if="successInfo" v-text="successInfo"></div>
+                            <div class="information_box information_error_box" v-if="errorInfo" v-text="errorInfo"></div>
+                            <div class="submit shadow_btn user_pwd_submit disabled" v-if="isSavePswDisabled">保存</div>
+                            <div class="submit shadow_btn user_pwd_submit" v-else  @click="savePsw">保存</div>
+                        </div>
+                    </div>
+                    <!-- 账号设置 -->
+                    <div v-if="userTabType === 'bindIdentity'">
+                        <div class="user-info-usr">
+                            <div class="user-info-title">账号</div>
+                            <div class="row">
+                                <div class="user-info-box">
+                                    <input type="tel" disabled="true" placeholder="手机号" v-model="userInfo.phone" id="user_mobile">  
+                                </div>
+                                <div class="contact-bind">
+                                    <span v-text="userInfo.phone_validated?'已经绑定':'绑定后便可快捷登录'"></span>
+                                    <span @click="bindContact('phone')" v-text="userInfo.phone_validated?'更换':'去绑定'"></span>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 15px;">
+                                <div class="user-info-box">
+                                    <input type="email" disabled="true" placeholder="邮箱" v-model="userInfo.email" id="user_email">
+                                </div>
+                                <div class="contact-bind">
+                                    <span v-text="userInfo.email_validated?'已经绑定':'绑定后便可快捷登录'"></span>
+                                    <span @click="bindContact('email')" v-text="userInfo.email_validated?'更换':'去绑定'"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 我的勋章 -->
+                    <div v-if="userTabType === 'myMedal'" class="user-info-pass row" style="min-height:600px">
+                        <div class="left" style="width:200px;height:300px;" v-for="medal in all_medals" :key="medal.id">
+                            <div class="medal.medal_type!=='1'?'show_medal_common':'show_medal'}" style="width:150px;margin-top:55px;margin-left:25px;background:white;cursor:pointer;"
+                                @click="showMedalModel(medal)"
+                            >
+                                <img v-if="medal.medal_type!=='1'" :src="img_base_url + (user_medals[medal.id]?medal.pic_ss_key:medal.pic_negative_ss_key) + '/url'" style="width:100%;height:auto">
+                                <img v-else :src="anniversary_img_base_url + (user_medals[medal.id]?medal.pic_ss_key:medal.pic_negative_ss_key)" style="width:100%;height:auto">
+                                <div class="medal_title" style="margin-top:25px;font-weight:700;text-align:center" v-text="medal.name">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>  
+    </div>
+    <!-- 勋章弹框 -->
+    <div v-show="isShowMedalModel" style="display: none" v-if="selected_medals" >
+        <div  class="medal_modal_container" style="position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.4);top:0;left:0;z-index:99999;">
+            <div class="medal_center_container" style="text-align:center;position:absolute;top:50%;left:50%;width:600px;height:400px;background:#fff;border-radius:3px;margin-left:-300px;margin-top:-200px;">
+                <div class="cancel_medal_modal" style="width:38px;height:38px;position:absolute;top:0;right:0;margin-top:-38px;margin-right:-58px;cursor:pointer">
+                    <img style="width:38px;height:38px" @click="isShowMedalModel=!isShowMedalModel" src="/static/images/cancel.svg">
+                </div>
+                <div style="position:absolute;top:0;left:50%;weight:150px;height:170px;margin-left:-75px;margin-top:-85px;">
+                    <img style="width:150px;height:164.5px" :src="selected_medals.img_base_url+selected_medals.img">
+                </div>
+                <div style="margin-top:110px">
+                    <span style="font-size:20px" v-text="selected_medals.txt"></span>
+                </div>
+                <div style="font-size:38px;color:#475dd9;font-weight:700;margin-top:36px;" v-text="selected_medals.title">
+                </div>
+                <div style="margin-top:40px;padding-left:110px;padding-right:110px;line-height:20px"  v-text="selected_medals.sub_title">
+                </div>
+                <div style="margin-top:28px;">
+                    已有<span style="color:#475dd9" v-text="selected_medals.num"></span>人获得
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    var myInfoVM = new Vue({
+        el: '#userInfoMain',
+        data: {
+            isShowSelf:false,
+            userTabType:'myInfo',
+            userInfo:null,
+            isShowSelectSex:false,
+            isShowSelectDepartment:false,
+            isSaveDisabled:false,
+            departmentDatas:[],
+            isShowSelectJob:false,
+            jobDatas:[],
+            //修改密码
+            pswObj:{
+                old:'',
+                new:'',
+                repeat:'',
+            },
+            errorInfo:'',
+            successInfo:'',
+            //我的勋章
+            anniversary_img_base_url:'/static/images/',
+            img_base_url: '/ss/v1/files/',
+            user_medals:{},//用户已有的勋章
+            all_medals:[],//用户所有的勋章
+            selected_medals: null,//弹框显示的勋章
+            isShowMedalModel:false
+        },
+        created:function(){
+            if(myNavVm.myNavType==='myinfo') this.isShowSelf = true;
+            this.medal();
+        },
+        computed: {
+            isSavePswDisabled: function () {
+                if(this.pswObj.old=='' || this.pswObj.new=='' || this.pswObj.repeat==''){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        },
+        watch: {
+            userInfo: {
+                handler: function (newVal, oldVal) {
+                    this.isSaveDisabled = !oldVal? false: true;
+                },
+                deep: true
+            }
+        },
+        methods: {
+            switchTab:function(method) {
+                var vm = this;
+                this.userTabType = method;
+                vm.successInfo = '';
+                vm.errorInfo = '';
+                this.isSaveDisabled = false;
+            },
+            //上传头像
+            selectAvatar:function(){
+                var vm = this;
+                // console.log($('#myAvatar').val())
+                if (!$('#myAvatar').val().match(/.jpg|.gif|.png|.bmp|.JPEG|svg|/i)) {
+                    $().alert_box('请选择图片格式上传')
+                    return
+                }
+                var oMyForm = new FormData();
+                oMyForm.append("imgFile", $('#myAvatar')[0].files[0]);
+                $.ajax({
+                    type: 'post',
+                    url: '/extends/image_storage/avatar/',
+                    data: oMyForm,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        if(res.code===200){
+                            vm.userInfo.avatar=res.data;
+                        }
+                    }
+
+                })
+            },
+            selectSex:function(val){
+                var vm = this;
+                vm.isShowSelectSex = true;
+                if(val===0||val===1||val===2){
+                    vm.userInfo.gender = val;
+                    vm.isShowSelectSex = false;
+                }
+            },
+            getDepartmentData:function(obj){
+                var vm = this;
+                if(vm.isShowSelectJob) vm.isShowSelectJob=false;
+                vm.isShowSelectDepartment = !obj.text && vm.departmentDatas.length!=0 && vm.isShowSelectDepartment ? false : true;
+                $.ajax({
+                    type: 'get',
+                    url: '/front_professional_sections/'+obj.cid+'/',
+                    success:function (res) {
+                        if(res.code === 200){
+                            var list=res.data.professionalSections;
+                            if(list.length > 1){
+                                vm.departmentDatas=list;
+                            }else{
+                                vm.userInfo.profession={};
+                                vm.userInfo.profession.department_name=obj.text;
+                                vm.userInfo.profession.id=obj.cid;
+                                vm.isShowSelectDepartment = false;
+                            }
+                        }
+                    }
+                })
+            },
+            getJobData:function(obj){
+                var vm = this;
+                if(vm.isShowSelectDepartment) vm.isShowSelectDepartment=false;
+                vm.isShowSelectJob = !obj.text && vm.jobDatas.length!=0 && vm.isShowSelectJob ? false : true;
+                $.ajax({
+                    url:"/front_job_title/"+obj.cid+'/',
+                    type:'get',
+                    success:function (res) {
+                        if(res.code === 200){
+                            var list=res.data.jobTitles;
+                            if(list.length > 1){
+                                vm.jobDatas=list;
+                            }else{
+                                vm.userInfo.jobTitle={};
+                                vm.userInfo.jobTitle.job_name=obj.text;
+                                vm.userInfo.jobTitle.id=obj.cid;
+                                vm.isShowSelectJob = false;
+                            }
+                        }
+                    }
+                })
+            },
+            // 绑定联系方式
+            bindContact:function(type){
+                bindContactVM.showModal(type)
+            },
+            checkMyInfo:function(value){
+                var reg = /^(?!\d+$)[\da-zA-Z_\u4e00-\u9fa5]{2,16}$/;
+                if (reg.test(value)) return true;
+                return false;
+            },
+            // 校验手机
+            isMobile:function(value){
+            let reg = /^(?:\+?86)?1(?:3\d{3}|5[^4\D]\d{2}|8\d{3}|7(?:[35678]\d{2}|4(?:0\d|1[0-2]|9\d))|9[189]\d{2}|66\d{2})\d{6}$/;
+            if (!reg.test(value)) return false;
+            return true;
+            },
+            // 校验邮箱
+            isEmail:function(value){
+            let reg = /^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+            if (!reg.test(value)) return false;
+            return true;
+            },
+            saveMyInfo:function(){
+                var vm = this;
+                if(!vm.checkMyInfo($.trim(vm.userInfo.username))){
+                    vm.errorInfo = '请输入2-16位，非纯数字，不含除"_"特殊字符用户名'
+                    return false
+                }else{
+                    vm.errorInfo =''
+                }
+                if(!vm.userInfo.profession){
+                    vm.errorInfo ='专业科室不能为空'
+                    return false
+                }
+                if(!vm.userInfo.jobTitle){
+                    vm.errorInfo ='职称不能为空'
+                    return false
+                }
+                if (vm.userInfo.mobile && !vm.isMobile(vm.userInfo.mobile)){
+                    vm.errorInfo = '请输入正确的手机号';
+                    return false;
+                }
+                if ( vm.userInfo.contact_email && !vm.isEmail(vm.userInfo.contact_email)){
+                    vm.errorInfo = '请输入正确的邮箱';
+                    return false;
+                }
+                if(vm.userInfo.signature && vm.userInfo.signature.length>28){
+                    vm.errorInfo = '简介在28个字以内';
+                    return false;
+                }
+
+                var dataObj={
+                    signature: vm.userInfo.signature,
+                    avatar: vm.userInfo.avatar,
+                    fullname: vm.userInfo.fullname,
+                    username: vm.userInfo.username,
+                    gender: vm.userInfo.gender,
+                    corporation: vm.userInfo.corporation,
+                    profession_id: vm.userInfo.profession && vm.userInfo.profession.id,
+                    job_id: vm.userInfo.jobTitle && vm.userInfo.jobTitle.id,
+                    mobile: vm.userInfo.mobile,
+                    contact_email: vm.userInfo.contact_email,
+                }
+                $.ajax({
+                    url: '/user_info/',
+                    data: dataObj,
+                    type: 'post',
+                    success: function (res) {
+                        if(res.code==200){
+                            vm.successInfo="保存成功";
+                            myNavVm.userbaseInfo.username = vm.userInfo.username;
+                            myNavVm.userbaseInfo.signature = vm.userInfo.signature;
+                            myNavVm.userbaseInfo.avatar = vm.userInfo.avatar;
+                            $('.login-on').css('background','url(/images/avatar/'+ vm.userInfo.avatar+')');
+                            $('.login-on').css('background-size','cover');
+                            vm.isSaveDisabled = false;
+                            setTimeout(function(){
+                                vm.successInfo='';
+                            },1000)
+                        }else{
+                            vm.errorInfo=res.message;
+                        }
+                    }
+                })
+            },
+            //检查密码
+            checkPsw:function(val,txt){
+                var vm = this;
+                if(val.length<4 || val.length>16) {
+                    vm.errorInfo = '请输入4-16位长度的密码!';
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            //修改密码
+            savePsw:function(){
+                var vm = this;
+                // vm.isSavePsw = true;
+                if(!vm.checkPsw($.trim(vm.pswObj.old),'旧密码')) return;
+                if(!vm.checkPsw($.trim(vm.pswObj.new),'新密码')) return;
+                if(!vm.checkPsw($.trim(vm.pswObj.repeat),'确认密码')) return;
+                if($.trim(vm.pswObj.new) !== $.trim(vm.pswObj.repeat)){
+                    vm.errorInfo = '两次密码不一致!';
+                    return;
+                }
+                $.ajax({
+                    url: '/reset_password/',
+                    data: {
+                        old_password: vm.pswObj.old,
+                        new_password: vm.pswObj.new,
+                        repeat_password: vm.pswObj.repeat
+                    },
+                    type: 'post',
+                    success: function (res) {
+                        if(res.code===200){
+                            vm.successInfo="密码修改成功";
+                            setTimeout(function(){
+                                vm.successInfo='';
+                                window.location.href='/login/#1'
+                            },1000)
+                            vm.errorInfo ='';
+                            vm.pswObj.old='';
+                            vm.pswObj.new='';
+                            vm.pswObj.repeat='';
+                        }else{
+                            vm.errorInfo = res.message;
+                        }
+                    }
+                })
+            },
+            //我的勋章
+            medal:function() {
+                var vm = this
+                if(vm.all_medals.length!==0) return
+                $.ajax({
+                    url:'/get_achievements/',
+                    type:'get',
+                    success:function (data) {
+                        var user_medals = data.data.user_medals
+                        var user_medal_id_list = user_medals.map((medal)=>{return medal['medal__id']});
+                        var receive_time = {}
+                        user_medals.forEach(medal => {
+                            receive_time[medal['medal__id']] = new Date(medal['create_time']).getFullYear()
+                        });
+
+                        all_medals = data.data.medals.map((medal)=>{
+                            switch(medal.uid){
+                                case 'old_bird':
+                                    medal.name = '医咖会见证者·' + (receive_time[medal.id] || '2018')
+                                    medal.description = `感谢有你，${receive_time[medal.id] || '2018'}年和医咖会共庆两周岁`
+                                    medal.pic_ss_key = 'old_bird.png'
+                                    medal.pic_negative_ss_key = 'old_bird_negative.png'
+                                    return medal
+                                case 'sci_god':
+                                    medal.name = 'SCI大神'
+                                    medal.description = 'Respect！Respect！Respect！'
+                                    medal.pic_ss_key = 'sci_god.png'
+                                    medal.pic_negative_ss_key = 'sci_god_negative.png'
+                                    return medal
+                                case 'yizhu_friend':
+                                    medal.name = '医咖会的朋友'
+                                    medal.description = '请收下小咖的感激和敬意'
+                                    medal.pic_ss_key = 'yizhu_friend.png'
+                                    medal.pic_negative_ss_key = 'yizhu_friend_negative.png'
+                                    return medal
+                                case 'positive_man':
+                                    medal.name = '活动积极分子'
+                                    medal.description = '活动积极参与者，沙龙聚会需要你'
+                                    medal.pic_ss_key = 'positive_man.png'
+                                    medal.pic_negative_ss_key = 'positive_man_negative.png'
+                                    return medal
+                                default:
+                                    return medal
+                            }
+                        })
+
+                        //记录用户已有勋章  key为勋章id 以key是否存在判断获得状态
+                        vm.user_medals = {}
+                        for(medal of all_medals){
+                            if(user_medal_id_list.indexOf(medal.id)!==-1){
+                                vm.user_medals[medal.id] = 1
+                            }else{
+                                vm.user_medals[medal.id] = 0
+                            }
+                        }
+                        vm.all_medals = all_medals
+                    },
+                    error:function(error){
+                        // console.log(error)
+                    }    
+                })
+            },
+            //弹框显示我的勋章
+            showMedalModel(medal){
+                var medalUrl = this.user_medals[medal.id]?medal.pic_ss_key:medal.pic_negative_ss_key;
+                this.selected_medals = {
+                    img_base_url: medal.medal_type==='1'?this.anniversary_img_base_url:this.img_base_url,
+                    img: medal.medal_type==='1'?medalUrl:medalUrl+'/url',
+                    title:medal.name,
+                    sub_title:medal.description,
+                    num:medal.count,
+                    txt:this.user_medals[medal.id]?'恭喜你获得新勋章':'尚未获得，仍需努力'
+                }
+                this.isShowMedalModel = true;
+            }
+        }
+    })
+</script>
+
+<!-- 收藏夹 -->
+{% include './my_collect_modal.html' %}
+<!-- 我的收藏 -->
+<div id="myCollectMain" v-if="isShowSelf" v-clock>
+    <div class="user-menu-list" data-link="collect">
+        <div>
+            <div class="user-collect-top">
+                <div class="user-collect-title">我的收藏</div>
+                <div class="user-collect-tag">
+                    <span>分类</span>
+                    <ul class="row user_tag_change_collect">
+                        <li :class="{'checked': curCollectTypeNum === 0}" @click="switchCollectTypes(0)">全部</li>
+                        <li v-for="item in collectTypeDatas" :key="item.id" :class="{'checked': curCollectTypeNum === item.id}" v-text="item.collect_category" @click="switchCollectTypes(item.id)"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="user-collect-cho-tag row">
+                <span class="tag" @click="manageCollectDict">分类管理</span>
+            </div>
+            <ul class="user-collect-list" >
+                <li v-if="collectDatas.length>0 && item.is_collect!=0" v-for="(item,index) in collectDatas" :key="item.type=='videomodel'?item.video_id:item.question_id">
+                    <div v-if="item.type=='videomodel'">
+                            <a :href="'/video_detail/'+item.video_id+'/'" target="_blank">
+                                <div style="width: 182px;height: 105px;border-radius: 5px ;display: inline-block;vertical-align: top">
+                                    <img :src="'/images/article_images/'+item.thumbnail" style="width:100%;height:105px;border-radius: 5px ">
+                                </div>
+                            </a>
+                            <div style="display:inline-block">
+                                <a :href="'/video_detail/'+item.video_id+'/'" target="_blank">
+                                    <div style="font-family: PingFangSC;font-size: 18px;font-weight: normal;font-style: normal;font-stretch: normal;line-height: 18px;letter-spacing: normal;text-align: left;color: #000000;margin-left: 18px;" 
+                                    v-text="item.title"></div>
+                                </a>
+                                <div style="margin-top:70px;margin-left:15px;line-height: 18px;">
+                                    <span style="font-size: 13px;height: 18px;display: inline-block" class="user-coll" @click="cancelCollect(item,index)">
+                                        <span class="inner_text">取消收藏</span>
+                                    </span>
+                                </div>
+                            </div>
+                    </div>
+                    <div v-else>
+                            <a :href="'/question_detail/' + item.question_id + '/0/1/1/'">
+                                <div class="user-collect-list-title" v-html="item.question_content"></div>
+                            </a>
+                            <div class="inline user-collect-list-img">
+                                <a href="javascript:;">
+                                    <span class="user" v-if='item.answer_username_avatar' :style="{backgroundImage:'url(/images/avatar/'+ item.answer_username_avatar+')',backgroundSize:'cover'}"></span>
+                                    <span class="user" v-else></span>
+                                </a>
+                            </div>
+                            <div class="inline user-collect-list-text">
+                                <a href="javascript:;"><div class="user-collect-list-name" v-text="item.answer_username"></div></a>
+                                <div class="user-collect-list-artic">
+                                    <span v-html="item.showFullContent ? item.answer_comment_simple : item.answer_content"></span>
+                                    <span class="color-link pointer" v-if="item.answer_comment_simple" @click="item.showFullContent = !item.showFullContent" v-text="item.showFullContent ? '展开' : '收起'"></span>
+                                </div>
+                                <div class="user-collect-list-tag">
+                                    <span v-text="item.answer_create_time"></span>
+                                    <span class="user-comm" v-text="'评论 '+item.answer_count"></span>
+                                    <span class="user-fig pointer" :ques_id="item.answer_id" v-text="item.praise_count === 1 ? ('已赞 ' + item.praise_count) : item.praise_count"></span>
+                                    <span class="user-coll"  @click="cancelCollect(item,index)">取消收藏</span>
+                                </div>
+                            </div>
+                    </div>
+                </li>
+                <li style="background-color: #F2F3F4;" v-if="collectDatas.length===0">
+                    <div class="no_comment">
+                        <div class="no_comment_img"></div>
+                        <div class="no_comment_text">目前暂无收藏~</div>
+                    </div>
+                </li>
+            </ul>
+            {% include './mypage.html' %}
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    var myCollectVM =new Vue({
+        el: '#myCollectMain',
+        mixins: [myPageMixin],
+        data: {
+            isShowSelf:false,
+            collectTypeDatas:null,
+            collectDatas:[],
+            curCollectTypeNum:0
+        },
+        // created:function(){
+        //     this.getCollectTypeData()
+        //     this.getCollectData()
+        // },
+        methods:{
+            switchCollectTypes:function(val){
+                this.curCollectTypeNum = val;
+                this.current_page = 1;
+                this.getCollectData(this.current_page,val)
+            },
+            getCollectTypeData:function(){
+                var vm = this;
+                $.ajax({//收藏标签
+                    url: '/user_collect_category_list/',
+                    type: 'get',
+                    success: function (res) {
+                        if(res.code===200){
+                            vm.collectTypeDatas=res.data.user_collect_category_list || [];
+                        }else{
+                            vm.collectTypeDatas=res.data.user_collect_category_list || [];
+                        }
+                    }
+                })
+            },
+            getCollectData:function(pagenum,curCollectTypeNum){
+                var vm = this;
+                var curPage = pagenum || vm.current_page;
+                var curCollectTypeNum = curCollectTypeNum || vm.curCollectTypeNum;
+                $.ajax({//收藏问答
+                    url: '/my_collect/'+curCollectTypeNum+'/'+curPage+'/',
+                    type: 'get',
+                    data: '',
+                    success: function (res) {
+                        if(res.code===200){
+                            var favorites=res.data.favorites;
+                            if(favorites.length>0){
+                                favorites.forEach(function(item){
+                                    if(item.type != 'videomodel'){
+                                        item.is_collect=1
+                                        item.question_content=item.question_content.replace(new RegExp('(<img[^>]+>)', 'g'), '图片').replace(new RegExp('(<[^>]+>)', 'g'), '');
+                                        item.answer_content=item.answer_content.replace(new RegExp('(<img[^>]+>)', 'g'), '图片').replace(new RegExp('(<[^>]+>)', 'g'), '');
+                                        if(getBt(item.answer_content)>184){
+                                            item.answer_comment_simple = autoAddEllipsis(item.answer_content, 184)
+                                            item.showFullContent = true
+                                        }else{
+                                            item.answer_comment_simple=''
+                                            item.showFullContent = false
+                                        }
+                                    }
+                                })
+                            }
+                            vm.collectDatas=favorites;
+                        }
+                    }
+                })
+            },
+            cancelCollect:function(item,index){
+                var vm = this;
+                if(item.type== 'videomodel'){
+                    $.ajax({
+                        url: "/front_favorites/" + item.video_id + "/" + item.collect_category + "/3/",
+                        type: "get",
+                        success: function (res) {
+                            if (res.code == 200) {
+                                item.is_collect = res.data.is_collect
+                                vm.collectDatas.splice(index, 1)
+                            }
+                        }
+                    })
+                }else{
+                    $.ajax({//收藏
+                        url: '/collect_answer/' + item.answer_id + '/0/',
+                        type: 'get',
+                        success: function (res) {
+                            if (res.code == 200) {
+                                item.is_collect = res.data.is_collect
+                                vm.collectDatas.splice(index, 1)
+                            }
+                        }
+                    })
+                }
+            },
+            manageCollectDict:function(){
+                manageCollectDictVM.isShowModal = true;
+                manageCollectDictVM.showCollectDictModal('manage');
+            },
+            jumpPage: function(pagenum,status) { 
+                if(status){
+                    if(status ==='prev') this.current_page--
+                    if(status ==='next') this.current_page++
+                }else{
+                    this.current_page = pagenum;
+                }
+                this.getCollectData(this.current_page)
+            }, 
+        }
+    })
+</script>
+
+<!-- 我的关注 -->
+<div id="myAttentionMain" v-if="isShowSelf" v-clock>
+    <div class="user-menu-list" data-link="atten">
+        <div class="user-attenbot-box">
+            <div class="user-atten-bot" type="ques">
+                <ul class="list" v-if="attentionDatas.length>0">
+                    <li v-for="item in attentionDatas" :key="item.id">
+                        <a :href="'/question_detail/'+item.id+'/0/1/1/'">
+                            <div class="user-atten-tit">
+                                <span v-html="item.question"></span>
+                                <span class="user-tag-icon" v-text="item.question_category"></span>
+                            </div>
+                        </a>
+                        <div class="user-atten-tag">
+                            <span v-text="item.create_time"></span>
+                            <span v-text="'回答 '+item.answer_count"></span>
+                            <span v-text="'关注 '+item.attention_count"></span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="no_comment" v-else>
+                    <div class="no_comment_img"></div>
+                    <div class="no_comment_text">您还没有关注问题哦~</div>
+                </div>
+                {% include './mypage.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    var myAttentionVM =new Vue({
+        el: '#myAttentionMain',
+        mixins: [myPageMixin],
+        data: {
+            isShowSelf:false,
+            attentionDatas:[],
+        },
+        // created:function(){
+        //     this.getAttentionData()
+        // },
+        methods:{
+            getAttentionData:function(pagenum){
+                var vm = this;
+                var curPage = pagenum || vm.current_page;
+                $.ajax({//关注的问题
+                    url:'/my_attention_questions/'+curPage+'/',
+                    type:'post',
+                    success:function (res) {
+                        if(res.code === 200){
+                            vm.attentionDatas = res.data.attention_questions;
+                            vm.attentionDatas.forEach(function(item){
+                                item.question = item.question.replace(new RegExp('(<img[^>]+>)', 'g'),'图片').replace(new RegExp('(<[^>]+>)', 'g'),'');
+                            })
+                            vm.pages = res.data.page_count
+                        }
+                    }
+                })
+            },
+            jumpPage: function(pagenum,status) { 
+                if(status){
+                    if(status ==='prev') this.current_page--
+                    if(status ==='next') this.current_page++
+                }else{
+                    this.current_page = pagenum;
+                }
+                this.getAttentionData(this.current_page)
+            }, 
+        }
+    })
+</script>
+
+<!-- 我的提问 -->
+<div id="myQuestionMain" v-if="isShowSelf" v-clock>
+    <div class="user-menu-list" data-link="ask_ques">
+        <ul class="user-ask-ques" v-if="questionDatas.length>0">
+            <li v-for="item in questionDatas" :key="item.id">
+                <a :href="'/question_detail/'+item.id+'/0/1/1/'">
+                    <div class="user-ask-ques-tit" style="word-break: break-all;" v-html="item.content"></div>
+                </a>
+                <div class="user-atten-tag">
+                    <span v-text="item.create_time"></span>
+                    <span v-text="'回答 '+item.answer_count"></span>
+                    <span v-text="'关注 '+item.attention_question_count"></span>
+                </div>
+            </li>
+        </ul>
+        <div class="no_comment" v-else>
+            <div class="no_comment_img"></div>
+            <div class="no_comment_text">目前暂无提问~</div>
+        </div>
+        {% include './mypage.html' %}
+    </div>
+</div>
+<script type="application/javascript">
+    var myQuestionVM =new Vue({
+        el: '#myQuestionMain',
+        mixins: [myPageMixin],
+        data: {
+            isShowSelf:false,
+            questionDatas:[],
+        },
+        // created:function(){
+        //     this.getQuestionData()
+        // },
+        methods:{
+            getQuestionData:function(pagenum){
+                var vm = this;
+                var curPage = pagenum || vm.current_page;
+                $.ajax({//我的提问
+                    url:'/my_questions/'+curPage+'/',
+                    data:'',
+                    type:'post',
+                    success:function (res) {
+                        if(res.code === 200){
+                            vm.questionDatas = res.data.my_questions;
+                            vm.questionDatas.forEach(function(item){
+                                item.content = item.content.replace(new RegExp('(<img[^>]+>)', 'g'),'图片').replace(new RegExp('(<[^>]+>)', 'g'),'');
+                            })
+                            vm.pages = res.data.page_count
+                        }
+                    }
+                })
+            },
+            jumpPage: function(pagenum,status) { 
+                if(status){
+                    if(status ==='prev') this.current_page--
+                    if(status ==='next') this.current_page++
+                }else{
+                    this.current_page = pagenum;
+                }
+                this.getQuestionData(this.current_page)
+            }, 
+        }
+    })
+</script>
+
+<!-- 我的回答 -->
+<div id="myAnswerMain" v-if="isShowSelf" v-clock>
+    <!-- 我的回答 -->
+    <div class="user-menu-list" data-link="ans_ques">
+        <ul class="user-collect-list mar-Top0" v-if="answerDatas.length>0">
+            <li v-for="(item,index) in answerDatas" :key="item.question_id">
+                <a :href="'/question_detail/'+item.question_id+'/0/1/1/'">
+                    <div class="user-collect-list-title" v-html="item.question_content"></div>
+                </a>
+                <div class="inline user-collect-list-img">
+                    <a href="javsscript:;"><span class="user" :style="{backgroundImage:'url(/images/avatar/'+ item.answer_user_avatar+')',backgroundSize:'cover'}"></span></a>
+                </div>
+                <div class="inline user-collect-list-text">
+                    <a href="javsscript:;"><div class="user-collect-list-name" v-text="item.answer_user_username"></div></a>
+                    <div class="user-collect-list-artic">
+                        <span v-html="item.showFullContent ? item.answer_comment_simple : item.answer_comment"></span>
+                        <span class="color-link pointer" v-if="item.answer_comment_simple" @click="item.showFullContent = !item.showFullContent" v-text="item.showFullContent ? '展开' : '收起'"></span>
+                    </div>
+                    <div class="user-collect-list-tag">
+                        <span v-text="item.answer_create_time"></span>
+                        <span class="user-comm" v-text="'评论 '+item.child_answer_count"></span>
+                        <span class="user-fig pointer" :ques_id="item.answer_id" v-text="item.praise_count === 1 ? ('已赞 ' + item.praise_count) : item.praise_count"></span>
+                    </div>
+                </div>
+            </li> 
+        </ul>
+        <div class="no_comment" v-else>
+            <div class="no_comment_img"></div>
+            <div class="no_comment_text">您还没有关注问题哦~</div>
+        </div>
+        {% include './mypage.html' %}
+    </div>
+</div>
+<script type="application/javascript">
+    var myAnswerVM =new Vue({
+        el: '#myAnswerMain',
+        mixins: [myPageMixin],
+        data: {
+            isShowSelf:false,
+            answerDatas:[],
+        },
+        // created:function(){
+        //     this.getAnswerData()
+        // },
+        methods:{
+            getAnswerData:function(pagenum){
+                var vm = this;
+                var curPage = pagenum || vm.current_page;
+                $.ajax({//回答问题
+                    url:'/my_answers/'+curPage+'/',
+                    data:'',
+                    type:'post',
+                    success:function (res) {
+                        if(res.code === 200){
+                            var answerDatas = res.data.my_answers;
+                            answerDatas.forEach(function(item){
+                                item.answer_comment = item.answer_comment.replace(new RegExp('(<img[^>]+>)', 'g'),'图片').replace(new RegExp('(<[^>]+>)', 'g'),'');
+                                item.question_content = item.question_content.replace(new RegExp('(<img[^>]+>)', 'g'),'图片').replace(new RegExp('(<[^>]+>)', 'g'),'');
+                                if(getBt(item.answer_comment)>184){
+                                    item.answer_comment_simple = autoAddEllipsis(item.answer_comment, 184)
+                                    item.showFullContent = true
+                                }else{
+                                    item.answer_comment_simple=''
+                                    item.showFullContent = false
+                                }
+                            })
+                            vm.answerDatas = answerDatas
+                            vm.pages = res.data.page_count
+                        }
+                    }
+                })
+            },
+            // like:function(item,index){//点赞
+            //     console.log()
+            //     item.praise_count
+            //     $.ajax({
+            //         url: '/praise_answer/' + item.answer_id + '/',
+            //         type: 'get',
+            //         success: function (res) {
+            //             if(res.code===200){
+            //                 item.praise_count=res.data.is_praise
+            //             }
+            //         }
+            //     });
+            // },
+            jumpPage: function(pagenum,status) { 
+                if(status){
+                    if(status ==='prev') this.current_page--
+                    if(status ==='next') this.current_page++
+                }else{
+                    this.current_page = pagenum;
+                }
+                this.getAnswerData(this.current_page)
+            }, 
+        }
+    })
+</script>
+
+<!-- 我的消息 -->
+<div id="myMessageMain" v-if="isShowSelf" v-clock>
+    <div class="user-menu-list" data-link="mess">
+        <ul class="user-mess" v-if="messageDatas.length>0">
+            <li v-for="item in messageDatas" :key="item.question_id">
+                <div class="user-mess-user">
+                    <span :style="{backgroundImage:'url(/images/avatar/'+ item.replay_user_avatar+')',backgroundSize:'cover'}"></span>
+                </div>
+                <div class="user-mess-content" >
+                    <a class="color-link pointer" :href="'/question_detail/'+ item.question_id+'/0/1/1/'">
+                        <span v-text="item.replay_name"></span>
+                        <span class="color-title">&nbsp;                回答了&nbsp;</span>
+                        <span v-html="item.question" style="word-break: break-all;"></span>
+                        <span class="color-liter-grey" v-text="item.create_time"></span>
+                        <span class="right color-title ans_message"></span>
+                    </a>
+                    <div class="mar-top10 wid-605" v-html="item.replay_answer"></div>
+                </div>
+            </li>
+        </ul>
+        <div class="no_comment" v-else>
+            <div class="no_comment_img"></div>
+            <div class="no_comment_text">目前暂无消息~</div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    var myMessageVM =new Vue({
+        el: '#myMessageMain',
+        mixins: [myPageMixin],
+        data: {
+            isShowSelf:false,
+            messageDatas:[],
+        },
+        created:function(){
+            if(myNavVm.myNavType==='mymessage'){
+                this.isShowSelf = true;
+                this.getMessageData();
+            }
+        },
+        methods:{
+            getMessageData:function(pagenum){
+                var vm = this;
+                var curPage = pagenum || vm.current_page;
+                $.ajax({
+                    url:'/my_messages/'+curPage+'/',
+                    data:'',
+                    type:'post',
+                    success:function (res) {
+                        if(res.code === 200){
+                            var messages = res.data.messages;
+                            messages.forEach(function(item){
+                                item.question =item.question.replace(new RegExp('(<img[^>]+>)', 'g'),'图片').replace(new RegExp('(<[^>]+>)', 'g'),'');
+                                item.replay_answer =item.replay_answer.replace(new RegExp('(<img[^>]+>)', 'g'),'图片').replace(new RegExp('(<[^>]+>)', 'g'),'');
+                            })
+                            vm.messageDatas = messages;
+                            vm.pages = res.data.page_count
+                        }
+                    }
+                })
+            },
+            // like:function(item,index){//点赞
+            //     console.log()
+            //     item.praise_count
+            //     $.ajax({
+            //         url: '/praise_answer/' + item.answer_id + '/',
+            //         type: 'get',
+            //         success: function (res) {
+            //             if(res.code===200){
+            //                 item.praise_count=res.data.is_praise
+            //             }
+            //         }
+            //     });
+            // },
+            jumpPage: function(pagenum,status) { 
+                if(status){
+                    if(status ==='prev') this.current_page--
+                    if(status ==='next') this.current_page++
+                }else{
+                    this.current_page = pagenum;
+                }
+                this.getMessageData(this.current_page)
+            }, 
+        }
+    })
+</script>
+
+<!-- 我的订单 -->
+<div id="myOrderMain" v-if="isShowSelf" v-clock>
+    <div class="user-menu-list" data-link="order">
+        <div class="user-collect-top list_title_container">
+            <div class="user-collect-title list_title">
+                我的订单
+            </div>
+            <div class="user-collect-tag">
+                <span>分类</span>
+                <ul class="row user_tag_change_collect">
+                    <li v-for="item in orderTypes" :key="item.num" :class="{'checked': curOrderType === item.value}" v-text="item.name" @click="switchOrderTypes(item.value)"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="user_order_list">
+            <div class="user-collect-list" v-if='orderDatas.length>0' v-for="item in orderDatas" :key="item.order_id" style="border: 1px solid rgb(234, 234, 241);margin-bottom:19px;">
+                <div style="padding:0">
+                    <div class="order_title">
+                        <img src="/static/images/order.svg" style="vertical-align: middle;">
+                        <span class="order_id" v-text="'订单编号：'+item.order_id"></span>
+                        <span class="order_time" v-text="item.create_time"></span>
+                    </div>
+                </div>
+                <div class="order_content">
+                    <div class="order_content_inner">
+                        <img :src="'/images/article_images/'+item.thumbnail" class="order_img">
+                        <div class="order_content_detail">
+                            <div class="order_name" v-text="item.course"></div>
+                            <div class="order_price" v-html="'￥&nbsp;'+item.price"></div>
+                        </div>
+                        <div class="order_state">
+                            <div class="state_others" v-if="item.status==0">已失效</div>
+                            <div class="state_others" v-else-if="item.status==2">已支付</div>
+                            <div class="state_waiting" v-else>
+                                <div class="waiting">待支付</div>
+                                <div class="pay_right_now" :data-id='item.order_id'> 马上支付</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="empty_order" v-if='orderDatas.length===0'>
+                暂无订单信息~
+            </div>
+        </div>
+    </div>
+</div>
+<script type="application/javascript">
+    var myOrderVM =new Vue({
+        el: '#myOrderMain',
+        data: {
+            isShowSelf:false,
+            orderTypes:[
+                {name:'全部',value:3},
+                {name:'待支付',value:1},
+                {name:'已完成',value:2},
+                {name:'已失效',value:0},
+            ],
+            curOrderType:3,
+            orderDatas:[]
+        },
+        // created:function(){
+        //     this.getOrderData(this.curOrderType)
+        // },
+        methods:{
+            switchOrderTypes:function(val){
+                this.curOrderType = val;
+                this.getOrderData(val)
+            },
+            getOrderData:function(val){
+                var vm = this;
+                $.ajax({
+                    type:"get",
+                    url:"/my_orders/"+val+"/",
+                    success:function(res){
+                        if(res.code===200){
+                            var orderDatas = res.data.order_list;
+                            if(orderDatas.length>0){
+                                orderDatas.forEach(function(item){
+                                    item.create_time = new Date(item.create_time).toLocaleString("CN",{hour12:false})
+                                })
+                            }
+                            vm.orderDatas = orderDatas;
+                        }
+                    }
+                })
+            }
+        }
+    })
+</script>
+{% endblock usermain %}

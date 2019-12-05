@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>研究方法-编辑关键词信息</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/methods.css">
+    <link rel="stylesheet" href="public/css/methods_artical.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+        .flex{
+            display: flex;
+            margin-bottom: 45px;
+        }
+        .flex-left{
+            width: 81px;
+            font-size: 16px;
+            text-align: left;
+            color: #000000;
+            font-weight: 400;
+        }
+        .flex-right{
+            flex:1;
+        }
+        #key-title{
+            background: #fff;
+            padding:35px 50px 10px 30px;
+        }
+         input{
+            padding-left: 17px;
+            height: 40px;
+            font-size: 14px;
+            text-align: left;
+            color: #2d3c5b;
+            border: solid 1px #d8d8d8;
+        }
+        #container input:focus{
+            box-sizing: border-box;
+        }
+        .key-input-title{
+            width: 100%;
+        }
+        .key-list-box{
+            margin-bottom: 13px;
+        }
+        .key-list-box input{
+            width: 334px;
+        }
+        .key-minus,
+        .key-plus{
+            display:inline-block;
+            vertical-align: middle;
+            margin-left: 20px;
+            position: relative;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .key-minus:before{
+            position: absolute;
+            content: '';
+            top:8.5px;
+            left: 1.5px;
+            width: 17px;
+            height: 3px;
+            border-radius: 1.5px;
+            background-color: #d0021b;
+        }
+        .key-plus:before{
+            position: absolute;
+            content: '';
+            top:8.5px;
+            left: 1.5px;
+            width: 17px;
+            height: 3px;
+            border-radius: 1.5px;
+            background-color: #45a0ea;
+        }
+        .key-plus:after{
+            position: absolute;
+            content: '';
+            top:8.5px;
+            left: 1.5px;
+            width: 17px;
+            height: 3px;
+            border-radius: 1.5px;
+            background-color: #45a0ea;
+            -webkit-transform: rotate(-270deg);
+            transform: rotate(-270deg);
+        }
+        .progress-tages{
+            display: inline-block;
+            line-height: 38px;
+            border: solid 2px #b4dbf0;
+            font-family: PingFangSC;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            color: #2d3c5b;
+        }
+        .progress-tages div{
+            float: left;
+            width: 100px;
+            border-right:solid 1px #b4dbf0;
+            cursor: pointer;
+        }
+        .progress-tages div:last-child{
+            border-right:none;
+            pointer-events: none;
+        }
+        .progress-tages div.select{
+            background: #b4dbf0;
+        }
+        #key-content{
+            background: #fff;
+            padding: 29px 30px;
+            margin-top: 19px;
+        }
+        .search_box input{
+            border: none;
+        }.search_box{
+            border: solid 1px #d8d8d8;
+        }
+        .progress-list{
+            display: flex;
+            text-align: center;
+            padding: 0 22px 0 22px;
+            line-height: 40px;
+            border-bottom: solid 1px #d8d8d8;
+        }
+        .progress-title{
+            flex: 2;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .progress-tag{
+            flex: 1;
+        }
+        .progress-recom{
+            flex: 1;
+        }
+        .progress-class{
+            flex: 2;
+        }
+        .sunmit{
+            width: 120px;
+            height: 40px;
+            border-radius: 2px;
+            background-color: #4588f1;
+            color: #FFFFFF;
+            letter-spacing: 1.07px;
+            font-size: 16px;
+            cursor: pointer;
+            float: right;
+            text-align: center;
+            line-height: 40px;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav"></div>
+<div id="content">
+    <div id="container">
+        <div id="key-title">
+            <div class="flex">
+                <div class="flex-left" style="line-height: 41px;">规则名称</div>
+                <div class="flex-right" style="display: flex">
+                    <input class="key-input-title"  type="text"><div class="sunmit">提交</div>
+                </div>
+            </div>
+
+            <div class="flex hide" id="key-lists">
+                <div class="flex-left" style="line-height: 41px;">关键词</div>
+                <div class="flex-right" id="key-list-box">
+                    <div class="key-list-box">
+                        <input type="text"><span class="key-minus"></span>
+                    </div>
+                    <div class="key-list-box">
+                        <input type="text"><span class="key-minus"></span><span class="key-plus"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recomm-box hide" id="key-content">
+                <div class="panel_toolbar">
+                    <div class="progress-tages">
+                        <div class="search-test select">关联文章</div>
+                        <div class="search-result">搜索结果</div>
+                    </div>
+                    <div class="search_box" style="float: right;"><input placeholder="点击搜索关键词…">
+                        <div class="search_img"></div>
+                    </div>
+
+                </div>
+                <div>
+                    <div class="progress-list" style="background:#d8d8d8;line-height: 33px;margin-top: 27px">
+                        <div class="progress-title">标题</div><div class="progress-class">分类</div><div class="progress-tag">标签</div><div class="progress-recom">是否关联</div>
+                    </div>
+                    <div class="progrss_recommen_list">
+                        <div class="progress-list" style="line-height: 40px;">
+                            <div class="progress-title">标题</div><div class="progress-class">分类</div><div class="progress-tag">标签</div><div class="progress-recom"><span class="tag-if-show checked" p_id="list[i].id " type="list[i].type " style="margin-right: 0" push_id="list[i].related_reading_article"></span></div>
+                        </div>
+                    </div>
+
+                </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+    window.getUrlParam = function(n) {
+        var t;
+        return t = window.location.search.substr(1).match(new RegExp("(^|&)" + n + "=([^&]*)(&|$)")),
+            null !== t ? unescape(t[2]) : null
+    }
+    $(document).ready(function () {
+        if(getUrlParam('type')==='add'){
+            $(document).on('click','.sunmit',function () {
+                if($('.key-input-title').val()){
+                    $.ajax({
+                        url:u+"/supervisor/add_key_word_group/",
+                        type:'post',
+                        data:{group_name:$('.key-input-title').val()},
+                        success:function (data) {
+                                if(data.code==200){
+                                window.location.href='methods_key_article.html?type=edit&g='+data.data.group_id+'&_='+Math.random()
+                                }else {
+                                    alert(data.message)
+                                }
+                        }
+                    })
+                }
+
+            })
+        }
+        else {
+            var g_id=getUrlParam('g'),obj={},ary=[],obq={},tit_name=''
+            $.ajax({
+                url:u+"/supervisor/alter_key_word_group_name/"+g_id+'/',
+                success:function (data) {
+                        if(data.code==200){
+                            tit_name=data.data.group_name
+                            $('.key-input-title').val(data.data.group_name);
+                            var list_str='',keys=data.data.key_word;
+                            if(keys.length){
+                                keys=keys.reverse()
+                                for(var key_i=0;key_i<keys.length;key_i++)   {
+                                    if(key_i===keys.length-1){
+                                        list_str+='<div class="key-list-box">\n' +
+                                            '                        <input type="text" value="'+keys[key_i].key_word+'" p_id="'+keys[key_i].id+'"><span class="key-minus" p_id="'+keys[key_i].id+'"></span><span class="key-plus" p_id="'+data.data.key_word_id+'"></span>\n' +
+                                            '                    </div>'
+                                    }else{
+                                        list_str+='<div class="key-list-box">\n' +
+                                            '                        <input type="text" value="'+keys[key_i].key_word+'" p_id="'+keys[key_i].id+'"><span class="key-minus" p_id="'+keys[key_i].id+'"></span>\n' +
+                                            '                    </div>'
+                                    }
+                                }
+                            }else {
+                                list_str='<div class="key-list-box key-list-new-box">\n' +
+                                    '                        <input type="text">' +
+                                    '                    </div>'
+                            }
+                            $('#key-list-box').html(list_str);
+                            $('#key-lists').removeClass('hide');
+                            var article_str='',article=data.data.relevance_articles;
+                            if(article.length){
+                                    ary=article;
+                                    for(var i=0;i<article.length;i++){
+                                      var  i_d=article[i].id;
+                                      if(article[i].type===1){
+                                          obj[i_d]=true;
+                                      }else {
+                                          obq[i_d]=true;
+                                      }
+
+                                            article_str+='<div class="progress-list" style="line-height: 40px">\n' +
+                                                '                        <div class="progress-title" title="'+article[i].title+'">'+article[i].title+'</div><div class="progress-class">'+article[i].category+'</div><div class="progress-tag">' ;
+                                        if(article[i].rank ===2){
+                                            article_str += '简单'
+                                        }else  if(article[i].rank === 3){
+                                            article_str += '详细'
+                                        }
+                                                   article_str+= '</div><div class="progress-recom">'
+//                                if(recomm_obj[iii]===true) {
+//                                    str += '<span class="tag-if-show checked" p_id="' + list[i].id + '" type="' + list[i].type + '" style="margin-right: 0" ></span>'
+//                                }else {
+                                        article_str += '<span class="tag-if-show checked" p_id="' + article[i].id + '" type="' + article[i].type + '" style="margin-right: 0" ></span>'
+//                                }
+                                        article_str+= '</div>\n' +
+                                            ' </div> '
+                                    }
+                            }else{
+                                article_str='<div class="tag-class-box" style="text-align: center; line-height: 100px;">暂无关联文章</div></div>'
+                            }
+                            $('#key-content .progrss_recommen_list').html(article_str);
+                            $('#key-content').removeClass('hide')
+                        }
+                }
+            })
+            
+
+
+
+
+            $(document).on('click','.sunmit',function () {
+                if($('.key-input-title').val()===tit_name){
+                    alert('请修改分组名称后再提交');
+                    return
+                }
+                if($('.key-input-title').val()){
+                    $.ajax({
+                        url:u+"/supervisor/alter_key_word_group_name/"+g_id+"/",
+                        type:'post',
+                        data:{group_name:$('.key-input-title').val()},
+                        success:function (data) {
+                            if(data.code===200){
+                                tit_name=$('.key-input-title').val()
+                            }else{
+
+                            }
+                        }
+                    })
+                }else{
+                    alert('分组名称不能为空')
+                }
+
+            })
+
+            //删除关键词
+            $(document).on('click','.key-minus',function () {
+                var p=$(this).attr('p_id'),$_that=$(this)
+                if($('.key-input-title').val()){
+                    $.ajax({
+                        url:u+"/supervisor/delete_key_word/"+p+"/",
+                        success:function (data) {
+                                if(data.code===200){
+                                   $_that.parent().remove();
+                                    $('#key-list-box .key-plus').remove()
+                                    $('#key-list-box .key-list-box').last().append('<span class="key-plus"></span>')
+                                }
+                        }
+                    })
+                }
+
+            })
+            //添加关键词
+            $(document).on('click','.key-plus',function () {
+                $(this).remove()
+                $('#key-list-box').append('<div class="key-list-box key-list-new-box">\n' +
+                    '                        <input type="text">' +
+                    '                    </div>')
+                $('.key-list-new-box input').focus()
+            })
+            $(document).on('blur','.key-list-new-box input',function () {
+                var val=$(this).val()
+                if(val){
+                    $.ajax({
+                        url:u+"/supervisor/add_key_word/"+g_id+"/",
+                        type:'post',
+                        data:{key_word:val},
+                        success:function (data) {
+                            if(data.code===200){
+                                $('.key-list-new-box input').parent().remove();
+                                $('#key-list-box').append('<div class="key-list-box">\n' +
+                                    '                        <input type="text" value="'+data.data.key_word+'" p_id="'+data.data.key_word_id+'"><span class="key-minus" p_id="'+data.data.key_word_id+'"></span><span class="key-plus" p_id="'+data.data.key_word_id+'"></span>\n' +
+                                    '                    </div>')
+                            }else {
+                                alert(data.message)
+                                $('.key-list-new-box input').parent().remove();
+                                $('#key-list-box .key-list-box').last().append('<span class="key-plus"></span>')
+                            }
+
+
+                        }
+                    })
+                }else {
+                    $(this).parent().remove();
+                    $('#key-list-box .key-list-box').last().append('<span class="key-plus"></span>')
+                }
+
+            })
+//             $(document).on('keyup','.key-list-new-box input',function (e) {
+//                         if(e.keyCode===13){
+//                             $('.key-list-new-box input').blur()
+////                             if($(this).val()){
+////                                 //                    $.ajax({
+////                                 //                        url:u+"/supervisor/add_key_word/"+g_id+"/",
+////                                 //                        type:'post',
+////                                 //                        data:{group_name:$('.key-input-title').val()},
+////                                 //                        success:function (data) {
+////                                 //
+////                                 //                        }
+////                                 //                    })
+////                             }else {
+////                                 $(this).remove()
+////                             }
+//                         }
+//
+//
+//             })
+                //搜索
+            function got_list() {
+                if(!$('.search_box input').val()){
+                    alert('请输入搜索关键词')
+                    return
+                }
+                $('.search-result').addClass('select').siblings().removeClass('select');
+                $.ajax({
+                    url:u+'/supervisor/search_key_word_articles/',
+                    type:'post',
+                    data:{
+                        search_key_word:$('.search_box input').val()
+                    },
+                    success:function (data) {
+                        var str = '' ;
+
+                        if (data.code !== 200) {
+                            $('#key-content .progrss_recommen_list').html('<div class="tag-class-box" style="text-align: center; line-height: 100px;">暂无文章</div></div>')
+                            return
+                        }
+                        var list = data.data.articles;
+                        if (list.length) {
+                            for(var i=0;i<list.length;i++){
+                                var iii=list[i].id
+                                str+='<div class="progress-list" style="line-height: 40px">\n' +
+                                    '                        <div class="progress-title" title="'+list[i].title+'">'+list[i].title+'</div><div class="progress-class">'+list[i].category+'</div><div class="progress-tag">';
+                                if (list[i].rank === 2) {
+                                    str += '简单'
+                                } else if (list[i].rank === 3) {
+                                    str += '详细'
+                                }
+                                str +='</div><div class="progress-recom">'
+                                if(list[i].type===1){
+                                    if(obj[iii]===true) {
+                                        str += '<span class="tag-if-show checked" p_id="' + list[i].id + '" type="' + list[i].type + '" style="margin-right: 0" ></span>'
+                                    }else {
+                                        str += '<span class="tag-if-show" p_id="' + list[i].id + '" type="' + list[i].type + '" style="margin-right: 0" ></span>'
+                                    }
+                                }else{
+                                    if(obq[iii]===true) {
+                                        str += '<span class="tag-if-show checked" p_id="' + list[i].id + '" type="' + list[i].type + '" style="margin-right: 0" ></span>'
+                                    }else {
+                                        str += '<span class="tag-if-show" p_id="' + list[i].id + '" type="' + list[i].type + '" style="margin-right: 0" ></span>'
+                                    }
+                                }
+                                str+= '</div>\n' +
+                                    ' </div> '
+                            }
+                        }else {
+                            str+='<div class="tag-class-box" style="text-align: center; line-height: 100px;">暂无文章</div></div>'
+                        }
+                        $('.progrss_recommen_list').html(str)
+                    }
+                })
+            }
+            $(document).on('click','.search_img',function(){
+                got_list()
+            })
+            $(document).on('keyup','.search_box input',function(e){
+                if (e.keyCode === 13) {
+                    $(this).blur()
+                    got_list()
+                }
+            })
+
+            //关联操作
+            $(document).on('click','.tag-if-show',function () {
+                var p = $(this).attr('p_id'),type=$(this).attr('type'),$_this=$(this);
+                if ($(this).hasClass('checked')) {
+                        $.ajax({
+                            url: u + '/supervisor/delete_key_word_group_relevance_article/' + g_id + '/',
+                            type: 'post',
+                            data: {
+                                article_id:p,
+                                type_id:type
+                            },
+                            success: function (data) {
+                                if(data.code==200){
+                                    $_this.removeClass('checked')
+                                    if(parseFloat(type)===1){
+                                        obj[p]=false;
+                                    }else {
+                                        obq[p]=false;
+                                    }
+                                }else{
+                                    alert(data.message)
+                                }
+                            }
+                        })
+                } else {
+                    $.ajax({
+                        url: u + '/supervisor/add_key_word_group_relevance_article/' + g_id + '/',
+                        type: 'post',
+                        data: {
+                            article_id:p,
+                            type_id:type
+                        },
+                        success: function (data) {
+                            if(data.code==200){
+                                $_this.addClass('checked');
+                                if(parseFloat(type)===1){
+                                    obj[p]=false;
+                                }else {
+                                    obq[p]=false;
+                                }
+                            }else {
+                                alert(data.message)
+                            }
+                        }
+                    })
+                }
+            })
+            $(document).on('click','.search-test',function () {
+                $.ajax({
+                    url:u+"/supervisor/alter_key_word_group_name/"+g_id+'/',
+                    success:function (data) {
+                        if(data.code==200){
+                            $('.search-test').addClass('select').siblings().removeClass('select');
+                            $('.key-input-title').val(data.data.group_name);
+                            var list_str='',keys=data.data.key_word;
+                            if(keys.length){
+                                keys=keys.reverse()
+                                for(var key_i=0;key_i<keys.length;key_i++)   {
+                                    if(key_i===keys.length-1){
+                                        list_str+='<div class="key-list-box">\n' +
+                                            '                        <input type="text" value="'+keys[key_i].key_word+'" p_id="'+keys[key_i].id+'"><span class="key-minus" p_id="'+keys[key_i].id+'"></span><span class="key-plus" p_id="'+data.data.key_word_id+'"></span>\n' +
+                                            '                    </div>'
+                                    }else{
+                                        list_str+='<div class="key-list-box">\n' +
+                                            '                        <input type="text" value="'+keys[key_i].key_word+'" p_id="'+keys[key_i].id+'"><span class="key-minus" p_id="'+keys[key_i].id+'"></span>\n' +
+                                            '                    </div>'
+                                    }
+                                }
+                            }else {
+                                list_str='<div class="key-list-box key-list-new-box">\n' +
+                                    '                        <input type="text">' +
+                                    '                    </div>'
+                            }
+                            $('#key-list-box').html(list_str);
+                            $('#key-lists').removeClass('hide');
+                            var article_str='',article=data.data.relevance_articles;
+                            if(article.length){
+                                ary=article;
+                                for(var i=0;i<article.length;i++){
+                                    var  i_d=article[i].id;
+                                    if(article[i].type===1){
+                                        obj[i_d]=true;
+                                    }else {
+                                        obq[i_d]=true;
+                                    }
+                                    article_str+='<div class="progress-list" style="line-height: 40px">\n' +
+                                        '                        <div class="progress-title" title="'+article[i].title+'">'+article[i].title+'</div><div class="progress-class">'+article[i].category+'</div><div class="progress-tag">标签</div><div class="progress-recom">';
+                                    article_str += '<span class="tag-if-show checked" p_id="' + article[i].id + '" type="' + article[i].type + '" style="margin-right: 0" ></span>';
+                                    article_str+= '</div>\n' +
+                                        ' </div> ';
+                                }
+                            }else{
+                                article_str='<div class="tag-class-box" style="text-align: center; line-height: 100px;">暂无关联文章</div></div>'
+                            }
+                            $('#key-content .progrss_recommen_list').html(article_str);
+                            $('#key-content').removeClass('hide')
+                        }
+                    }
+                })
+            })
+        }
+    })
+
+</script>
+</body>
+</html>

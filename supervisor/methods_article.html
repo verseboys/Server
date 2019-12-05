@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>研究方法分类管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <!--<link rel="stylesheet" href="public/css/methods.css">-->
+
+    <link rel="stylesheet" href="public/css/research_detail.css">
+    <link rel="stylesheet" href="public/css/methods_artical.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+    </style>
+
+    <script type="text/javascript" src="public/js/common.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/adapters/jquery.js"></script>
+    <script type="text/javascript" src="public/js/methods_head_article.js"></script>
+    <script type="text/javascript" src="public/js/plugins/jquery_formdata/jquery.formdata.js"></script>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+    <ul>
+        <li>
+            <span>内容管理</span>
+            <ul>
+                <li data-url="research_method.html">研究方法文章管理</li>
+                <li data-url="research_progress.html">研究进展文章管理</li>
+                <li data-url="comment.html">评论管理</li>
+                <li data-url="article_tag.html">文章标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>问答管理</span>
+            <ul>
+                <li data-url="question.html">问题管理</li>
+                <li data-url="questions_tag.html">问题标签管理</li>
+            </ul>
+        </li>
+        <li>
+            <span>用户管理</span>
+            <ul>
+                <li data-url="user.html">用户列表</li>
+            </ul>
+        </li>
+        <li>
+            <span>微信自定义菜单</span>
+            <ul>
+                <li data-url="custom_menu.html">文章管理</li>
+                <li data-url="custom_menu_tag.html">分类管理</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <div id="container">
+        <div id="left_box">
+            <div class="title_box">
+                <input placeholder="输入标题"/>
+            </div>
+            <div class="abstract_box">
+                <textarea placeholder="输入摘要"></textarea>
+            </div>
+        </div>
+        <div id="right_box">
+
+            <div class="flex-2">
+                <div class="flex-left">选择分类</div>
+                <div class="flex-right" id="artticle-classify">
+                    <span>
+                         <select id="artticle-classify-l"></select>
+                    </span>
+                    <span id="artticle-classify-r"></span>
+                </div>
+            </div>
+
+            <div class="flex-2">
+                <div class="flex-left">标签状态</div>
+                <div class="flex-right">
+                    <span class="tag-if-show tag-if-new" p="1"></span>
+                    <span class="tag-if-show tag-if-con"  p="2"></span>
+                    <span class="tag-if-show tag-if-det"  p="3"></span>
+                    <span class="tag-if-show tag-if-none"  p="0"></span>
+
+                </div>
+            </div>
+
+            <div class="flex-2">
+                <div class="flex-left">发布状态</div>
+                <div class="flex-right public_box">
+                    <span class="tag-if-radius taf-rad-ok" p="1"></span>
+                    <span class="tag-if-radius taf-rad-caogao" p="3"></span>
+                    <span class="tag-if-radius taf-rad-dele" p="0"></span>
+                    <span class="tag-if-radius taf-rad-comme" p="2"></span>
+                </div>
+            </div>
+
+            <div class="flex-2">
+                <div class="flex-left" style="line-height: 41px;">发布时间</div>
+                <div class="flex-right public_box">
+                    <input class="public_time_input" placeholder="点击选择时间" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="flex-2">
+                <div class="flex-left" style="line-height: 41px;">上传附件</div>
+                <div class="flex-right public_box">
+                    <div class="medel-up-file"><span class="medel-up-file-text"></span><label for="model-up-file">浏览</label></div>
+                    <input type="file" id="model-up-file" style="display: none;">
+                </div>
+            </div>
+            <div class="flex-2">
+                <div class="flex-left">上传缩略图</div>
+                <div class="flex-right public_box">
+                    <div class="thumbnail pc_banner"></div>
+                    <div class="thumbnail web_banner"></div>
+                </div>
+            </div>
+        </div>
+        <!--<div  class="model-mothods-box">-->
+        <!--<div class="modek-head">-->
+            <!--<div class="modek-head-left">1.问题与数据</div>-->
+            <!--<div  class="modek-head-right"><span class="edit">修改</span> / <span class="del">删除</span></div>-->
+        <!--</div>-->
+        <!--<div class="model-meth-viwe">-->
+            <!--<span>顺序：1</span><span>登录后是否可查看：是</span>-->
+        <!--</div>-->
+        <!--<div class="model-meth-content">12</div>-->
+    <!--</div>-->
+        <div class="more-article hide" style="background: #fff;    margin-top: 20px;">
+            <div class="recomm_title"><span class="checked" p="RECOM">推荐</span></div>
+            <div id="more-article">
+            </div>
+            <div id="compents_paginator" style="display: none">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="publish_submit_btn sunmit">提交</div>
+            <div class="publish_submit_btn add-article hide" style="margin-right: 28px">添加相关文章</div>
+            <div class="publish_submit_btn add-model hide" style="margin-right: 28px">添加文章模块</div>
+        </div>
+
+    </div>
+</div>
+<input type="file" accept="image/*" id="up_img">
+<input type="file" accept="image/*" id="up_web_img">
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div>
+            <div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<div class="flex-outer hide">
+        <div class="flex-box ">
+                <div class="flex-add-article-title">添加文章模块</div>
+                <div class="flex-add-article-concel">
+                    <div class="flex-add-article-concel-model">选择模块：<span><select><option value="1">撰写结论</option></select></span></div>
+                    <div class="flex-add-article-concel-order">顺序：<span><select ><option value="1">1</option></select></span></div>
+                    <div class="flex-add-article-concel-show">登录后显示：<span><span class="tag-if-show"></span></span></div>
+                </div>
+            <!--编辑-->
+            <div class="model-article-content">
+                <div class=" more-text">
+                    <textarea id="ask_area" name="editor"></textarea>
+                    <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                </div>
+            </div>
+
+            <!--按钮-->
+            <div class="text_center flex-article-btn"><span class="re-close">取消</span><span class="re-submit">提交</span></div>
+            
+        </div>
+
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+
+
+
+</script>
+</body>
+</html>

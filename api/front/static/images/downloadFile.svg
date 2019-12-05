@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="941px" height="151px" viewBox="0 0 941 151" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>分组</title>
+    <desc>Created with Sketch.</desc>
+    <g id="慢阻肺专项" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="慢阻肺项目-通知公告--详情页" transform="translate(-196.000000, -659.000000)">
+            <g id="分组" transform="translate(196.000000, 659.000000)">
+                <path d="M6,16 C3.23857625,16 1,18.2385763 1,21 L1,145 C1,147.761424 3.23857625,150 6,150 L935,150 C937.761424,150 940,147.761424 940,145 L940,21 C940,18.2385763 937.761424,16 935,16 L6,16 Z" id="Rectangle-4" stroke="#46A1EA" stroke-width="2" fill="#FAFAFA" opacity="0.796149554"></path>
+                <rect id="Rectangle-2" fill="#FCFCFC" x="23" y="14" width="145" height="30"></rect>
+                <rect id="Rectangle" fill="#47A3EB" x="40" y="0" width="111" height="30" rx="3"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

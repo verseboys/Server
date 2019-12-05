@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会--研究进展分类管理</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <link rel="stylesheet" href="public/css/methods.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content{
+            display: block;
+        }
+    </style>
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav"></div>
+<div id="content">
+    <div id="container">
+        <div class="panel_toolbar">
+            <div class="publish_btn" style="width: 146px">+添加分类</div>
+        </div>
+        <div class="tag-cla">
+            <div class="me-class-left" style="padding-left: 48px;">分类名称</div>
+            <div class="me-class-right">
+                <!--<div class="me-class-2">上移</div>-->
+                <!--<div class="me-class-3">下移</div>-->
+                <!--<div class="me-class-4">列排序</div>-->
+                <div class="me-class-5" style="width: 60%;">创建时间</div>
+                <!--<div class="me-class-6">是否显示</div>-->
+            </div>
+        </div>
+
+        <div class="panel_body">
+            <div id="panel_content">
+
+            </div>
+            <div id="add-new-list">
+
+            </div>
+            <div id="compents_paginator"  style="display: none">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="alert_area" class="hide">
+    <div id="alert_box">
+        <div class="box_header">提示</div>
+        <div class="box_content">确认删除？</div>
+        <div class="box_item">
+            <div class="item_left">取消</div><div class="item_right">确认</div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script>
+
+    var check_type_num={}
+    get_list()
+    function get_list() {
+        $.ajax({
+            url:u+'/supervisor/news_category_list/',
+            type:'get',
+            data:'',
+            success:function (data) {
+                if(data.code!==200){
+                    alert(data.message);
+                    return
+                }
+                var list=data.data.news_category_list;
+                var str='';
+                var arr = Object.keys(check_type_num)
+                for(var i=0;i<list.length;i++) {
+                    str += ' <div class="tag-class-box" p_id="'+list[i].id+'" p_rank="'+list[i].rank+'">';
+
+                    str += '<div class="tag-cla par-tag">\n' +
+                        '                        <div class="me-class-left">\n' +
+                        '                            <div class="me-class-left-body">\n'
+                    var id=list[i].id
+                    if(!arr.length &&i==0){
+                        str+='                                <span class="meghods-list-type " p_id="'+list[i].id+'" style="border: 6px solid transparent;;pointer-events: none"></span> <input type="text" value="' + list[i].category + '" p_id="'+list[i].id+'">\n'
+                    }else {
+                        if (check_type_num[id]) {
+                            str+='                                <span class="meghods-list-type " p_id="'+list[i].id+'" style="border: 6px solid transparent;;pointer-events: none"></span> <input type="text" value="' + list[i].category + '" p_id="'+list[i].id+'">\n'
+                        }else{
+                            str+='                                <span class="meghods-list-type checked" p_id="'+list[i].id+'" style="border: 6px solid transparent;;pointer-events: none"></span> <input type="text" value="' + list[i].category + '" p_id="'+list[i].id+'">\n'
+                        }
+                    }
+
+                    str+= '                            </div>\n' +
+                        '                        </div>\n' +
+                        '                        <div class="me-class-right">\n' +
+//                        '                            <div class="me-class-2"><span class="tag-move-up" p_id="'+list[i].id+'" p_rank="'+list[i].rank+'"></span></div>\n' +
+//                        '                            <div class="me-class-3"><span class="tag-move-down" p_id="'+list[i].id+'" p_rank="'+list[i].rank+'"></span></div>\n' +
+//                        '                            <div class="me-class-4"></div>\n' +
+                        '                            <div class="me-class-5" style="width: 60%;">'+list[i].create_time.substring(0,10)+'</div>\n';
+//                    if (list[i].is_active) {
+//                        str+=  '                            <div class="me-class-6"><span class="tag-if-show checked" p_id="'+list[i].id+'"></span></div>\n'
+//                    } else {
+//                        str+=   '                            <div class="me-class-6"><span class="tag-if-show" p_id="'+list[i].id+'"></span></div>\n'
+//                    }
+                    str += '                        </div>\n' +
+                        '</div>';
+
+//                    var chil=list[i].relevance_category?list[i].relevance_category:[];
+//                    if(!arr.length && i==0){
+//                        str += '<div class="tag_to_box " style="height: auto">\n';
+//                    }else {
+//
+//                        if (check_type_num[id]) {
+//                            str += '<div class="tag_to_box " style="height: auto">\n';
+//                        } else {
+//                            str += '<div class="tag_to_box " >\n';
+//                        }
+//                    }
+//                    for(var j=0;j<chil.length;j++) {
+//                        var ch=chil[j]
+//                        str += '                        <div class="tag-cla chil-tag" p_id="'+ch.id+'" p_rank="'+ch.rank+'">\n' +
+//                            '                            <div class="me-class-left">\n' +
+//                            '                                <div class="me-class-left-body"><span class="meghods-list-child"></span> <input type="text" value="'+ch.category+'" p_id="'+ch.id+'"></div>\n' +
+//                            '                            </div>\n' +
+//                            '                            <div class="me-class-right">\n' +
+//                            '                                <div class="me-class-2"><span class="tag-move-up" p_id="'+ch.id+'" p_rank="'+ch.rank+'"></span></div>\n' +
+//                            '                                <div class="me-class-3"><span class="tag-move-down" p_id="'+ch.id+'" p_rank="'+ch.rank+'"></span></div>\n' +
+//                            '                                <div class="me-class-4">\n' +
+//                            '                                    <select p_id="'+ch.id+'">'+bond_select(ch.column)+'</select>\n' +
+//                            '                                </div>\n' +
+//                            '                                <div class="me-class-5">'+ch.create_time.substring(0,10)+'</div>\n' +
+//                            '                                <div class="me-class-6">'
+//                        if(ch.is_active){
+//                            str+= '<span class="tag-if-show checked" p_id="'+ch.id+'"></span>'
+//                        }else{
+//                            str+= '<span class="tag-if-show" p_id="'+ch.id+'"></span>'
+//                        }
+//                        str+='</div>\n' +
+//                            '                            </div>\n' +
+//                            '                        </div>\n' ;
+//                    }
+//                    str+='                        <div class="tag-cla">\n' +
+//                        '                            <div class="me-class-left">\n' +
+//                        '                                <div class="me-class-left-body"><span class="meghods-list-child"></span> <span class="add-child-class">+添加子分类</span>\n' +
+//                        '                                    <input type="text" p_id="'+list[i].id+'"></div>\n' +
+//                        '                            </div>\n' +
+//                        '                            <div class="me-class-right">\n' +
+//                        '                                <div class="me-class-6">&nbsp;</div>\n' +
+//                        '                            </div>\n' +
+//                        '                        </div>\n' +
+//
+//                        '                    </div>'
+
+                    str += '</div>';
+                }
+                $('#panel_content').html(str);
+            }
+        })
+    }
+
+    $(document).on('click','.meghods-list-type',function () {
+        var p=$(this).attr('p_id');
+        if($(this).hasClass('checked')){
+            var a =$(this).parents('.tag-cla').next().children().length;
+            if(a){
+                $(this).removeClass('checked');
+                $(this).parents('.tag-cla').next().css('height',a*36+'px');
+                check_type_num[p]=true;
+            }
+
+        }else {
+            $(this).addClass('checked');
+            $(this).parents('.tag-cla').next().css('height','0')
+            var a =$(this).parents('.tag-cla').next().children().length;
+            if(a){
+                check_type_num[p]=false;
+            }
+
+        }
+    })
+    $(document).on('click','.publish_btn',function () {
+        if($('#add-new-list').find('.new-teg-box').length){
+            return
+        }
+        $('#add-new-list').append('<div class="tag-class-box new-teg-box">\n' +
+            '                    <div class="tag-cla" style="border-bottom: solid 1px #e1e7ed;background-color: #ddeff9;">\n' +
+            '                        <div class="me-class-left">\n' +
+            '                            <div class="me-class-left-body"><span class="meghods-list-type checked" style="border: 6px solid transparent;;pointer-events: none"></span>\n' +
+            '                                <input type="text"></div>\n' +
+            '                        </div>\n' +
+            '                        <div class="me-class-right">\n' +
+            '                            <div class="me-class-2">&nbsp;</div>\n' +
+            '                        </div>\n' +
+            '                    </div>\n' +
+            '                </div>')
+    })
+    $(document).on('blur','#add-new-list input',function () {
+        var val=$(this).val();
+        if(!val){
+            $('#add-new-list').html('')
+        }else{
+            $.ajax({
+                url:u+'/supervisor/add_news_category/',
+                type:'post',
+                data:{category:val},
+                success:function (data) {
+                    if(data.code!==200){
+                        alert(data.message)
+                        return
+                    }
+                    $('#add-new-list').html('')
+                    get_list()
+                }
+            })
+        }
+    })
+
+    $(document).on('click','.add-child-class',function () {
+        $(this).addClass('checked');
+        $(this).next().focus()
+    })
+    $(document).on('blur','.add-child-class+input',function () {
+        var p=$(this).attr('p_id');
+        var self=this;
+        if(!$(this).val()){
+            return
+        }
+        $.ajax({
+            url:u+'/supervisor/add_method_category/',
+            type:'post',
+            data:{
+                'category':$(this).val(),
+                'relevance_category_id':p
+            },
+            success:function (data) {
+                if(data.code!==200){
+                    alert(data.message)
+                }else {
+                    get_list()
+//                    $(self).val('').prev().removeClass('checked');
+                }
+            }
+//            ,error:function () {
+//                var data={
+//                    "message": "此分类已存在!",
+//                    "code": 400,
+//                    "data": {}
+//                }
+//                if(data.code!==200){
+//                    alert(data.message)
+//                }else {
+//
+//                    $(self).val('').prev().removeClass('checked');
+//                }
+//            }
+        })
+
+    })
+
+    var old_title_text=''
+    $(document).on('focus','.meghods-list-type+input',function () {
+        old_title_text=$(this).val()
+    })
+    $(document).on('blur','.meghods-list-type+input',function () {
+        var p=$(this).attr('p_id');
+        var self=this;
+        if($(this).val()===old_title_text){
+            return
+        }
+        $.ajax({
+            url:u+'/supervisor/alter_news_category/'+p+'/',
+            type:'post',
+            data:{
+                category:$(this).val()
+            },
+            success:function (data) {
+                if(data.code!==200){
+                    alert(data.message);
+                    $(self).val(old_title_text)
+                    old_title_text=''
+                    return
+                }
+                old_title_text=''
+                get_list()
+            }
+        })
+    })
+
+    $(document).on('focus','.meghods-list-child+input',function () {
+        old_title_text=$(this).val()
+    })
+    $(document).on('blur','.meghods-list-child+input',function () {
+        var p=$(this).attr('p_id');
+        var self=this;
+        if($(this).val()===old_title_text){
+            return
+        }
+        $.ajax({
+            url:u+'/supervisor/alter_method_category/'+p+'/',
+            type:'post',
+            data:{
+                category:$(this).val()
+            },
+            seccess:function (data) {
+                if(data.code!==200){
+                    alert(data.message);
+                    $(self).val(old_title_text)
+                    return
+                }
+                old_title_text=''
+                get_list()
+            }
+//            ,error:function () {
+//                var data={
+//                    code:300
+//                }
+//                if(data.code!==200){
+//                    alert(data.message);
+//                    $(self).val(old_title_text)
+//                    return
+//                }
+//            }
+        })
+    })
+
+    $(document).on('click','.tag-if-show',function () {
+        var p=$(this).attr('p_id');
+        var self=this
+        if($(this).hasClass('checked')){
+            $.ajax({
+                url:u+'/supervisor/alter_method_category/'+p+'/',
+                type:'post',
+                data:{
+                    is_active:0,
+                },
+                success:function (data) {
+                    if(data.code!==200){
+                        alert(data.message)
+                        return
+                    }
+                    $(self).removeClass('checked');
+                }
+            })
+        }else {
+            $.ajax({
+                url:u+'/supervisor/alter_method_category/'+p+'/',
+                type:'post',
+                data:{
+                    is_active:1,
+                },
+                success:function (data) {
+                    if(data.code!==200){
+                        alert(data.message)
+                        return
+                    }
+                    $(self).addClass('checked');
+                }
+            })
+        }
+    })
+    $(document).on('change','.me-class-4 select',function () {
+        var p=$(this).attr('p_id');
+        var self=this
+        $.ajax({
+            url:u+'/supervisor/alter_method_category/'+p+'/',
+            type:'post',
+            data:{
+                column:$(this).val()
+            },
+            seccess:function (data) {
+                if(data.code!==200){
+                    alert(data.message)
+                    return
+                }
+                get_list()
+            }
+//            ,error:function () {
+//                var data={
+//                    code:300
+//                }
+//                if(data.code!==200){
+//                    alert(data.message)
+//                    return
+//                }
+//
+//            }
+        })
+    })
+    $(document).on('click','.tag-move-down',function () {
+        var t_p=$(this).attr('p_id'),t_n=$(this).attr('p_rank'),p_n,p_p;
+        if($(this).parents('.par-tag').length){
+            p_p=$(this).parents('.tag-class-box').next().attr('p_id');
+            p_n=$(this).parents('.tag-class-box').next().attr('p_rank');
+        }else {
+            p_p=$(this).parents('.chil-tag').next().attr('p_id');
+            p_n=$(this).parents('.chil-tag').next().attr('p_rank');
+        }
+        var obj={}
+//        var ary=[];
+//        ary.push()
+        obj[t_p]=p_n;
+        obj[p_p]=t_n;
+        console.log(obj)
+        $.ajax({
+            url:u+'/supervisor/alter_category_rank/',
+            type:'post',
+            data:obj,
+            success:function (data) {
+                if(data.code!==200){
+                    alert(data.message)
+                    return
+                }
+                get_list()
+            }
+        })
+    })
+    $(document).on('click','.tag-move-up',function () {
+        var t_p=$(this).attr('p_id'),t_n=$(this).attr('p_rank'),p_n,p_p;
+        if($(this).parents('.par-tag').length){
+            p_p=$(this).parents('.tag-class-box').prev().attr('p_id');
+            p_n=$(this).parents('.tag-class-box').prev().attr('p_rank');
+        }else {
+            p_p=$(this).parents('.chil-tag').prev().attr('p_id');
+            p_n=$(this).parents('.chil-tag').prev().attr('p_rank');
+        }
+        var obj={}
+        obj[t_p]=p_n;
+        obj[p_p]=t_n;
+        console.log(obj)
+        $.ajax({
+            url:u+'/supervisor/alter_category_rank/',
+            type:'post',
+            data:obj,
+            success:function (data) {
+                if(data.code!==200){
+                    alert(data.message)
+                    return
+                }
+                console.log(123456)
+                get_list()
+            }
+        })
+    })
+    function bond_select(num) {
+        num?num:1
+        var str='';
+        for(var i=1;i<=4;i++){
+            if(i===Number(num)){
+                str+=' <option value="'+i+'" selected>'+i+'</option>'
+            }else {
+                str+=' <option value="'+i+'">'+i+'</option>'
+            }
+        }
+        return str
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+{% extends 'header_base.html' %}
+{% load static %}
+
+{% block titleblock %}
+    {{ title }}-医咖会
+{% endblock titleblock %}
+
+{% block headblock %}
+    <link rel="stylesheet" href="{% static 'css/news_detail.css' %}">
+{% endblock headblock %}
+
+{% block head_description %}
+    {{ content }}
+{% endblock head_description %}
+
+{% block bodyblock %}
+    <div id="details_top_item">
+        <div class="item_inner">
+            <div class="img"></div>
+            <div class="text">{{ title }}</div>
+            <div class="date">{{ publish_time }}</div>
+        </div>
+    </div>
+
+    <div id="container">
+        <div class="container_vision">
+            <div id="container_body" style="display: block">
+                <div class="body_tools">
+                    <a href="#commit_box">
+                        <div class="look_comment">查看评论</div>
+                    </a>
+                    <div class="comment_number">{{ comment_count }}</div>
+                </div>
+                <div class="body_detail">{{ content|safe }}</div>
+
+                <div class="body_tags">
+                    <a href="#commit_link">
+                        <div class="reply_link">我要评论</div>
+                    </a>
+                </div>
+            </div>
+            <div id="container_reply">
+                <div class="reply_banner" id="commit_box">留言板
+                    <div class="reply_num">{{ comment_count|default:0 }}</div>
+                </div>
+                <div class="comment_box">
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="reply_item clearfix">
+                            <div class="user_box">
+                                {% if comment.avatar %}
+                                    <div class="header" style="background-image:url('/images/avatar/{{ comment.avatar }}')"></div>
+                                {% else %}
+                                    <div class="header" style="background-image:url({% static 'images/user_static.svg' %})"></div>
+                                {% endif %}
+                                <div class="name">{{ comment.username }}</div>
+                            </div>
+                            <div class="info_box">
+                                <div class="info">{{ comment.comment }}</div>
+                                <div class="message_box">
+                                    <div class="reply" sid={{ comment.id }}>回复</div>
+                                    <div class="floor">{{ forloop.revcounter }}</div>
+                                    <div class="time">{{ comment.create_time }}</div>
+                                </div>
+                                {% if comment.second_level_comment %}
+                                    {% for second_comment in comment.second_level_comment %}
+                                        <div class="recomment_box">
+                                            <div class="recomment_item">
+                                                <div class="user_box">
+                                                    {% if not second_comment.avatar %}
+                                                        <div class="header" style="background-image:url({% static '/images/{{ second_comment.avatar }}' %})"></div>
+                                                    {% else %}
+                                                        <div class="header" style="background-image:url({% static 'images/user_static.svg' %})"></div>
+                                                    {% endif %}
+                                                    <div class="name">{{ second_comment.username }}</div>
+                                                </div>
+                                                <div class="info_box">
+                                                    <div class="info">{{ second_comment.comment }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no_comment">
+                        <div class="no_comment_img"></div>
+                        <div class="no_comment_text">目前暂无评论！</div>
+                    </div>
+                {% endif %}
+                </div>
+                {% if not front_user %}
+                    <div class="no_login_box" id="commit_link">
+                        <div class="no_login_img"></div>
+                        <div class="text">您尚未登录，请</div>
+                        <a class="login_log">登录</a>
+                        <div class="text">后评论</div>
+                    </div>
+                {% else %}
+                    <div class="ans-ques-ans inline" id="commit_link">
+                        <div class="ans-text-area">
+                            <textarea></textarea>
+                        </div>
+                        <div class=" row text-rig">
+                            <span class="inline text-cen ans-ques-btn ">提交</span>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div><div id="container_sidebar">
+
+            <div id="sidebar_paper_box">
+                <div class="paper_title">热门文章</div>
+                <div class="paper_content"></div>
+            </div>
+            <div id="sidebar_qr_code">
+                <div class="qr_code"></div>
+                <div class="qr_text"></div>
+            </div>
+        </div>
+    </div>
+    <div id="pc-state-box" class="hide">
+        <div class="hide">{{ check_typ }}</div>
+        <div id="neko_shadow_box" v-show="check_type">
+            <div class="close_btn" @click="close()"></div>
+            <pc-state-box v-bind:check_type="check_type"></pc-state-box>
+            <pc-collect-add v-bind:check_type="check_type" v-bind:old="old_check"></pc-collect-add>
+            <pc-collect-list v-bind:check_type="check_type" v-bind:old="old_check" v-bind:lists="collect_lists" v-bind:user="user"></pc-collect-list>
+            <pc-collect-chage v-bind:check_type="check_type" v-bind:old="old_check" v-bind:val="change_collect_val"></pc-collect-chage>
+            <div v-bind:class="[check_type===10 ? fix_wat.show:fix_wat.hide]">
+                <div id="model_ask_ques">
+                    <div class="ask-title">描述问题</div>
+                    <div class="ask-text">
+                        <div id="box_content" style="padding: 0">
+                            <div id="common_content">
+                                <textarea id="ask_area" name="editor"></textarea>
+                                <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ask-title">选择一个标签 <span>（请选择一个与您问题最相符的标签）</span></div>
+                    <div>
+                        <ul class="model_tag_list"></ul>
+                    </div>
+                    <div>
+                        <div class="model_btn block-center mar-top38" style="background-color: #ccc;cursor: no-drop">提交问题</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'js/javaScripts/main.js' %}?t=1561514674"></script>
+    <script>
+    ~function () {
+        var u=window.location.search
+            u=u.replace('?','').split('=');
+        if(u[0]==='ty'){
+            if(u[1]==='methods'){
+                $('.header-top li').eq(2).find('a').addClass("color-link");
+                window.SEARCH_TYPE = 1
+            }else if(u[1]=== 'news'){
+                $('.header-top li').eq(3).find('a').addClass("color-link");
+                window.SEARCH_TYPE = 2;
+            }
+            $('.header-top li').eq(1).find('a').removeClass("color-link");
+        }
+    }()
+    var box = new Vue({
+        el: '#pc-state-box',
+        data: {
+            check_type: 0,
+            fix_wat: {
+                show: 'show neko_shadow_box',
+                hide: 'neko_shadow_box hide'
+            },
+            old_check: 0,
+            collect_lists: [],
+            user: {
+                ques_id: '1',
+                ans_id: '2',
+                tar: ''
+            },
+            item: 0,
+            del_item: '',
+            change_collect_val: {}
+        },
+        methods: {
+            close: function () {
+                this.check_type = 0
+            },
+            check_old: function (num) {
+                this.old_check = num;
+                this.check_type = 6
+            },
+            del_collect_list: function (list, num) {
+                this.del_item = list.id
+                this.item = num
+                this.check_type = 22;
+            },
+            cancel_collect_list: function () {
+                this.check_type = 21
+            },
+            push_del_collect: function () {
+                $.ajax({
+                    url: '/delete_collect_category/' + this.del_item + '/',
+                    type: 'get',
+                    success: function (data) {
+
+                        $.ajax({
+                            url: '/user_collect_category_list/',
+                            type: 'get',
+                            success: function (data) {
+                                if (data.code == 200) {
+                                    var list = data.data.user_collect_category_list
+                                    box.collect_lists = list;
+                                }
+                            }
+                        })
+                    }
+                })
+
+                this.check_type = 21;
+            },
+            change_collect_list: function (list, item) {
+                var self = this
+                $.ajax({
+                    url: '/alter_collect_category/' + list.id + '/',
+                    type: 'get',
+                    siccess: function (data) {
+                        self.change_collect_val = data.data;
+                        check_type(23)
+                    }
+                })
+            }
+        },
+        computed: {
+            check_typ: function () {
+                this.check_type === 0 ? $('#pc-state-box').addClass('hide') : $('#pc-state-box').removeClass('hide');
+            }
+        }
+    });
+        $(".ans-ques-btn").click(function () {
+            var text = $(this).parents('.ans-ques-ans').find('textarea').val();
+            $.ajax({
+                url: '/add_comment/',
+                data: {
+                    comment: text,
+                    article_id:{{ id }},
+                    relevance_comment_id: ''
+                },
+                type: 'post',
+                success: function (data) {
+                    if (data.code !== 200) {
+                        $().alert_box(data.message)
+                        return
+                    }
+                    window.location.reload()
+                }
+            })
+        })
+        AJAX({
+            url: '/hot_articles/',
+            type: 'get',
+            data: '',
+            fn: function (data) {
+                if (data.code === 200) {
+                    data = data.data.hot_articles;
+                    var str = '';
+                    for (var i = 0; i < data.length; i++) {
+                        str += '<a href="/article_detail/' + data[i].id + '/">';
+                        str += '<div class="paper_item">';
+                        str += '<div class="item_info">' + data[i].title + '</div>';
+                        {# str += '<div class="item_date">' + new Date(data[i].publish_time).format('yyyy年MM月dd日 hh:mm') + '</div>';#}
+                        str += '<div class="item_date">' + data[i].publish_time + '</div>';
+                        str += '</div>';
+                        str += '</a>';
+                    }
+                    $('#sidebar_paper_box .paper_content').html(str)
+                }
+            }
+        })
+        $(document).on('click', '.message_box .reply', function () {
+            var pid = $(this).attr('sid');
+            var name = $(this).parents('.info_box').eq(0).prev().find('.name').html();
+            var child = $(this).parent().parent('.info_box').children();
+            if (child.eq(child.length - 1).hasClass('sec_reply_box')) {
+                return
+            }
+            $(this).parents('.info_box').eq(0).append('<div class="sec_reply_box"><input class="sec_reply_input" placeholder="回复 ' + name + '"><div class="sec_toolbar"><div class="sec_cancel">取消</div><div class="sec_submit shadow_btn" pid="' + pid + '">评论</div></div></div>')
+        })
+
+        $(document).on('click', '.info_box .sec_cancel', function () {
+            $(this).parents('.sec_reply_box').eq(0).remove()
+        })
+        $(document).on('click', '.info_box .sec_submit', function () {
+            var self = $(this);
+            var i = $(this).attr('pid');
+            var text = $(this).parent().prev().val()
+            $.ajax({
+                url: '/add_comment/',
+                type: 'post',
+                data: {
+                    comment: text,
+                    article_id:{{ id }},
+                    relevance_comment_id: i
+                }
+                , success: function (data) {
+                    if (data.code !== 200) {
+                        $().alert_box(data.message)
+                        return
+                    }
+                    window.location.reload()
+
+                    self.self.parents('.sec_reply_box').remove()
+                }
+            })
+        })
+    </script>
+{% endblock bodyblock %}

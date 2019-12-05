@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>医咖会--研究进展文章详情</title>
+    <link rel="stylesheet" href="public/css/main.css">
+    <!--<link rel="stylesheet" href="public/css/methods.css">-->
+
+    <link rel="stylesheet" href="public/css/research_detail.css">
+    <link rel="stylesheet" href="public/css/methods_artical.css">
+    <script type="text/javascript" src="public/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <style>
+        .box_content {
+            display: block;
+        }
+        .recomm-box{
+            margin-top:25px;
+            padding:50px 30px 38px;
+            border-radius: 2px;
+            background-color: #fdfdfd;
+            box-shadow: 0 1px 2px 0 rgba(140, 150, 169, 0.35);
+        }
+        .progress-tages{
+            display: inline-block;
+            line-height: 38px;
+            border: solid 2px #b4dbf0;
+            font-family: PingFangSC;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            color: #2d3c5b;
+        }
+        .progress-tages div{
+            float: left;
+            width: 100px;
+            border-right:solid 1px #b4dbf0;
+            cursor: pointer;
+        }
+        .progress-tages div:last-child{
+            border-right:none;
+            pointer-events: none;
+        }
+        .progress-tages div.select{
+            background: #b4dbf0;
+        }
+        .progress-search-box{
+            display: inline-block;
+            float: right;
+        }
+        .progress-search-box input:focus{
+            box-sizing: border-box;
+        }
+        .progress-search-box input{
+            border-radius: 2px;
+            background-color: #f6f6f6;
+            box-shadow: inset 0 1px 2px 0 #d8d8d8;
+            padding:12px 20px;
+            width:478px ;
+            margin-right: 17px;
+        }
+        .progress-search-box span{
+            display: inline-block;
+            width: 69px;
+            line-height: 42px;
+            border-radius: 4px;
+            background-color: #45a0ea;
+            text-align: center;
+            font-family: PingFangSC;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.9px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        .progress-list{
+            display: flex;
+            text-align: center;
+            padding: 0 22px 0 22px;
+            line-height: 40px;
+            border-bottom: solid 1px #d8d8d8;
+        }
+        .progress-title{
+            flex: 4;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .progress-tag{
+            flex: 1;
+        }
+        .progress-recom{
+            flex: 2;
+        }
+    </style>
+
+    <script type="text/javascript" src="public/js/common.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="public/js/plugins/ckeditor/adapters/jquery.js"></script>
+    <script type="text/javascript" src="public/js/plugins/jquery_formdata/jquery.formdata.js"></script>
+
+</head>
+<body class="hide">
+<div id="header">
+    <h1 class="left"><img src="public/img/logo.jpg" alt=""></h1>
+    <div class="right user_box">
+        <div><span class="user_img"></span><span class="color_f user_name"></span><span class="log_out">退出</span></div>
+    </div>
+</div>
+<!--导航-->
+<div class="nav" id="nav">
+
+</div>
+<div id="content">
+    <div id="container">
+        <div id="left_box">
+            <div class="title_box">
+                <input placeholder="输入标题"/>
+            </div>
+            <div class="abstract_box">
+                <textarea placeholder="输入摘要"></textarea>
+            </div>
+        </div>
+        <div id="right_box">
+
+            <div class="flex-2">
+                <div class="flex-left">选择分类</div>
+                <div class="flex-right" id="artticle-classify">
+                    <span>
+                         <select id="artticle-classify-l"></select>
+                    </span>
+                    <span id="artticle-classify-r"></span>
+                </div>
+            </div>
+
+            <div class="flex-2">
+                <div class="flex-left">发布状态</div>
+                <div class="flex-right public_box">
+                    <span class="tag-if-radius taf-rad-ok" p="1"></span>
+                    <span class="tag-if-radius taf-rad-caogao" p="3"></span>
+                    <span class="tag-if-radius taf-rad-dele" p="0"></span>
+                    <span class="tag-if-radius taf-rad-comme" p="2"></span>
+                </div>
+            </div>
+
+            <div class="flex-2">
+                <div class="flex-left" style="line-height: 41px;">发布时间</div>
+                <div class="flex-right public_box">
+                    <input class="public_time_input" placeholder="点击选择时间" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="flex-2">
+                <div class="flex-left" style="line-height: 41px;">上传附件</div>
+                <div class="flex-right public_box">
+                    <div class="medel-up-file"><span class="medel-up-file-text"></span><label for="model-up-file">浏览</label></div>
+                    <input type="file" id="model-up-file" style="display: none;">
+                </div>
+            </div>
+            <div class="flex-2">
+                <div class="flex-left">上传缩略图</div>
+                <div class="flex-right public_box">
+                    <div class="thumbnail pc_banner"></div>
+                    <div class="thumbnail web_banner"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class=" more-text" style="margin-top: 25px">
+            <textarea id="ask_area" name="editor"></textarea>
+            <input id="yika_img_upload" type="file" style="display:none;" accept="image/*"/>
+        </div>
+        <div class="recomm-box hide">
+            <div>
+                <div class="progress-tages">
+                    <div class="search-test select">相关阅读</div>
+                    <div class="search-result">搜索结果</div>
+                </div>
+                <div class="progress-search-box">
+                    <input type="text" placeholder="点击搜索关键词">
+                    <span>搜索</span>
+                </div>
+
+            </div>
+            <div>
+                <div class="progress-list" style="background:#d8d8d8;line-height: 33px;margin-top: 27px">
+                    <div class="progress-title">标题</div><div class="progress-recom">是否添加</div>
+                </div>
+                <div class="progrss_recommen_list">
+                </div>
+
+            </div>
+        </div>
+        <div class="more-article hide" style="background: #fff;    margin-top: 20px;">
+            <div class="recomm_title"><span class="checked" p="RECOM">推荐</span></div>
+            <div id="more-article">
+            </div>
+            <div id="compents_paginator" style="display: none">
+                <ul class="compents_paginator paginator">
+
+                </ul>
+                <ul class="compents_paginator paginator_controller">
+                    <li class="page_number">
+                        <div id="page_number"></div>
+                    </li>
+                    <li class="page_saver"><input id="page_saver"></li>
+                    <li class="page_ender">页</li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <div class="publish_submit_btn sunmit">提交</div>
+        </div>
+    </div>
+</div>
+<input type="file" accept="image/*" id="up_img">
+<input type="file" accept="image/*" id="up_web_img">
+<script type="text/javascript" src="public/js/main.js" charset="UTF-8"></script>
+<script type="text/javascript" src="public/js/progress_article.js"></script>
+<script>
+
+
+
+</script>
+</body>
+</html>

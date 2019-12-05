@@ -1,0 +1,139 @@
+<div id="userCenterMain">
+  <div class="user-bar-top" v-show="userbaseInfo" v-clock>
+    <div class="user-bar-top-img text-cen">
+      <span :style="{backgroundImage: userbaseInfo.avatar ? 'url(/images/avatar/' + userbaseInfo.avatar + ')':'','backgroundSize': 'cover'}" style="border-radius: 100%;"></span>
+    </div>
+    <div class="user-bar-top-name" style="text-align: center">
+      <span v-text="userbaseInfo.username"></span>
+    </div>
+    <div class="user-bar-top-des" style="text-align: center">
+      <span style="word-break: break-all;" v-text="userbaseInfo.signature || '这个人很懒，没有简介'"></span>
+    </div>
+    <div class="user-bar-top-num text-cen font-14">
+      <div class="inline after_line relative">
+        <span class="block line-height25">粉丝</span>
+        <span class="block line-height25">0</span>
+      </div><div class="inline line-height25">
+        <span class="block line-height25">回答</span>
+        <span class="block line-height25" v-text="userbaseInfo.answer_count"></span>
+      </div>
+    </div>
+    <div class="user-bar-btn" :style="{'background': myNavType==='myinfo'?'#4990e2':'','cursor':myNavType==='myinfo'?'inherit':'pointer','color': myNavType==='myinfo'?'#fff':''}" @click="switchNav('myinfo')">编辑个人资料</div>
+  </div>
+  <div class="user-bar-bot">
+    <div class="user-bar-tag" :class="{'user-bar-left-checked': myNavType==='mycollect'}" @click="switchNav('mycollect')">我的收藏</div>
+    <div class="user-bar-tag" :class="{'user-bar-left-checked': myNavType==='myattention'}" @click="switchNav('myattention')">我的关注</div>
+    <div class="user-bar-bot-line"></div>
+    <div class="user-bar-tag" :class="{'user-bar-left-checked': myNavType==='myquestion'}" @click="switchNav('myquestion')">我的提问</div>
+    <div class="user-bar-tag" :class="{'user-bar-left-checked': myNavType==='myanswer'}" @click="switchNav('myanswer')">我的回答</div>
+    <div class="user-bar-bot-line"></div>
+    <div class="user-bar-tag" :class="{'user-bar-left-checked': myNavType==='mymessage'}" @click="switchNav('mymessage')">我的消息</div>
+    <div class="user-bar-tag" :class="{'user-bar-left-checked': myNavType==='myorder'}" @click="switchNav('myorder')">我的订单</div>
+  </div>
+</div>
+<script type="application/javascript">
+  var myNavVm = new Vue({
+    el: '#userCenterMain',
+    data: {
+        userbaseInfo:{
+            answer_count: 0,
+            avatar: '',
+            signature: '',
+            username: '',
+        },
+        myNavType:'myinfo'
+    },
+    created:function() {
+      var vm = this;
+      $.ajax({
+        url:'/user_info/',
+        type:'get',
+        success:function (res) {
+          if(res.code===200){
+            vm.userbaseInfo = res.data;
+            myInfoVM.userInfo = JSON.parse(JSON.stringify(res.data));
+            myInfoVM.userInfo.mobile = myInfoVM.userInfo.mobile || myInfoVM.userInfo.phone || null;
+            myInfoVM.userInfo.contact_email = myInfoVM.userInfo.contact_email || myInfoVM.userInfo.email || null;
+          }else{
+            window.location.href='/login/#1'
+          }
+        }
+      })
+      var params = vm.getUrlParam('t');
+      if(params === 'mess'){
+        vm.myNavType = 'mymessage';
+      }
+    },
+    methods: {
+      getUrlParam:function (name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]); return null;
+      },
+      switchNav:function(navName){
+        // window.location.href='/user/?t=user';
+        this.myNavType = navName;
+        myInfoVM.isShowSelf = navName==='myinfo'? true:false;
+        myCollectVM.isShowSelf = navName==='mycollect'? true:false;
+        myAttentionVM.isShowSelf = navName==='myattention'? true:false;
+        myQuestionVM.isShowSelf = navName==='myquestion'? true:false;
+        myAnswerVM.isShowSelf = navName==='myanswer'? true:false;
+        myMessageVM.isShowSelf = navName==='mymessage'? true:false;
+        myOrderVM.isShowSelf = navName==='myorder'? true:false;
+
+        if(navName==='mycollect'){
+          myCollectVM.getCollectTypeData()
+          myCollectVM.getCollectData()
+        }
+        if(navName==='myattention') myAttentionVM.getAttentionData();
+        if(navName==='myquestion') myQuestionVM.getQuestionData();
+        if(navName==='myanswer') myAnswerVM.getAnswerData();
+        if(navName==='mymessage') myMessageVM.getMessageData();
+        if(navName==='myorder') myOrderVM.getOrderData(3);
+      }
+    },
+  })
+
+  var myPageMixin = {
+    data:function() {
+      return {
+        current_page: 1, //当前页 
+        pages: 0, //总页数 
+        changePage:''//跳转页 
+      }
+    }, 
+    computed:{ 
+      show:function(){ 
+          return this.pages && this.pages !=1 
+      }, 
+      efont: function() { 
+        if (this.pages <= 7) return false; 
+        return this.current_page > 5 
+      }, 
+      indexs: function() { 
+        var left = 1, 
+          right = this.pages, 
+          ar = []; 
+        if (this.pages >= 7) { 
+            if (this.current_page > 5 && this.current_page < this.pages - 4) { 
+            left = Number(this.current_page) - 3; 
+            right = Number(this.current_page) + 3; 
+            } else { 
+              if (this.current_page <= 5) { 
+                left = 1; 
+                right = 7; 
+              } else { 
+                right = this.pages; 
+                left = this.pages - 6; 
+              } 
+            } 
+        } 
+        while (left <= right) { 
+          ar.push(left); 
+          left++; 
+        } 
+        return ar; 
+      }, 
+    }
+  }
+</script>
